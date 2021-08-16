@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from gestor.env import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-giwu2*#_+=sen9&@mur)u2chyjizf)#a(8we0@v$uo*vc*83om'
+SECRET_KEY = credentials.get('django_secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = credentials.get('debug')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = credentials.get('allowed_hosts', [])
 
 
 
@@ -93,10 +94,10 @@ WSGI_APPLICATION = 'gestor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'desarrollo',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'NAME': credentials.get('db_name', ''),
+        'USER': credentials.get('db_user', ''),
+        'HOST': credentials.get('db_host', ''),
+        'PASSWORD': credentials.get('db_password', ''),
         'PORT': '5432',
     }
 }

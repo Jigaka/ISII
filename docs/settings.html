@@ -25,7 +25,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/</p>
 https://docs.djangoproject.com/en/3.2/ref/settings/</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span></pre></div>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">gestor.env</span> <span class="kn">import</span> <span class="n">credentials</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -62,7 +63,7 @@ See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/</p>
       <p>SECURITY WARNING: keep the secret key used in production secret!</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;django-insecure-giwu2*#_+=sen9&amp;@mur)u2chyjizf)#a(8we0@v$uo*vc*83om&#39;</span></pre></div>
+      <div class="highlight"><pre><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;django_secret_key&#39;</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -74,9 +75,9 @@ See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/</p>
       <p>SECURITY WARNING: don&rsquo;t run with debug turned on in production!</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
+      <div class="highlight"><pre><span class="n">DEBUG</span> <span class="o">=</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
 
-<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[]</span></pre></div>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;allowed_hosts&#39;</span><span class="p">,</span> <span class="p">[])</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -176,10 +177,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/#databases</p>
       <div class="highlight"><pre><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.postgresql_psycopg2&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;desarrollo&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;postgres&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s1">&#39;postgres&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;db_name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;db_user&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;db_host&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="n">credentials</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;db_password&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
         <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="s1">&#39;5432&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">}</span></pre></div>

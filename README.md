@@ -38,6 +38,10 @@ OBS: tener activado el entorno virtual
 ```shell
 $ pip install -r paquetes.txt
 ```
+## Generar la documentacion automatica
+```shell
+$ pycco **/*.py -i
+```
 ## Probar el entorno
 ```shell
 $ python3 manage.py makemigrations

@@ -1,11 +1,17 @@
 
 from pathlib import Path
 from gestor.env import credentials
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = credentials.get('django_secret_key')
-DEBUG = credentials.get('debug')
-ALLOWED_HOSTS = credentials.get('allowed_hosts', [])
+# SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = credentials.get('django_secret_key')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', credentials.get('django_secret_key'))
+# SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = credentials.get('debug')
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+#ALLOWED_HOSTS = credentials.get('allowed_hosts', [])
+ALLOWED_HOSTS = ['mi-sitio.herokuapp.com','127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,6 +33,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -97,7 +104,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -110,3 +116,24 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/'
 SOCIALACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapterAccount'
+
+
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# The URL to use when referring to static files (where they will be served from)
+STATIC_URL = '/static/'
+
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

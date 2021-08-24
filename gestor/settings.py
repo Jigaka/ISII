@@ -11,7 +11,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', credentials.get('django_secret_
 #DEBUG = credentials.get('debug')
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 #ALLOWED_HOSTS = credentials.get('allowed_hosts', [])
-ALLOWED_HOSTS = ['mi-sitio.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['desolate-basin-61151.herokuapp.com','127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'crispy_forms',
     'login',
+    'user',
 ]
 
 SITE_ID = 1
@@ -110,3 +111,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/'
 SOCIALACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapterAccount'
+AUTH_USER_MODEL = 'user.User'

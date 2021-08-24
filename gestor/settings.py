@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', credentials.get('django_secret_key'))
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = credentials.get('debug')
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = False
 #ALLOWED_HOSTS = credentials.get('allowed_hosts', [])
 ALLOWED_HOSTS = ['desolate-basin-61151.herokuapp.com','127.0.0.1']
 

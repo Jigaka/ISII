@@ -36,7 +36,7 @@ Ingresar a la carpeta del repositorio
 
 OBS: tener activado el entorno virtual
 ```shell
-$ pip install -r paquetes.txt
+$ pip install -r requirements.txt
 ```
 ## Generar la documentacion automatica
 ```shell

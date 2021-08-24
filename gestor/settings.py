@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'crispy_forms',
     'login',
+    'user',
 ]
 
 SITE_ID = 1
@@ -116,8 +117,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/'
 SOCIALACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapterAccount'
-
-
+AUTH_USER_MODEL = 'user.User'
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
@@ -137,3 +137,4 @@ STATIC_URL = '/static/'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+

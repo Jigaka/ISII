@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block head_title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body class="m-0 vh-100 row justify-content-center align-items-center">
+    {% block body %}
+
+    {% if messages %}
+    <div>
+      <strong>Messages:</strong>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+{#    <div>#}
+{#      <strong>Menu:</strong>#}
+{#      <ul>#}
+{#        {% if user.is_authenticated %}#}
+{#        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>#}
+{#        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>#}
+{#        {% else %}#}
+{#        <li><a href="{% url 'account_login' %}">Sign In</a></li>#}
+{#        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
+{#        {% endif %}#}
+{#      </ul>#}
+{#    </div>#}
+    {% block content %}
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+  </body>
+</html>

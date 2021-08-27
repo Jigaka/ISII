@@ -20,20 +20,13 @@
     {% endif %}
         <h1 align="center">Proyecto IS II</h1>
         {% if user.is_authenticated %}
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-          <h2 align="center">{{ user.username }}, listo para desarrollar un proyecto con nuestro servicio!!</h2>
-            <div align="center">
-            <a href='accounts/logout' class="btn btn-primary">Cerrar Sesion</a>
-            </div>
+            <button type="submit" class="border border-primary" ><a href="{% url 'inicio' %}">Ingresar al Sistema</a></button>
+
         {% else %}
             <br>
             <br>
             <div align="center">
-                <a href='{% provider_login_url 'google' %}' class="btn btn-primary">Iniciar Sesion con google</a>
+                <a href="{% provider_login_url 'google' %}" class="btn btn-primary">Iniciar Sesion con google</a>
             </div>
 
         {% endif %}

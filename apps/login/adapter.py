@@ -6,7 +6,7 @@ from django.contrib import messages
 from allauth.account.models import EmailAddress
 from allauth.account.utils import user_email, user_field, user_username
 from allauth.utils import valid_email_or_none
-from login.models import ListaPermitidos
+from apps.login.models import ListaPermitidos
 
 
 

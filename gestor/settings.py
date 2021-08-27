@@ -110,6 +110,6 @@ ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_LOGOUT_ON_GET=True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/'
-SOCIALACCOUNT_ADAPTER = 'login.adapter.RestrictEmailAdapter'
+SOCIALACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'

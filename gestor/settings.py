@@ -1,4 +1,4 @@
-
+import os
 from pathlib import Path
 from gestor.env import credentials
 
@@ -99,6 +99,8 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

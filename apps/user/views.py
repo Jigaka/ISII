@@ -9,4 +9,4 @@ def inicio(request):#para toda peticion proveniente del navegador debe usarse re
 
 def logout_Usuario(request):
     logout(request)
-    return HttpResponseRedirect('http://localhost:8000/')
+    return HttpResponseRedirect('/')

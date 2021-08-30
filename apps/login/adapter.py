@@ -47,7 +47,6 @@ class RestrictEmailAdapter(DefaultSocialAccountAdapter):
         name_parts = (name or "").partition(" ")
         user_field(user, "first_name", first_name or name_parts[0])
         user_field(user, "last_name", last_name or name_parts[2])
-        print(user)
         return user
 
 

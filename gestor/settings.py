@@ -1,4 +1,4 @@
-
+import os
 from pathlib import Path
 from gestor.env import credentials
 
@@ -100,6 +100,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -109,7 +111,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_LOGOUT_ON_GET=True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'inicio'
 SOCIALACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'

@@ -1,6 +1,6 @@
 function listadoUsuarios(){
     $.ajax({
-        url: "/usuarios/listado_usuarios/",
+        url: "/usuarios/listar_usuarios/",
         type:"get",
         dataType: "json",
         success: function(response){

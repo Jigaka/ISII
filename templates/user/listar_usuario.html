@@ -1,0 +1,74 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Usuarios
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Usuarios</strong>
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary"> REGISTRAR CORREOS PERMITIDOS</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Estado</th>
+                    <th>Username</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Email</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for user in object_list %}
+               <tr>
+                 <td>{{ user.id }}</td>
+                 <td>{{ user.is_active }}</td>
+                 <td>{{ user.username }}</td>
+                 <td>{{ user.first_name }}</td>
+                 <td>{{ user.last_name}}</td>
+                 <td>{{ user.email }}</td>
+                 <td>
+                   <div class="col-md-2">
+                     <button type="submit" class="btn btn-primary"><a href="{% url 'usuarios:actualizar_usuario' user.id %}">Editar</a></button>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="submit" class="btn btn-danger"><a href="{% url 'usuarios:eliminar_usuario' user.id %}">Eliminar</a></button>
+                    </div>
+                 </td>
+               </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="creacion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="eliminacion" role="dialog">
+
+</div>
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

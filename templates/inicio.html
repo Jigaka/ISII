@@ -35,7 +35,8 @@
                         <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
                                 class="menu-icon fa fa-users"></i>Usuarios</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="">Listado de Usuarios</a></li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'usuarios:listar_usuario' %}">Listado de Usuarios</a></li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'usuarios:listar_activos' %}">Usuarios Activos</a></li>
                         </ul>
                     </li>
 
@@ -124,9 +125,7 @@
                     <div class="col-sm-6">
                         Equipo 16
                     </div>
-                    <div class="col-sm-6 text-right">
-                        Designed by <a href="https://colorlib.com">Colorlib</a>
-                    </div>
+
                 </div>
             </div>
         </footer>

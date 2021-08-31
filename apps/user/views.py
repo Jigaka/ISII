@@ -38,7 +38,7 @@ class ActualizaUsuario(UpdateView):
 class EliminarUsuario(DeleteView):
     model = User
 
-    def post(self,request,pk,args,*kwargs):#Eliminacion logica
+    def post(self,request,pk,*args,**kwargs):#Eliminacion logica
         object = User.objects.get(id = pk)
         object.is_active = False
         object.save()

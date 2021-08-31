@@ -27,7 +27,7 @@ class ActivosUsuario(ListView):
     model = User
     template_name = 'user/listar_usuario.html'
     queryset = User.objects.filter(is_active=True)
-    
+
 
 class ActualizaUsuario(UpdateView):
     model = User

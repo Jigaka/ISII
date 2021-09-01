@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'apps.login',
     'apps.user',
+    'apps.proyectos',
+
 ]
 
 SITE_ID = 1

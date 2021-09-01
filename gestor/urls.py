@@ -14,5 +14,6 @@ urlpatterns = [
     path('accounts/', include('allauth.socialaccount.providers.google.urls')),
     path('inicio/',login_required(Inicio.as_view(),login_url='login'), name = 'inicio'),
     path('usuarios/',include(('apps.user.urls','usuarios'))),
-    path('logout/',logout_Usuario, name = 'logout')
+    path('logout/',logout_Usuario, name = 'logout'),
+    path('proyectos/', include(('apps.proyectos.urls', 'proyectos')))
 ]

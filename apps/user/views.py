@@ -25,7 +25,7 @@ class ListarUsuario(ListView):
 
 class ActivosUsuario(ListView):
     model = User
-    template_name = 'user/listar_usuario.html'
+    template_name = 'user/listar_userActivos.html'
     queryset = User.objects.filter(is_active=True)
 
 

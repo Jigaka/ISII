@@ -13,7 +13,7 @@ class Proyec(models.Model):
     )
     id=models.AutoField(primary_key=True)
     nombre=models.CharField(max_length=200,blank=False, null= False )
-    equipo= models.ManyToManyField(User)
+    equipo= models.ManyToManyField(User, related_name="equipo")
     descripcion=models.TextField(blank=False, null=False)
     estado=models.CharField(max_length=15 , choices=STATUS_CHOICES, default=1 )
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)

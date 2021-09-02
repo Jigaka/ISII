@@ -43,3 +43,8 @@ class EliminarUsuario(DeleteView):
         object.is_active = False
         object.save()
         return redirect('usuarios:listar_usuario')
+def listarProyectoporUsuario(request):
+    model=User
+    user=User.objects.get(id=request.user.id)
+    proyectos=user.equipo.all()
+    return render(request, 'proyectos/listarporusuario.html', {'proyectos':proyectos})

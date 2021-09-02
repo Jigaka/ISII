@@ -1,0 +1,52 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Usuarios
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Usuarios Activos</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Estado</th>
+                    <th>Username</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for user in object_list %}
+               <tr>
+                 <td>{{ user.id }}</td>
+                 <td>{{ user.is_active }}</td>
+                 <td>{{ user.username }}</td>
+                 <td>{{ user.first_name }}</td>
+                 <td>{{ user.last_name}}</td>
+                 <td>{{ user.email }}</td>
+               </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

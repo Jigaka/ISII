@@ -1,0 +1,76 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Proyectos
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+        .table-stats{
+            background-color: #e8e9ef;
+        }
+        #tabla-crear-proyecto, #tabla-crear-proyecto textarea, input[type=text]{
+            width:100%;
+        }
+        #tabla-crear-proyecto tr td{
+            text-align: left;
+        }
+        #tabla-crear-proyecto textarea, input[type=text], select{
+            border-radius: 5px;
+        }
+        #guardar{
+            color:white;
+            background-color: rgb(34, 93, 161);
+            border-color: rgb(34, 93, 161);
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin:0 20px 10px 20px;
+            float:right;
+        }
+        #guardar:hover{
+            cursor:pointer;
+            background-color: rgb(21, 72, 131);
+            border-color: rgb(21, 72, 131)
+        }
+    </style>
+{% endblock extra_css %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Crear Proyecto</strong>
+            </div>
+        </div>
+    </div>
+    <div class="table-stats order-table ov-h">
+        <form method="POST">
+            {%  csrf_token %}
+                <table id="tabla-crear-proyecto">
+                {{proyecto_form.as_table }}
+                </table>
+                    <button type="submit" id="guardar">Crear</button>
+        </form>
+    </div>
+   
+    
+</div>
+<div class="modal fade" id="creacion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="eliminacion" role="dialog">
+
+</div>
+{% endblock body %}
+
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

@@ -1,0 +1,78 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Proyectos
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+        #eliminar:hover{
+            color:red;
+        }
+    </style>
+{% endblock extra_css %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Proyectos</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        {%  if proyectos %}
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>nombre</th>
+                        <th>descripcion</th>
+                        <th>estado</th>
+                        {% if not request.user.is_superuser %}
+                        <th style="text-align: left;">modificar</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for proyec in proyectos %}
+                    <tr>
+                        <td>{{ proyec.id }}</td>
+                        <td>{{ proyec.nombre }}</td>
+                        <td>{{ proyec.descripcion}}</td>
+                        <td>{{ proyec.estado }}</td>
+                        {% if not request.user.is_superuser %}
+                        <td style="text-align: left;">
+                            <a href="{%  url 'proyectos:editar_proyectos' proyec.id %}"> Editar</a><br>
+                            <a id="eliminar" href="{%  url 'proyectos:eliminar_proyectos' proyec.id %}"> Eliminar</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h1> No existen proyectos</h1>
+        {%  endif %}
+    </div>
+</div>
+<div class="modal fade" id="creacion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="eliminacion" role="dialog">
+
+</div>
+{% endblock body %}
+
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

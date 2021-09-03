@@ -1,0 +1,53 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Permisos
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+         #danger:hover{
+            color:red;
+        }
+    </style>
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Permisos</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>codename</th>
+                    <th>Tipo de contenido</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for permisos in object_list %}
+               <tr>
+                 <td>{{ permisos.id }}</td>
+                 <td>{{ permisos.name }}</td>
+                 <td>{{ permisos.codename }}</td>
+                 <td>{{ permisos.content_type }}</td>
+               </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

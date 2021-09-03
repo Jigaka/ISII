@@ -1,0 +1,58 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Proyectos
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+        #eliminar:hover{
+            color:red;
+        }
+    </style>
+{% endblock extra_css %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Proyectos</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        {%  if proyectos %}
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>nombre</th>
+                        <th>descripcion</th>
+                        <th>estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for proyec in proyectos %}
+                    <tr>
+                        <td>{{ proyec.id }}</td>
+                        <td>{{ proyec.nombre }}</td>
+                        <td>{{ proyec.descripcion}}</td>
+                        <td>{{ proyec.estado }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h1> No existen proyectos</h1>
+        {%  endif %}
+    </div>
+
+{% endblock body %}
+
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

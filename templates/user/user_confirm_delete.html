@@ -1,0 +1,13 @@
+{% extends 'inicio.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Confirmación de Eliminación
+{% endblock titulo %}
+
+{% block body %}
+<form method="post">
+  {% csrf_token %}
+  <p><strong>¿Desea eliminar el registro {{ object }}?</strong></p>
+  <button type="submit" class="btn btn-danger">Confirmar</button>
+</form>
+
+{% endblock body %}

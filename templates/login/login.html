@@ -1,0 +1,33 @@
+{% load socialaccount %}
+{% load  crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Gestor de proyecto</title>
+        <meta name="description" content="Ela Admin - HTML5 Admin Template">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        {% block extra_css %}
+        {% endblock extra_css %}
+    </head>
+    <body>
+    {% if messages %}
+        {% for message in messages %}
+            <div align="center" class="border border-primary">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+        <h1 align="center">Proyecto IS II</h1>
+
+            <br>
+            <br>
+            <div align="center">
+                <a href="{% provider_login_url 'google' process=process scope=scope auth_params=auth_params%}" class="btn btn-primary">Iniciar Sesion con google</a>
+            </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    </body>
+</html>

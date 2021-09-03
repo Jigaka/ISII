@@ -1,0 +1,17 @@
+Requirement already up-to-date: Faker in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (8.12.1)
+Collecting install
+  Downloading install-1.3.4-py3-none-any.whl (3.1 kB)
+Requirement already up-to-date: pytest-django in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (4.4.0)
+Requirement already satisfied, skipping upgrade: python-dateutil>=2.4 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from Faker) (2.8.2)
+Requirement already satisfied, skipping upgrade: text-unidecode==1.3 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from Faker) (1.3)
+Requirement already satisfied, skipping upgrade: pytest>=5.4.0 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest-django) (6.2.5)
+Requirement already satisfied, skipping upgrade: six>=1.5 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from python-dateutil>=2.4->Faker) (1.16.0)
+Requirement already satisfied, skipping upgrade: py>=1.8.2 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest>=5.4.0->pytest-django) (1.10.0)
+Requirement already satisfied, skipping upgrade: toml in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest>=5.4.0->pytest-django) (0.10.2)
+Requirement already satisfied, skipping upgrade: pluggy<2.0,>=0.12 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest>=5.4.0->pytest-django) (1.0.0)
+Requirement already satisfied, skipping upgrade: iniconfig in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest>=5.4.0->pytest-django) (1.1.1)
+Requirement already satisfied, skipping upgrade: packaging in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest>=5.4.0->pytest-django) (21.0)
+Requirement already satisfied, skipping upgrade: attrs>=19.2.0 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from pytest>=5.4.0->pytest-django) (21.2.0)
+Requirement already satisfied, skipping upgrade: pyparsing>=2.0.2 in /home/garcete/Desktop/is2/entorno-is2/lib/python3.8/site-packages (from packaging->pytest>=5.4.0->pytest-django) (2.4.7)
+Installing collected packages: install
+Successfully installed install-1.3.4

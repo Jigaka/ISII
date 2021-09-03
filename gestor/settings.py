@@ -101,7 +101,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 
@@ -129,6 +129,8 @@ DATABASES['default'].update(db_from_env)
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# The URL to use when referring to static files (where they will be served from)
+STATIC_URL = '/static/'
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/

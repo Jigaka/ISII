@@ -9,7 +9,10 @@ from allauth.utils import valid_email_or_none
 from apps.login.models import ListaPermitidos
 
 
-
+'''
+clase para controlar los registros e inicios de sesion de un
+usuario
+'''
 class RestrictEmailAdapter(DefaultSocialAccountAdapter):
     def is_open_for_signup(self, request,sociallogin):
         """
@@ -50,6 +53,10 @@ class RestrictEmailAdapter(DefaultSocialAccountAdapter):
         return user
 
 
+'''
+Sobreescritura de clase, para no permitir el registro de usuarios
+desde la ventana de registro de django
+'''
 class RestrictEmailAdapterAccount(DefaultAccountAdapter):
     def is_open_for_signup(self, request):
         """

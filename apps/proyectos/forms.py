@@ -1,6 +1,10 @@
 from django import  forms
 from .models import Proyec
 
+'''
+Form para rellenar campos para la creacion y/o edicion
+de un proyecto
+'''
 class ProyectoForm(forms.ModelForm):
     estado=forms.ChoiceField(choices=Proyec.STATUS_CHOICES)
     class Meta:

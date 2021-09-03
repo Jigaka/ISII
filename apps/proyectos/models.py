@@ -1,5 +1,12 @@
 from django.db import models
 from apps.user.models import User
+
+
+'''
+Modelo para el proyecto a desarrollar.
+Este represe la clase del proyecto, el cual contiene
+los estados, el nombre, descripcion y los miembros.
+'''
 class Proyec(models.Model):
     Pendiente='Pendiente'
     Iniciado='Iniciado'

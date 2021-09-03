@@ -3,6 +3,7 @@ from django.contrib.auth.models import Permission
 from .models import User, Rol
 
 class UserForm(forms.ModelForm):
+    """ Formulario para usuario, se usa para crear los usuarios """
     class Meta:
         model = User
         fields = ['first_name', 'last_name','rol', 'email', 'is_active']
@@ -15,6 +16,7 @@ class UserForm(forms.ModelForm):
         }
 
 class PermsForm(forms.ModelForm):
+    """ Formulario para usuario, se usa para crear permisos """
     class Meta:
         model = Permission
         fields = ['codename', 'name', 'content_type']

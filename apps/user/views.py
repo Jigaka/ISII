@@ -12,6 +12,7 @@ from apps.user.forms import UserForm, PermsForm, RolForm
 # Create your views here.
 
 class Inicio(LoginRequiredMixin, TemplateView):
+    """Retorna al template_name si esta si esta autenticado"""
     template_name = 'inicio.html'
 
 
@@ -21,6 +22,16 @@ def logout_Usuario(request):
 
 
 class ListarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    """ Vista basada en clase, se utiliza para listar todos los usuarios del sistema
+
+
+
+      Argumentos:
+      LoginYSuperStaffMixin: verifica que el usuario esté autenticado
+      y valida si puede ingresar al sitio de administracion
+      ValidarPermisosMixin: valida que tenga los permisos requeridos
+
+      """
     model = User
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
@@ -29,6 +40,7 @@ class ListarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 
 
 class ActivosUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    """ Vista basada en clase, se utiliza para listar los usuarios activos del sistema"""
     model = User
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
@@ -37,6 +49,7 @@ class ActivosUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 
 
 class ActualizaUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     model = User
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
@@ -45,6 +58,7 @@ class ActualizaUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     success_url = reverse_lazy('usuarios:listar_usuario')
 
 class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
+    """ Vista basada en clase, se utiliza para desactivar a los usuarios del sistema"""
     model = User
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
@@ -55,6 +69,7 @@ class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         return redirect('usuarios:listar_usuario')
 
 class ListarPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    """ Vista basada en clase, se utiliza para listar los permisos del sistema"""
     permisos = Permission
     permission_required = ('auth.view_permission', 'auth.add_permission',
                            'auth.delete_permission', 'auth.change_permission')
@@ -62,7 +77,7 @@ class ListarPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     queryset = permisos.objects.all()
 
 class CrearPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
-    """docstring for CrearPermisos."""
+    """Vista basada en clase, se utiliza para crear permisos"""
     model = Permission
     permission_required = ('auth.view_permission', 'auth.add_permission',
                            'auth.delete_permission', 'auth.change_permission')
@@ -72,6 +87,7 @@ class CrearPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
 
 
 class ListarRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+
     roles = Rol
     permission_required = ('auth.view_permission', 'auth.add_permission',
                            'auth.delete_permission', 'auth.change_permission')
@@ -88,6 +104,7 @@ class CrearRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     success_url = reverse_lazy('usuarios:listar_roles')
 
 def listarProyectoporUsuario(request):
+    """ Función que retorna los proyectos por usuarios"""
     model=User
     user=User.objects.get(id=request.user.id)
     proyectos=user.equipo.all()

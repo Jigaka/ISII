@@ -4,7 +4,7 @@ from gestor.env import credentials
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', credentials.get('django_secret_key'))
-DEBUG = credentials.get('debug')
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 ALLOWED_HOSTS = credentials.get('allowed_hosts', [])
 
 INSTALLED_APPS = [

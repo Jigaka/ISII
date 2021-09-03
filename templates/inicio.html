@@ -59,14 +59,24 @@
                        </ul>
                     </li>
                     --->
+                        <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.is_superuser %}
+                                <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' %}">  Crear Rol</a></li>
+                                <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' %}">  Listar Roles</a></li>
+                            {% endif %}
+
+                        </ul>
+                     </li>
                     {% endif %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-project-diagram"></i> Proyectos</a>
                         <ul class="sub-menu children dropdown-menu">
                             {% if request.user.is_superuser %}
-                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_proyecto' %}">  Crear Proyecto</a></li>
+                                <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_proyecto' %}">  Crear Proyecto</a></li>
+                                <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_proyectos' %}">  Listar Proyectos</a></li>
                             {% endif %}
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_proyectos' %}">  Listar Proyectos</a></li>
                             <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:mis_proyectos' %}"> Mis Proyectos</a></li>
                         </ul>
                      </li>

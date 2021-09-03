@@ -7,8 +7,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
-from apps.user.models import User
-from apps.user.forms import UserForm, PermsForm
+from apps.user.models import User, Rol
+from apps.user.forms import UserForm, PermsForm, RolForm
 # Create your views here.
 
 class Inicio(LoginRequiredMixin, TemplateView):
@@ -69,6 +69,23 @@ class CrearPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     form_class = PermsForm
     template_name = 'user/crear_permisos.html'
     success_url = reverse_lazy('usuarios:listar_permisos')
+
+
+class ListarRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    roles = Rol
+    permission_required = ('auth.view_permission', 'auth.add_permission',
+                           'auth.delete_permission', 'auth.change_permission')
+    template_name = 'user/listar_roles.html'
+    queryset = roles.objects.all()
+
+class CrearRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
+    """docstring for CrearRol."""
+    model = Rol
+    permission_required = ('auth.view_rol', 'auth.add_rol',
+                           'auth.delete_rol', 'auth.change_rol')
+    form_class = RolForm
+    template_name = 'user/crear_rol.html'
+    success_url = reverse_lazy('usuarios:listar_roles')
 
 def listarProyectoporUsuario(request):
     model=User

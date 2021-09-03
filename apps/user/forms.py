@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import Permission
-from .models import User
+from .models import User, Rol
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -21,4 +21,12 @@ class PermsForm(forms.ModelForm):
             'codename': 'codename',
             'name': 'Nombre del permiso',
             'content_type': 'Tipo de contenido'
+        }
+
+class RolForm(forms.ModelForm):
+    class Meta:
+        model = Rol
+        fields = ['rol']
+        labels = {
+            'Rol': 'Nombre del rol',
         }

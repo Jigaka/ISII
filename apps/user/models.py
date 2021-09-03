@@ -62,28 +62,28 @@ class User(AbstractUser):
     def getEmail(self):
         return self.email
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            super().save(*args, **kwargs)
-            if self.rol is not None:
-                grupo = Group.objects.filter(name=self.rol.rol).first()
-                if grupo:
-                    self.groups.add(grupo)
-                super().save(*args, **kwargs)
-        else:
-            if self.rol is not None:
-                grupo_antiguo = User.objects.filter(id=self.id).values('rol__rol').first()
-                # print(grupo_antiguo['rol__rol'])
-                # print(self.rol.rol)
-                if grupo_antiguo['rol__rol'] == self.rol.rol:
-                    print("Entro en igualdad de roles")
-                    super().save(*args, **kwargs)
-                else:
-                    grupo_anterior = Group.objects.filter(name=grupo_antiguo['rol__rol']).first()
-                    if grupo_anterior:
-                        print(grupo_anterior)
-                        self.groups.remove(grupo_anterior)
-                    nuevo_grupo = Group.objects.filter(name=self.rol.rol).first()
-                    if nuevo_grupo:
-                        self.groups.add(nuevo_grupo)
-                    super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     print('1111111111111111111111111111111111111')
+    #     print(*args)
+    #     print('1111111111111111111111111111111111111')
+    #     if not self.id:
+    #         super().save(*args, **kwargs)
+    #         if self.rol is not None:
+    #             grupo = Group.objects.filter(name=self.rol.rol).first()
+    #             if grupo:
+    #                 self.groups.add(grupo)
+    #             super().save(*args, **kwargs)
+    #     else:
+    #         if self.rol is not None:
+    #             grupo_antiguo = User.objects.filter(id=self.id).values('rol__rol').first()
+    #             if grupo_antiguo['rol__rol'] == self.rol.rol:
+    #                 super().save(*args, **kwargs)
+    #             else:
+    #                 grupo_anterior = Group.objects.filter(name=grupo_antiguo['rol__rol']).first()
+    #                 if grupo_anterior:
+    #                     print(grupo_anterior)
+    #                     self.groups.remove(grupo_anterior)
+    #                 nuevo_grupo = Group.objects.filter(name=self.rol.rol).first()
+    #                 if nuevo_grupo:
+    #                     self.groups.add(nuevo_grupo)
+    #                 super().save(*args, **kwargs)

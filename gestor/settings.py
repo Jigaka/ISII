@@ -117,3 +117,8 @@ LOGIN_REDIRECT_URL = 'inicio'
 SOCIALACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'
+
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)

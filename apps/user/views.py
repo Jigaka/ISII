@@ -62,6 +62,7 @@ class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
     model = User
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
+
     def post(self,request,pk,*args,**kwargs):#Eliminacion logica
         object = User.objects.get(id = pk)
         object.is_active = False

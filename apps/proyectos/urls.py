@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import crearProyecto, listarProyectos, editarProyecto, eliminarProyecto
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto
 from apps.user.views import listarProyectoporUsuario
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('crear_proyecto/',login_required(crearProyecto, login_url='login'), name='crear_proyecto'),
-    path('listar_proyectos/',login_required(listarProyectos, login_url='login'), name='listar_proyectos'),
-    path('editar_proyectos/<int:id>',login_required(editarProyecto, login_url='login'), name='editar_proyectos'),
-    path('eliminar_proyectos/<int:id>',login_required(eliminarProyecto, login_url='login'), name='eliminar_proyectos'),
+    path('crear_proyecto/',CrearProyecto.as_view(), name='crear_proyecto'),
+    path('listar_proyectos/',ListarProyectos.as_view(), name='listar_proyectos'),
+    path('editar_proyecto/<int:pk>/',EditarProyecto.as_view(), name='editar_proyecto'),
+    path('eliminar_proyecto/<int:pk>/',EliminarProyecto.as_view(), name='eliminar_proyecto'),
     path('mis_proyectos/',login_required(listarProyectoporUsuario, login_url='login'), name='mis_proyectos')
 ]

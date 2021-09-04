@@ -10,5 +10,11 @@ class ProyectoForm(forms.ModelForm):
     class Meta:
         model= Proyec
         fields=['nombre', 'equipo', 'descripcion','estado']
+        labels = {
+            'nombre': 'Nombre del proyecto',
+            'equipo': 'Miembros del proyecto',
+            'descripcion': 'Descripcion del proyecto',
+            'estado': 'Estado del proyecto',
+        }
         #if (estado == Iniciado):
         #fecha_inicio = forms.DateField("fecha_de_creacion", auto_now=True, auto_now_add=False)

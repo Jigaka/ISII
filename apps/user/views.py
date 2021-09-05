@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from apps.user.models import User, Rol
 from apps.user.forms import UserForm, PermsForm, RolForm
+from apps.login.models import ListaPermitidos
 # Create your views here.
 
 class Inicio(LoginRequiredMixin, TemplateView):
@@ -60,13 +61,15 @@ class ActualizaUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
 class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
     """ Vista basada en clase, se utiliza para desactivar a los usuarios del sistema"""
     model = User
+    model2 = ListaPermitidos
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
 
     def post(self,request,pk,*args,**kwargs):#Eliminacion logica
         object = User.objects.get(id = pk)
-        object.is_active = False
-        object.save()
+        object2 = ListaPermitidos.objects.get(correo=object.email)
+        object.delete()
+        object2.delete()
         return redirect('usuarios:listar_usuario')
 
 class ListarPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):

@@ -41,3 +41,10 @@ class GroupForm(forms.ModelForm):
         labels = {
             'permissions': 'Permisos del rol',
         }
+        widgets = {
+            'permissions': forms.SelectMultiple(
+                attrs={
+                    'class': 'form-control'
+                }
+            )
+        }

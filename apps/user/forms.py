@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from .models import User, Rol
 
 class UserForm(forms.ModelForm):
@@ -32,4 +32,12 @@ class RolForm(forms.ModelForm):
         fields = ['rol']
         labels = {
             'Rol': 'Nombre del rol',
+        }
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['permissions']
+        labels = {
+            'permissions': 'Permisos del rol',
         }

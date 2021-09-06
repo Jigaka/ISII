@@ -21,7 +21,6 @@ Gestion de Proyectos | Listado de Usuarios
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Estado</th>
                     <th>Username</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
@@ -32,7 +31,6 @@ Gestion de Proyectos | Listado de Usuarios
               {% for user in object_list %}
                <tr>
                  <td>{{ user.id }}</td>
-                 <td>{{ user.is_active }}</td>
                  <td>{{ user.username }}</td>
                  <td>{{ user.first_name }}</td>
                  <td>{{ user.last_name}}</td>

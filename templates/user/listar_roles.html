@@ -27,6 +27,7 @@ Gestion de Proyectos | Listado de Roles
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,9 @@ Gestion de Proyectos | Listado de Roles
                <tr>
                  <td>{{ roles.id }}</td>
                  <td>{{ roles.rol }}</td>
+                 <td>
+                   <a href="{%  url 'usuarios:agregar_permisos_roles' roles.id %}">  Agregar permisos</a>
+                 </td>
                </tr>
              {% endfor %}
             </tbody>

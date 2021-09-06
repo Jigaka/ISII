@@ -4,11 +4,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.contrib.auth import logout
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from apps.user.models import User, Rol
-from apps.user.forms import UserForm, PermsForm, RolForm
+from apps.user.forms import UserForm, PermsForm, RolForm, GroupForm
 from apps.login.models import ListaPermitidos
 # Create your views here.
 
@@ -105,6 +105,16 @@ class CrearRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
                            'auth.delete_rol', 'auth.change_rol')
     form_class = RolForm
     template_name = 'user/crear_rol.html'
+    success_url = reverse_lazy('usuarios:listar_roles')
+
+class AgregarPermisosAlRol(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
+    """docstring for AgregarPermisosAlRol."""
+    model = Group
+    permission_required = ('auth.view_rol', 'auth.add_rol',
+                           'auth.delete_rol', 'auth.change_rol', 'auth.view_permission', 'auth.add_permission',
+                            'auth.change_permission')
+    form_class = GroupForm
+    template_name = 'user/agregar_permisos_roles.html'
     success_url = reverse_lazy('usuarios:listar_roles')
 
 def listarProyectoporUsuario(request):

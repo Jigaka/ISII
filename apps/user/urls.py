@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 from apps.user.views import ListarUsuario, EliminarUsuario, \
     ActualizaUsuario, ActivosUsuario, ListarPermisos, \
-    CrearPermisos, ListarRoles, CrearRoles
+    CrearPermisos, ListarRoles, CrearRoles, AgregarPermisosAlRol
 
 urlpatterns = [
     path('listar_usuario/', login_required(ListarUsuario.as_view(), login_url='login'), name='listar_usuario'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('crear_permisos/', CrearPermisos.as_view(), name='crear_permisos'),
     path('listar_roles/', ListarRoles.as_view(), name='listar_roles'),
     path('crear_rol/', CrearRoles.as_view(), name='crear_rol'),
+    path('agregar_permisos_roles/<int:pk>/', AgregarPermisosAlRol.as_view(), name='agregar_permisos_roles'),
 ]

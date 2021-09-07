@@ -1,9 +1,10 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from .forms import ProyectoForm
 from .models import Proyec
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy
+from apps.user.models import User
 
 '''
 Funcion para crear un proyecto.
@@ -67,3 +68,23 @@ class EliminarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         object.delete()
         return redirect('proyectos:listar_proyectos')
 
+
+class Integrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    model = User
+    permission_required = ('user.view_user', 'user.add_user',
+                               'user.delete_user', 'user.change_user')
+
+    def get(self, request, pk, *args, **kwargs):
+        users = Proyec.objects.get(id=pk).equipo.all()
+        return render(request, 'proyectos/listar_integrantes.html', {'users':users})
+
+
+
+class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
+    """Vista basada en clase, se utiliza para asignar un rol a un proyecto"""
+    model = Proyec
+    permission_required = ('auth.view_permission', 'auth.add_permission',
+                           'auth.delete_permission', 'auth.change_permission')
+    form_class = ProyectoForm
+    template_name = 'proyectos/asignar_rol.html'
+    success_url = reverse_lazy('proyectos:listar_proyectos')

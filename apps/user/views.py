@@ -119,7 +119,5 @@ class AgregarPermisosAlRol(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateVi
 
 def listarProyectoporUsuario(request):
     """ Función que retorna los proyectos por usuarios"""
-    model=User
-    user=User.objects.get(id=request.user.id)
-    proyectos=user.equipo.all()
+    proyectos = request.user.equipo.all()
     return render(request, 'proyectos/listarporusuario.html', {'proyectos':proyectos})

@@ -1,5 +1,5 @@
 from django.db import models
-from apps.user.models import User
+from apps.user.models import User, Rol
 
 
 '''
@@ -33,3 +33,20 @@ class Proyec(models.Model):
 
     def is_upperclass(self):
         return self.estado in {self.Pendiente, self.Iniciado, self.Cancelado , self.Concluido}
+
+
+class RolProyecto(models.Model):
+    '''
+    Modelo para relacionar un rol con un proyecto.
+    Un proyecto puede tener varios roles, ademas esto permitira
+    importar roles desde un proyecto a otro.
+    '''
+    nombre = models.CharField(max_length=50, blank=False, null=False)
+    proyecto = models.ForeignKey(Proyec, on_delete=models.CASCADE, blank=True, null=True)
+    rol = models.ForeignKey(Rol, on_delete=models.CASCADE, blank=True, null=True)
+    class Meta:
+        verbose_name='RolProyecto'
+        verbose_name_plural = 'RolesProyectos'
+
+    def __str__(self):
+        return self.nombre

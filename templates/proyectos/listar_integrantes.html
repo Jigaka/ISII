@@ -49,17 +49,16 @@ Gestion de Proyectos | Listado de Proyectos
                 <tbody>
                 {% for user in users %}
                     <tr>
-                        <td>{{ user.username }}</td>
-                        {% if user.rol %}
-                            <td>{{ user.rol }}</td>
+                        <td>{{ user.user.username }}</td>
+                        {% if user.rol.rol%}
+                            <td>{{ user.rol.rol }}</td>
                         {% else %}
                             <td>Sin rol</td>
                         {% endif %}
                         {% if  request.user.is_superuser %}
                         <td style="text-align: left;">
-                            <a href="{%  url 'proyectos:editar_proyecto' user.id %}"> Editar</a><br>
-                            <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' user.id %}"> Eliminar</a>
-{#                            <a href="{%  url 'proyectos:asignar_roles' proyec.id %}"> Roles</a>#}
+                            <a href="#"> Asignar Rol</a>
+{#                        {%  url 'proyectos:asignar_roles' proyec.id %}#}
                         </td>
                         {% endif %}
                     </tr>

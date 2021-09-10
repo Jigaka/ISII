@@ -1,10 +1,12 @@
+from typing import List
+
 from django.shortcuts import redirect, render
 from .forms import ProyectoForm
-from .models import Proyec
+from .models import Proyec, RolProyecto
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy
-from apps.user.models import User
+from apps.user.models import User, Rol
 
 '''
 Funcion para crear un proyecto.
@@ -70,13 +72,31 @@ class EliminarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
 
 
 class Integrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    ''' Vista basada en clase, muestra los integrantes de un proyecto'''
+
     model = User
     permission_required = ('user.view_user', 'user.add_user',
                                'user.delete_user', 'user.change_user')
 
     def get(self, request, pk, *args, **kwargs):
+        ''' Funcion para retornar la lista de integrantes de un proyecto
+                Parameters
+                ----------
+                parametro_1 : pk
+                    ID del proyecto
+
+                Returns
+                ---------
+                Render listado de integrantes
+                    Devuelve el listado de los integrantes
+            '''
         users = Proyec.objects.get(id=pk).equipo.all()
-        return render(request, 'proyectos/listar_integrantes.html', {'users':users})
+        # integrantes = [{'user':user, 'rol': Rol.objects.filter(id = User.objects.get(id=user.id).rol.filter(proyecto_id=pk).first().id if User.objects.get(id=user.id).rol.filter(proyecto_id=pk).first() else None).first() } for user in users]
+        # integrantes = [{'user':user, 'rol': Rol.objects.filter(id = user.rol.filter(proyecto_id=pk).first().id if user.rol.filter(proyecto_id=pk).first() else None).first() } for user in users]
+        integrantes = [{'user':user, 'rol': Rol.objects.filter(id = user.rol.filter(proyecto_id=pk).first().rol.id if user.rol.filter(proyecto_id=pk).first() else None ).first()} for user in users]
+        print(integrantes)
+        roles = list(Rol.objects.all())
+        return render(request, 'proyectos/listar_integrantes.html', {'users':integrantes})
 
 
 

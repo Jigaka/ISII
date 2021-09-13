@@ -1,7 +1,7 @@
 {% extends 'inicio.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Listado de Usuarios
+Gestion de Proyectos | Listado de Correos Permitidos
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
@@ -16,10 +16,10 @@ Gestion de Proyectos | Listado de Usuarios
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Usuarios</strong>
+                <strong class="card-title">Listado de Correos Permitidos</strong>
             </div>
             <div class="col-md-4">
-                <button type="button" style="float:right" class="btn btn-primary"><a href="{% url 'login:listar_correos_permitidos'%}">Correos permitidos</a></button>
+                <button type="button" style="float:right" class="btn btn-primary"><a href="{% url 'login:agregar_correos_permitidos'%}">Registrar Correos permitidos</a></button>
             </div>
         </div>
 
@@ -29,28 +29,17 @@ Gestion de Proyectos | Listado de Usuarios
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Estado</th>
-                    <th>Username</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Rol</th>
-                    <th>Email</th>
+                    <th>Correos</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
-              {% for user in object_list %}
+              {% for permitidos in object_list %}
                <tr>
-                 <td>{{ user.id }}</td>
-                 <td>{{ user.is_active }}</td>
-                 <td>{{ user.username }}</td>
-                 <td>{{ user.first_name }}</td>
-                 <td>{{ user.last_name}}</td>
-                 <td>{{ user.rol }}</td>
-                 <td>{{ user.email }}</td>
+                 <td>{{ permitidos.id }}</td>
+                 <td>{{ permitidos.correo }}</td>
                  <td>
-                    <a href="{% url 'usuarios:actualizar_usuario' user.id %}">Editar</a><br>
-                    <a id="danger" href="{% url 'usuarios:eliminar_usuario' user.id %}">Eliminar</a>
+                   <a href="{%  url 'login:eliminar_correos_permitidos' permitidos.id %}"> Eliminar</a>
                  </td>
                </tr>
              {% endfor %}
@@ -58,17 +47,7 @@ Gestion de Proyectos | Listado de Usuarios
         </table>
     </div>
 </div>
-<div class="modal fade" id="creacion" role="dialog">
 
-</div>
-
-<div class="modal fade" id="edicion" role="dialog">
-
-</div>
-
-<div class="modal fade" id="eliminacion" role="dialog">
-
-</div>
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

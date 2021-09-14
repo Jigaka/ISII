@@ -57,9 +57,9 @@ Gestion de Proyectos | Listado de Proyectos
                         <td>{{ proyec.estado }}</td>
                         {% if  request.user.is_superuser %}
                         <td style="text-align: left;">
+                            <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a><br>
                             <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a><br>
                             <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
-                            <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
 {#                            <a href="{%  url 'proyectos:asignar_roles' proyec.id %}"> Roles</a>#}
                         </td>
                         {% endif %}

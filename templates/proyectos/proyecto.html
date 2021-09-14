@@ -37,20 +37,23 @@
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
                     </li>
                     {% if request.user.is_superuser %}
-                    <li >
-                        <a href='{%  url 'proyectos:listar_integrantes' proyecto.id %}' > <i
-                                class="menu-icon fa fa-users"></i>Integrantes</a>
-                    </li>
+                        <li >
+                            <a href="{%  url 'proyectos:listar_integrantes' proyecto.id %}" > <i
+                                    class="menu-icon fa fa-users"></i>Integrantes</a>
+                        </li>
                         <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            {% if request.user.is_superuser %}
-                                <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' %}">  Crear Rol</a></li>
-                                <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' %}">  Listar Roles</a></li>
-                            {% endif %}
-
-                        </ul>
-                     </li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                    <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' %}">  Crear Rol</a></li>
+                                    <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' %}">  Listar Roles</a></li>
+                            </ul>
+                        </li>
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-running"></i> Sprints</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                    <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' %}">  Crear Sprint</a></li>
+                            </ul>
+                        </li>
                     {% endif %}
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -94,17 +97,17 @@
                         <div class="col-md-12 prueba">
                             <div class="col-md-4 card bg-primary" style="margin-inline: 8px">
                                 <div class="card-body">
-                                    <h3>Backlogs</h3>
+                                    <h3>Backlog</h3>
                                 </div>
                             </div>
                             <div class="col-md-4 card bg-primary" style="margin-inline: 8px">
                                 <div class="card-body">
-                                    <h3>Spring</h3>
+                                    <h3>Sprint</h3>
                                 </div>
                             </div>
                             <div class="col-md-4 card bg-primary" style="margin-inline: 8px">
                                 <div class="card-body">
-                                    <h3>User historys</h3>
+                                    <h3>User histories</h3>
                                 </div>
                             </div>
                         </div>

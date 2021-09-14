@@ -1,7 +1,7 @@
-{% extends 'inicio.html' %}
+{% extends 'proyectos/proyecto.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Listado de Proyectos
+Gestion de Proyectos | Listado de integrantes
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
@@ -57,8 +57,7 @@ Gestion de Proyectos | Listado de Proyectos
                         {% endif %}
                         {% if  request.user.is_superuser %}
                         <td style="text-align: left;">
-                            <a href="#"> Asignar Rol</a>
-{#                        {%  url 'proyectos:asignar_roles' proyec.id %}#}
+                            <a href="#"> Asignar Rol</a
                         </td>
                         {% endif %}
                     </tr>

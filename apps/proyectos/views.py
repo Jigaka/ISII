@@ -71,6 +71,14 @@ class EliminarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         return redirect('proyectos:listar_proyectos')
 
 
+class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
+    permission_required = ('user.view_user', 'user.add_user',
+                           'user.delete_user', 'user.change_user')
+    def get(self, request, pk, *args, **kwargs):
+        proyecto = Proyec.objects.get(id=pk);
+        return render(request, 'proyectos/proyecto.html', {'proyecto':proyecto})
+
+
 class Integrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     ''' Vista basada en clase, muestra los integrantes de un proyecto'''
 
@@ -91,12 +99,10 @@ class Integrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
                     Devuelve el listado de los integrantes
             '''
         users = Proyec.objects.get(id=pk).equipo.all()
-        # integrantes = [{'user':user, 'rol': Rol.objects.filter(id = User.objects.get(id=user.id).rol.filter(proyecto_id=pk).first().id if User.objects.get(id=user.id).rol.filter(proyecto_id=pk).first() else None).first() } for user in users]
-        # integrantes = [{'user':user, 'rol': Rol.objects.filter(id = user.rol.filter(proyecto_id=pk).first().id if user.rol.filter(proyecto_id=pk).first() else None).first() } for user in users]
         integrantes = [{'user':user, 'rol': Rol.objects.filter(id = user.rol.filter(proyecto_id=pk).first().rol.id if user.rol.filter(proyecto_id=pk).first() else None ).first()} for user in users]
-        print(integrantes)
         roles = list(Rol.objects.all())
-        return render(request, 'proyectos/listar_integrantes.html', {'users':integrantes})
+        proyecto=Proyec.objects.get(id=pk)
+        return render(request, 'proyectos/listar_integrantes.html', {'users':integrantes, 'proyecto':proyecto})
 
 
 

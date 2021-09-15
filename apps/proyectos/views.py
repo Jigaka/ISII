@@ -1,8 +1,8 @@
 from typing import List
 
-from django.shortcuts import redirect, render
-from .forms import ProyectoForm
-from .models import Proyec, RolProyecto
+from django.shortcuts import redirect, render, get_object_or_404
+from .forms import ProyectoForm, SprintForm
+from .models import Proyec, RolProyecto, Sprint
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy
@@ -75,7 +75,7 @@ class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
     def get(self, request, pk, *args, **kwargs):
-        proyecto = Proyec.objects.get(id=pk);
+        proyecto = Proyec.objects.get(id=pk)
         return render(request, 'proyectos/proyecto.html', {'proyecto':proyecto})
 
 
@@ -114,3 +114,26 @@ class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView
     form_class = ProyectoForm
     template_name = 'proyectos/asignar_rol.html'
     success_url = reverse_lazy('proyectos:listar_proyectos')
+
+
+class CrearSprint(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    permission_required = ('auth.view_permission', 'auth.add_permission',
+                        'auth.delete_permission', 'auth.change_permission')
+    template_name = 'proyectos/crear_sprint.html'
+    model = Sprint
+    form_class = SprintForm
+    success_url = reverse_lazy('proyectos:listar_proyectos')    
+    
+    def form_valid(self, form):
+        proyecto = get_object_or_404(Proyec, id=self.kwargs['pk'])
+        form.instance.proyecto = proyecto
+        return super(CrearSprint, self).form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        context['proyecto'] = Proyec.objects.get(id=pk)
+        return context

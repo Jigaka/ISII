@@ -50,3 +50,27 @@ class RolProyecto(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class Sprint(models.Model):
+    Pendiente='Pendiente'
+    Iniciado='Iniciado'
+    Finalizado='Finalizado'
+    STATUS_CHOICES = (
+        (Pendiente, "Pendiente"),
+        (Iniciado, "Iniciado"),
+        (Finalizado, "Finalizado")
+    )
+    nombre=models.CharField(max_length=200,blank=False, null= False )
+    proyecto=models.ForeignKey(Proyec, blank=False, null=False, on_delete=models.CASCADE)
+    fecha_inicio=models.DateField()
+    fecha_fin=models.DateField()
+    estado= models.CharField(max_length=15, choices=STATUS_CHOICES, default=1) #pendiente,iniciado,finalizado
+    #user_histories=
+    #duracion_dias
+    #capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días)
+
+    class Meta:
+        verbose_name='Sprint'
+        verbose_name_plural = 'Sprints'
+    def __str__(self):
+        return self.nombre

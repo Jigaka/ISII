@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, Proyecto, Integrantes
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, Proyecto, Integrantes, CrearSprint
 from apps.user.views import listarProyectoporUsuario
 from django.contrib.auth.decorators import login_required
 
@@ -13,5 +13,6 @@ urlpatterns = [
     path('listar_integrantes/<int:pk>/',Integrantes.as_view(), name='listar_integrantes'),
     # path('asignar_roles/<int:pk>/',AsignarRolProyecto.as_view(), name='asignar_roles'),
     path('mis_proyectos/',login_required(listarProyectoporUsuario, login_url='login'), name='mis_proyectos'),
-    path('loco/<int:pk>/', Proyecto.as_view(), name='loco')
+    path('loco/<int:pk>/', Proyecto.as_view(), name='loco'),
+    path('loco/crear_sprint/<int:pk>/',CrearSprint.as_view(),name='crear_sprint') 
 ]

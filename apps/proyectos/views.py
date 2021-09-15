@@ -55,7 +55,7 @@ class EditarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
     template_name = 'proyectos/editar_proyecto.html'
-    form_class = ProyectoForm
+    form_class = editarProyect
     success_url = reverse_lazy('proyectos:listar_proyectos')
 
 

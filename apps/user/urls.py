@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 from apps.user.views import ListarUsuario, EliminarUsuario, \
     ActualizaUsuario, ActivosUsuario, ListarPermisos, \
-    CrearPermisos, ListarRoles, CrearRoles, AgregarPermisosAlRol
+    CrearPermisos, ListarRoles, CrearRoles, AgregarPermisosAlRol, AsignarRolUserProyecto
 
 urlpatterns = [
     path('listar_usuario/', login_required(ListarUsuario.as_view(), login_url='login'), name='listar_usuario'),
@@ -11,7 +11,8 @@ urlpatterns = [
     path('eliminar_usuario/<int:pk>/', login_required(EliminarUsuario.as_view(), login_url='login'), name='eliminar_usuario'),
     path('listar_permisos/', ListarPermisos.as_view(), name='listar_permisos'),
     path('crear_permisos/', CrearPermisos.as_view(), name='crear_permisos'),
-    path('listar_roles/', ListarRoles.as_view(), name='listar_roles'),
-    path('crear_rol/', CrearRoles.as_view(), name='crear_rol'),
+    path('listar_roles/<int:pk>', ListarRoles.as_view(), name='listar_roles'),
+    path('crear_rol/<int:pk>', CrearRoles.as_view(), name='crear_rol'),
+    path('asignar_rol/<int:pk>/<int:pl>', AsignarRolUserProyecto.as_view(), name='asignar_rol'),
     path('agregar_permisos_roles/<int:pk>/', AgregarPermisosAlRol.as_view(), name='agregar_permisos_roles'),
 ]

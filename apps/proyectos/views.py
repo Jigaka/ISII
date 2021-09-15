@@ -9,12 +9,17 @@ from django.urls import reverse_lazy
 from apps.user.models import User, Rol
 
 '''
+
+'''
+
+
+
+
+'''
 Funcion para crear un proyecto.
 En request, se se obtiene todos los parametros del usuario actual
 Se devuelve un form para crear un proyecto y guardar en la base de datos.
 '''
-
-
 class CrearProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     """Vista basada en clase, se utiliza para crear permisos"""
     model = Proyec
@@ -75,11 +80,11 @@ class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
     def get(self, request, pk, *args, **kwargs):
-        proyecto = Proyec.objects.get(id=pk);
-        return render(request, 'proyectos/proyecto.html', {'proyecto':proyecto})
+        return render(request, 'proyectos/proyecto.html', {'proyecto_id':pk})
 
 
-class Integrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+
+class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     ''' Vista basada en clase, muestra los integrantes de un proyecto'''
 
     model = User
@@ -87,22 +92,30 @@ class Integrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
                                'user.delete_user', 'user.change_user')
 
     def get(self, request, pk, *args, **kwargs):
-        ''' Funcion para retornar la lista de integrantes de un proyecto
-                Parameters
-                ----------
-                parametro_1 : pk
-                    ID del proyecto
+        """ Funcion para retornar la lista de integrantes de un proyecto
 
-                Returns
-                ---------
-                Render listado de integrantes
-                    Devuelve el listado de los integrantes
-            '''
+
+
+        Argumentos:
+            pk: ID del proyecto
+
+        Returns:
+            view: render listado de integrantes
+        """
+
+
         users = Proyec.objects.get(id=pk).equipo.all()
+
+        ''' Doc para la linea de abajo
+            Esta parte es un poco larga.
+            Recorre la lista users, para obtener cada user. Luego, de acuerdo al user,obtiene
+            su rol dentro del proyecto con el id=pk.
+            Para obtener el rol del user, primero trae filtra el rol del user respecto al proyecto,
+            ahi se obtiene el id del rol. Con el id del rol, se obtiene el rol del modelo Rol.
+        '''
         integrantes = [{'user':user, 'rol': Rol.objects.filter(id = user.rol.filter(proyecto_id=pk).first().rol.id if user.rol.filter(proyecto_id=pk).first() else None ).first()} for user in users]
-        roles = list(Rol.objects.all())
-        proyecto=Proyec.objects.get(id=pk)
-        return render(request, 'proyectos/listar_integrantes.html', {'users':integrantes, 'proyecto':proyecto})
+        proyecto = Proyec.objects.get(id=pk)
+        return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
 
 

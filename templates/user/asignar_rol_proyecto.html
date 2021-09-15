@@ -1,0 +1,29 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Asingar rol a {{object.username}}</h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form id="form_edicion" action="{% url 'usuarios:asignar_rol' object.id proyecto_id%}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+{#                {{ form.as_p }}#}
+                <p>Elige un rol</p>
+                <select name="rol_id">
+                    <option value="">Sin rol</option>
+                    {% for rol in roles %}
+                        <option value={{ rol.rol.id }}>{{ rol.rol }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="proyecto_id" value={{proyecto_id}}>
+                <input type="hidden" name="usuario_id" value={{object.id}}>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancelar</button>
+                <button id="boton_creacion" class="btn btn-primary" type="submit">Confirmar</button>
+            </div>
+        </form>
+    </div>
+</div>

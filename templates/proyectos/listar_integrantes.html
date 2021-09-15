@@ -57,7 +57,7 @@ Gestion de Proyectos | Listado de integrantes
                         {% endif %}
                         {% if  request.user.is_superuser %}
                         <td style="text-align: left;">
-                            <a href="#"> Asignar Rol</a
+                            <button class="btn btn-primary" onclick="abrirModalRol('{% url 'usuarios:asignar_rol' user.user.id id%}')"> Asignar Rol</button>
                         </td>
                         {% endif %}
                     </tr>
@@ -73,7 +73,7 @@ Gestion de Proyectos | Listado de integrantes
 
 </div>
 
-<div class="modal fade" id="edicion" role="dialog">
+<div class="modal fade" id="asignarRol" role="dialog">
 
 </div>
 
@@ -86,4 +86,12 @@ Gestion de Proyectos | Listado de integrantes
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'js/usuarios/index.js' %}"></script>
+    <script type="text/javascript">
+        var $ = JQuery.noConflict()
+        function abrirModalRol(url) {
+            $('#asignarRol').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+    </script>
 {% endblock extrajs %}

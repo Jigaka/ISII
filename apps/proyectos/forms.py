@@ -1,20 +1,51 @@
-from django import  forms
-from .models import Proyec
+from django import forms
+from .models import Proyec, HistoriaUsuario
 
 '''
 Form para rellenar campos para la creacion y/o edicion
 de un proyecto
 '''
 class ProyectoForm(forms.ModelForm):
-    estado=forms.ChoiceField(choices=Proyec.STATUS_CHOICES)
+
     class Meta:
         model= Proyec
-        fields=['nombre', 'equipo', 'descripcion','estado']
+
+        fields=['nombre', 'descripcion','encargado','estado']
         labels = {
             'nombre': 'Nombre del proyecto',
-            'equipo': 'Miembros del proyecto',
+            'encargado':'Encargado del Proyecto',
+            'descripcion': 'Descripcion del proyecto',
+            'estado': 'Estado del proyecto'
+        }
+class editarProyect(forms.ModelForm):
+    class Meta:
+        model = Proyec
+        fields = ['nombre', 'descripcion','estado','equipo','dias_estimados']
+        labels = {
+            'nombre': 'Nombre del proyecto',
             'descripcion': 'Descripcion del proyecto',
             'estado': 'Estado del proyecto',
+            'equipo':'Equipo de trabajo',
+            'dias_estimados':'Cantdad de dias estimados'
         }
-        #if (estado == Iniciado):
-        #fecha_inicio = forms.DateField("fecha_de_creacion", auto_now=True, auto_now_add=False)
+
+class CrearUSForm(forms.ModelForm):
+    class Meta:
+        model= HistoriaUsuario
+        fields=['nombre', 'descripcion','prioridad']
+        labels = {
+            'nombre': 'Nombre de la Historia de Usuario',
+            'descripcion': 'Descripcion de la Historia de Usuario',
+            'prioridad':'Prioridad de la Historia de Usuario'
+        }
+class editarUS(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['nombre', 'descripcion', 'prioridad','estado','estimacion','asignacion']
+        labels = {
+            'nombre': 'Nombre de la Historia de Usuario',
+            'descripcion': 'Descripcion de la Historia de Usuario',
+            'prioridad': 'Prioridad de la Historia de Usuario',
+            'estado': 'Estado de la Historia de Usuario',
+            'asignacion':'Asignar Historia de Usuario'
+        }

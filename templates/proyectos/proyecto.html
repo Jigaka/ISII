@@ -53,6 +53,15 @@
 
                         </ul>
                      </li>
+                        <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Historias de Usuario</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.is_superuser %}
+                                <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_us' %}">  Crear Historia de Usuario</a></li>
+                            {% endif %}
+
+                        </ul>
+                     </li>
                     {% endif %}
                 </ul>
             </div><!-- /.navbar-collapse -->

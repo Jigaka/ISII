@@ -1,8 +1,8 @@
 from typing import List
 
 from django.shortcuts import redirect, render
-from .forms import ProyectoForm
-from .models import Proyec, RolProyecto
+from .forms import ProyectoForm, editarUS, editarProyect, CrearUSForm
+from .models import Proyec, RolProyecto, HistoriaUsuario
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy
@@ -119,6 +119,15 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 
 
 
+
+
+
+
+
+
+
+#class listarporencargado( ValidarPermisosMixin, ListView):
+#    model = Proyec
 class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     """Vista basada en clase, se utiliza para asignar un rol a un proyecto"""
     model = Proyec
@@ -127,3 +136,46 @@ class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView
     form_class = ProyectoForm
     template_name = 'proyectos/asignar_rol.html'
     success_url = reverse_lazy('proyectos:listar_proyectos')
+def listarProyectoporEncargado(request):
+    user = User.objects.get(id=request.user.id)
+    proyectos = user.encargado.all()
+    return render(request, 'proyectos/listarporencargado.html', {'proyectos': proyectos})
+
+
+class listarProyectosUsuario( ValidarPermisosMixin, ListView):
+    model = Proyec
+    def listarporUsuario(request):
+        user = User.objects.get(id=request.user.id)
+        proyectos = user.equipo.all()
+        return render(request, 'proyectos/listarporusuario.html', {'proyectos': proyectos})
+
+
+
+
+
+
+
+class CrearUS(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
+    """Vista basada en clase, se utiliza para crear permisos"""
+    model = HistoriaUsuario
+    form_class = CrearUSForm
+    template_name = 'proyectos/crear_US.html'
+    success_url = reverse_lazy('proyectos:listar_US')
+
+
+class EditarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    model = HistoriaUsuario
+    permission_required = ('user.view_user', 'user.add_user',
+                           'user.delete_user', 'user.change_user')
+    template_name = 'proyectos/editar_us.html'
+    form_class = editarUS
+    success_url = reverse_lazy('proyectos:listar_US')
+
+'''
+class ListarProyectos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    model = HistoriaUsuario
+    #permission_required =
+    template_name = 'proyectos/listar_USporProyecto.html'
+    queryset = Proyec.objects.all()
+'''

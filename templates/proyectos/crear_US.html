@@ -1,0 +1,18 @@
+{% extends 'inicio.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Crear Proyecto
+{% endblock titulo %}
+{% block body %}
+<form method="POST">
+  {% csrf_token %}
+  <div class="card">
+    <div class="card-header">
+        <strong>Añadir Historia de Usuario</strong>
+    </div>
+    <div class="card-body card-block">
+        {{ form.as_p }}
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success">Crear</button>
+</form>
+{% endblock body %}

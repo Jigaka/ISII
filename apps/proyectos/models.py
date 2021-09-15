@@ -1,5 +1,6 @@
 from django.db import models
 from apps.user.models import User, Rol
+from django.db.models.signals import post_save, pre_save
 
 
 '''
@@ -7,32 +8,109 @@ Modelo para el proyecto a desarrollar.
 Este represe la clase del proyecto, el cual contiene
 los estados, el nombre, descripcion y los miembros.
 '''
+class HistoriaUsuario(models.Model):
+    Pendiente = 'Pendiente'
+    ToDo = 'ToDo'
+    Doing = 'Doing'
+    Done = 'Done'
+    QA = 'QA'
+    STATUS_CHOICES = (
+        (Pendiente, "Pendiente"),
+        (ToDo, 'ToDo'),
+        (Doing, 'Doing'),
+        (Done, 'Done'),
+        (QA, 'QA')
+    )
+    Media = 'Media'
+    Baja = 'Baja'
+    Alta = 'Alta'
+    Prioridad_CHOICES = (
+        (Baja, 'Baja'),
+        (Media, 'Media'),
+        (Alta, 'Alta'),
+    )
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=200, blank=False, null=False)
+    asignacion = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="asignacion")
+    descripcion = models.TextField(blank=False, null=False)
+    estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default=1)
+    fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
+    estimacion = models.PositiveIntegerField(editable=True, default=0)
+    fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True)
+    fecha_inicio = models.DateField(blank=True, null=True)
+    fecha_concluido = models.DateField(blank=True,null=True)
+    fecha_cancelado = models.DateField(blank=True,null=True)
+    estado_anterior = models.CharField(max_length=200, default='Pendiente')
+    prioridad = models.CharField(max_length=15, choices=Prioridad_CHOICES, default=1)
+
+
+
+
+
+    class Meta:
+        verbose_name = 'Historia de Usuario'
+        verbose_name_plural = 'Historias de Usuarios'
+
+    def __str__(self):
+        return self.nombre
+
+    def is_upperclass(self):
+        return self.prioridad in {self.Baja, self.Media, self.Alta}
+
+    def is_upperclasss(self):
+        return self.estado in {self.Pendiente, self.ToDo, self.Doing, self.Done, self.QA}
+
+    def obtener_asignacion(self):
+        asignacion_user = self.asignacion.all().values_list('username', flat=True)
+        return asignacion_user
+
+
+
 class Proyec(models.Model):
-    Pendiente='Pendiente'
-    Iniciado='Iniciado'
-    Concluido='Concluido'
-    Cancelado='Cancelado'
+    Pendiente = 'Pendiente'
+    Iniciado = 'Iniciado'
+    Concluido = 'Concluido'
+    Cancelado = 'Cancelado'
     STATUS_CHOICES = (
         (Pendiente, "Pendiente"),
         (Iniciado, "Iniciado"),
         (Concluido, "Concluido"),
         (Cancelado, "Cancelado")
     )
-    id=models.AutoField(primary_key=True)
-    nombre=models.CharField(max_length=200,blank=False, null= False )
-    equipo= models.ManyToManyField(User, related_name="equipo")
-    descripcion=models.TextField(blank=False, null=False)
-    estado=models.CharField(max_length=15 , choices=STATUS_CHOICES, default=1 )
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=200, blank=False, null=False)
+    # limit_choices_to={'rol':1}
+    encargado = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="encargado")
+    equipo = models.ManyToManyField(User, related_name="equipo")
+    descripcion = models.TextField(blank=False, null=False)
+    estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default=1)
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
-    #fecha_inicio=models.DateField()
+    dias_estimados = models.PositiveIntegerField(editable=True, default=0)
+    fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True)
+    fecha_inicio = models.DateField(blank=True, null=True)
+    fecha_concluido = models.DateField(blank=True, null=True)
+    fecha_cancelado = models.DateField(blank=True, null=True)
+    estado_anterior = models.CharField(max_length=200, default='Pendiente')
+    US = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True, related_name="US")
+
     class Meta:
-        verbose_name='Proyecto'
+        verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
+
     def __str__(self):
         return self.nombre
 
     def is_upperclass(self):
-        return self.estado in {self.Pendiente, self.Iniciado, self.Cancelado , self.Concluido}
+        return self.estado in {self.Pendiente, self.Iniciado, self.Cancelado, self.Concluido}
+
+    def obtener_equipo(self):
+        miembros = str([User for User in self.equipo.all().values_list('username', flat=True)]).replace("[","").replace("]",  "").replace( "'", "")
+        return miembros
+
+    def obtener_encargado(self):
+        encargado_del_proyecto = self.encargado.all().values_list('username', flat=True)
+        return encargado_del_proyecto
+
 
 
 class RolProyecto(models.Model):
@@ -50,3 +128,21 @@ class RolProyecto(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+def definir_estadoanterior(sender, instance, **kwargs):
+    x = Proyec.objects.filter(id=instance.id).update(estado_anterior=instance.estado)
+
+
+def agregar_fecha_inicio(sender, instance, **kwargs):
+    if instance.estado != instance.estado_anterior:
+        if instance.estado == 'Iniciado':
+            x = Proyec.objects.filter(id=instance.id).update(fecha_inicio=instance.fecha)
+        elif instance.estado == 'Cancelado':
+            x = Proyec.objects.filter(id=instance.id).update(fecha_cancelado=instance.fecha)
+        elif instance.estado == 'Concluido':
+            x = Proyec.objects.filter(id=instance.id).update(fecha_concluido=instance.fecha)
+
+
+pre_save.connect(definir_estadoanterior, sender=Proyec)
+post_save.connect(agregar_fecha_inicio, sender=Proyec)

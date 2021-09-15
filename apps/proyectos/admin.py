@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Proyec, RolProyecto
+from .models import HistoriaUsuario
 
 
 class RolProyectoAdmin(admin.ModelAdmin):
@@ -11,3 +12,4 @@ class RolProyectoAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Proyec)
 admin.site.register(RolProyecto,RolProyectoAdmin)
+admin.site.register(HistoriaUsuario)

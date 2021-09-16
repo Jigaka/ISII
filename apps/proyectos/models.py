@@ -36,7 +36,7 @@ class HistoriaUsuario(models.Model):
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default=1)
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
     estimacion = models.PositiveIntegerField(editable=True, default=0)
-    fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True)
+    fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
     fecha_inicio = models.DateField(blank=True, null=True)
     fecha_concluido = models.DateField(blank=True,null=True)
     fecha_cancelado = models.DateField(blank=True,null=True)
@@ -146,3 +146,6 @@ def agregar_fecha_inicio(sender, instance, **kwargs):
 
 pre_save.connect(definir_estadoanterior, sender=Proyec)
 post_save.connect(agregar_fecha_inicio, sender=Proyec)
+
+
+

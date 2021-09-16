@@ -10,12 +10,12 @@ class ProyectoForm(forms.ModelForm):
     class Meta:
         model= Proyec
 
-        fields=['nombre', 'descripcion','encargado','estado']
+        fields=['nombre', 'descripcion','encargado']
         labels = {
             'nombre': 'Nombre del proyecto',
             'encargado':'Encargado del Proyecto',
             'descripcion': 'Descripcion del proyecto',
-            'estado': 'Estado del proyecto'
+
         }
 class editarProyect(forms.ModelForm):
     class Meta:

@@ -80,11 +80,8 @@
                         <ul class="sub-menu children dropdown-menu">
                             {% if request.user.is_superuser %}
                                 <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_proyecto' %}">  Crear Proyecto</a></li>
-                                <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_proyectos' %}">  Listar Proyectos</a></li>
                             {% endif %}
-                            {% if not request.user.is_superuser %}
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:mis_proyectos' %}"> Mis Proyectos</a></li>
-                            {% endif %}
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_proyectos' %}">  Listar Proyectos</a></li>
                         <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:mis_proyectos(encargado)' %}"> Mis Proyectos(encargado)</a></li>
                         </ul>
                      </li>

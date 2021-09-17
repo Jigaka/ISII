@@ -1,18 +1,13 @@
 from typing import List
 
-from django.shortcuts import redirect, render
-from .forms import ProyectoForm, editarUS, editarProyect, CrearUSForm
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render, get_object_or_404
+from .forms import ProyectoForm, editarUS, editarProyect, CrearUSForm,aprobar_us
 from .models import Proyec, RolProyecto, HistoriaUsuario
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from apps.user.models import User, Rol
-
-'''
-
-'''
-
-
 
 
 '''
@@ -155,27 +150,90 @@ class listarProyectosUsuario( ValidarPermisosMixin, ListView):
 
 
 
+
+
+
+
+
+
 class CrearUS(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
-    """Vista basada en clase, se utiliza para crear permisos"""
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    permission_required = ('auth.view_permission', 'auth.add_permission',
+                           'auth.delete_permission', 'auth.change_permission')
     model = HistoriaUsuario
     form_class = CrearUSForm
     template_name = 'proyectos/crear_US.html'
-    success_url = reverse_lazy('proyectos:listar_US')
+    success_url = reverse_lazy('proyectos:listar_us')
 
+    def post(self, request, *args, **kwargs):
+        """ Funcion para crear un rol con los datos devueltos por el form
+
+        Crea un nuevo rol con los datos devueltos por el form. Tambien relaciona dicho rol
+        con el proyecto actual.
+        """
+        id = request.path.split('/')[-1]
+        proyecto = Proyec.objects.get(id=id)
+        nombre = request.POST['nombre']
+        descripcion = request.POST['descripcion']
+        prioridad=request.POST['prioridad']
+        us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto)
+        us.save()
+        return redirect('proyectos:listar_us', id)
+
+
+class ConfigurarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    model = HistoriaUsuario
+    permission_required = ('user.view_user', 'user.add_user',
+                           'user.delete_user', 'user.change_user')
+    template_name = 'proyectos/configurar_us.html'
+    form_class = editarUS
+    def get_success_url(self):
+        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 class EditarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     model = HistoriaUsuario
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
-    template_name = 'proyectos/editar_us.html'
-    form_class = editarUS
-    success_url = reverse_lazy('proyectos:listar_US')
+    template_name = 'proyectos/configurar_us.html'
+    form_class = CrearUSForm
+    def get_success_url(self):
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
-'''
-class ListarProyectos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     model = HistoriaUsuario
-    #permission_required =
-    template_name = 'proyectos/listar_USporProyecto.html'
-    queryset = Proyec.objects.all()
-'''
+    template_name = 'proyectos/listar_us.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        proyecto=Proyec.objects.get(id=pk)
+        us=proyecto.proyecto.all()
+        return render(request, 'proyectos/listar_us.html', {'object_list': us})
+
+
+class EliminarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,DeleteView):
+    """ Vista basada en clase, se utiliza para eliminar un proyecto"""
+    model = HistoriaUsuario
+    def get_success_url(self):
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+
+class aprobarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,UpdateView ):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    model = HistoriaUsuario
+    permission_required = ('user.view_user', 'user.add_user',
+                           'user.delete_user', 'user.change_user')
+    template_name = 'proyectos/aprobar_us.html'
+    form_class = aprobar_us
+    def get_success_url(self):
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+
+
+class ProductBacklog(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    model = HistoriaUsuario
+    template_name = 'proyectos/ver_PB.html'
+
+    def get(self, request, pk, *args, **kwargs):
+
+        proyecto=Proyec.objects.get(id=pk)
+        us = proyecto.proyecto.filter(aprobado_PB=True)
+        return render(request, 'proyectos/ver_PB.html', {'object_list': us})

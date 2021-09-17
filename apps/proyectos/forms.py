@@ -28,7 +28,8 @@ class editarProyect(forms.ModelForm):
             'equipo':'Equipo de trabajo',
             'dias_estimados':'Cantdad de dias estimados'
         }
-
+class DateInput(forms.DateInput):
+    input_type='date'
 class CrearUSForm(forms.ModelForm):
     class Meta:
         model= HistoriaUsuario
@@ -41,11 +42,17 @@ class CrearUSForm(forms.ModelForm):
 class editarUS(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
-        fields = ['nombre', 'descripcion', 'prioridad','estado','estimacion','asignacion']
+        fields = ['estimacion','asignacion']
         labels = {
-            'nombre': 'Nombre de la Historia de Usuario',
-            'descripcion': 'Descripcion de la Historia de Usuario',
-            'prioridad': 'Prioridad de la Historia de Usuario',
-            'estado': 'Estado de la Historia de Usuario',
+            'estimacion': 'estimacion de tiempo para la historia de usuario',
             'asignacion':'Asignar Historia de Usuario'
+        }
+
+
+class aprobar_us(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['aprobado_PB']
+        labels = {
+            'aprobado_PB': 'Aprobar Historia de Usuario'
         }

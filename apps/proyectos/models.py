@@ -8,6 +8,56 @@ Modelo para el proyecto a desarrollar.
 Este represe la clase del proyecto, el cual contiene
 los estados, el nombre, descripcion y los miembros.
 '''
+
+
+class Proyec(models.Model):
+    Pendiente = 'Pendiente'
+    Iniciado = 'Iniciado'
+    Concluido = 'Concluido'
+    Cancelado = 'Cancelado'
+    STATUS_CHOICES = (
+        (Pendiente, "Pendiente"),
+        (Iniciado, "Iniciado"),
+        (Concluido, "Concluido"),
+        (Cancelado, "Cancelado")
+    )
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=200, blank=False, null=False)
+    # limit_choices_to={'rol':1}
+    encargado = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="encargado")
+    equipo = models.ManyToManyField(User, related_name="equipo")
+    descripcion = models.TextField(blank=False, null=False)
+    estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default="Pendiente")
+    fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
+    dias_estimados = models.PositiveIntegerField(editable=True, default=0)
+    fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True)
+    fecha_inicio = models.DateField(blank=True, null=True)
+    fecha_concluido = models.DateField(blank=True, null=True)
+    fecha_cancelado = models.DateField(blank=True, null=True)
+    estado_anterior = models.CharField(max_length=200, default='Pendiente')
+
+    class Meta:
+        verbose_name = 'Proyecto'
+        verbose_name_plural = 'Proyectos'
+
+    def __str__(self):
+        return self.nombre
+
+    def is_upperclass(self):
+        return self.estado in {self.Pendiente, self.Iniciado, self.Cancelado, self.Concluido}
+
+    def obtener_equipo(self):
+        miembros = str([User for User in self.equipo.all().values_list('username', flat=True)]).replace("[",
+                                                                                                        "").replace("]",
+                                                                                                                    "").replace(
+            "'", "")
+        return miembros
+
+    def obtener_encargado(self):
+        encargado_del_proyecto = self.encargado.all().values_list('username', flat=True)
+        return encargado_del_proyecto
+
+
 class HistoriaUsuario(models.Model):
     Pendiente = 'Pendiente'
     ToDo = 'ToDo'
@@ -37,13 +87,14 @@ class HistoriaUsuario(models.Model):
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
     estimacion = models.PositiveIntegerField(editable=True, default=0)
     fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
-    fecha_inicio = models.DateField(blank=True, null=True)
-    fecha_concluido = models.DateField(blank=True,null=True)
-    fecha_cancelado = models.DateField(blank=True,null=True)
+    fecha_ToDo = models.DateField(blank=True, null=True)
+    fecha_Doing = models.DateField(blank=True,null=True)
+    fecha_Done = models.DateField(blank=True,null=True)
+    fecha_QA = models.DateField(blank=True, null=True)
     estado_anterior = models.CharField(max_length=200, default='Pendiente')
     prioridad = models.CharField(max_length=15, choices=Prioridad_CHOICES, default=1)
-
-
+    proyecto = models.ForeignKey(Proyec, on_delete=models.CASCADE, blank=True, null=True, related_name="proyecto")
+    aprobado_PB=models.BooleanField(default=False)
 
 
 
@@ -66,50 +117,6 @@ class HistoriaUsuario(models.Model):
 
 
 
-class Proyec(models.Model):
-    Pendiente = 'Pendiente'
-    Iniciado = 'Iniciado'
-    Concluido = 'Concluido'
-    Cancelado = 'Cancelado'
-    STATUS_CHOICES = (
-        (Pendiente, "Pendiente"),
-        (Iniciado, "Iniciado"),
-        (Concluido, "Concluido"),
-        (Cancelado, "Cancelado")
-    )
-    id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=200, blank=False, null=False)
-    # limit_choices_to={'rol':1}
-    encargado = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="encargado")
-    equipo = models.ManyToManyField(User, related_name="equipo")
-    descripcion = models.TextField(blank=False, null=False)
-    estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default=1)
-    fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
-    dias_estimados = models.PositiveIntegerField(editable=True, default=0)
-    fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True)
-    fecha_inicio = models.DateField(blank=True, null=True)
-    fecha_concluido = models.DateField(blank=True, null=True)
-    fecha_cancelado = models.DateField(blank=True, null=True)
-    estado_anterior = models.CharField(max_length=200, default='Pendiente')
-    US = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True, related_name="US")
-
-    class Meta:
-        verbose_name = 'Proyecto'
-        verbose_name_plural = 'Proyectos'
-
-    def __str__(self):
-        return self.nombre
-
-    def is_upperclass(self):
-        return self.estado in {self.Pendiente, self.Iniciado, self.Cancelado, self.Concluido}
-
-    def obtener_equipo(self):
-        miembros = str([User for User in self.equipo.all().values_list('username', flat=True)]).replace("[","").replace("]",  "").replace( "'", "")
-        return miembros
-
-    def obtener_encargado(self):
-        encargado_del_proyecto = self.encargado.all().values_list('username', flat=True)
-        return encargado_del_proyecto
 
 
 

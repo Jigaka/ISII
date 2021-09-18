@@ -6,7 +6,7 @@ de personas no autorizadas. Atraves del atributo
 correo
 '''
 class ListaPermitidos(models.Model):
-    correo = models.TextField()
+    correo = models.TextField(unique=True)
 
     def __str__(self):
         return f'{self.correo}'

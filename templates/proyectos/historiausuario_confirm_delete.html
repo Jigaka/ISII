@@ -1,0 +1,9 @@
+<form method="post">{% csrf_token %}
+
+
+<p>Desea eliminar la historia de usuario "{{ object }}"?</p>
+
+
+     <button type="submit">Eliminar</button>
+     <a href="{%  url "proyectos:listar_us" object.proyecto.id%}">Cancelar</a>
+</form>

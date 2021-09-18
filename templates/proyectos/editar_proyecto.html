@@ -30,6 +30,10 @@
               <div class="col col-md-3">{{ form.estado.label}}</div>
               <div class="col-12 col-md-9">{{ form.estado}}</div>
             </div>
+            <div class="row form-group">
+              <div class="col col-md-3">{{ form.dias_estimados.label}}</div>
+              <div class="col-12 col-md-9">{{ form.dias_estimados}}</div>
+            </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Guardar</button>
               <button type="reset" class="btn btn-danger"><a href="{% url 'proyectos:listar_proyectos' %}">Cancelar</a></button>

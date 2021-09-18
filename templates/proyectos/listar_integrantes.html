@@ -1,7 +1,7 @@
-{% extends 'inicio.html' %}
+{% extends 'proyectos/proyecto.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Listado de Proyectos
+Gestion de Proyectos | Listado de integrantes
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
@@ -29,41 +29,37 @@ Gestion de Proyectos | Listado de Proyectos
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Proyectos</strong>
+                <strong class="card-title">Listado de Integrantes</strong>
             </div>
         </div>
 
     </div>
     <div class="table-stats order-table ov-h">
-        {%  if object_list %}
+        {%  if users %}
             <table style="width:100%">
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>nombre</th>
-                        <th>descripcion</th>
-                        <th>estado</th>
+                        <th>username</th>
+                        <th>rol</th>
+                        {% if request.user.is_superuser %}
                         <th style="text-align: left;">Opciones</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
-                {% for proyec in object_list %}
+                {% for user in users %}
                     <tr>
-                        <td>{{ proyec.id }}</td>
-                        <td>{{ proyec.nombre }}</td>
-                        <td>{{ proyec.descripcion }}</td>
-                        <td>{{ proyec.estado }}</td>
-
+                        <td>{{ user.user.username }}</td>
+                        {% if user.rol.rol%}
+                            <td>{{ user.rol.rol }}</td>
+                        {% else %}
+                            <td>Sin rol</td>
+                        {% endif %}
+                        {% if  request.user.is_superuser %}
                         <td style="text-align: left;">
-                            {% if  request.user.id == proyec.encargado.id %}
-                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a><br>
-                                <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
-                            {% elif  request.user.is_superuser %}
-                                <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
-                            {% else %}
-                                <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
-                            {% endif %}
+                            <button class="btn btn-primary" onclick="abrirModalRol('{% url 'usuarios:asignar_rol' user.user.id id%}')"> Asignar Rol</button>
                         </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -77,7 +73,7 @@ Gestion de Proyectos | Listado de Proyectos
 
 </div>
 
-<div class="modal fade" id="edicion" role="dialog">
+<div class="modal fade" id="asignarRol" role="dialog">
 
 </div>
 
@@ -90,4 +86,12 @@ Gestion de Proyectos | Listado de Proyectos
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'js/usuarios/index.js' %}"></script>
+    <script type="text/javascript">
+        var $ = JQuery.noConflict()
+        function abrirModalRol(url) {
+            $('#asignarRol').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+    </script>
 {% endblock extrajs %}

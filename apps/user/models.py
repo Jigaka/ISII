@@ -46,7 +46,7 @@ class Rol(models.Model):
                 super().save(*args, **kwargs)
 
 class User(AbstractUser):
-    rol = models.ForeignKey(Rol, on_delete=models.CASCADE, blank=True, null=True)
+    rol = models.ManyToManyField('proyectos.RolProyecto', related_name='user_rol_proyecto')
     def getIdUsuario(self):
         return self.id
 

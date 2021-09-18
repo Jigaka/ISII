@@ -1,7 +1,7 @@
 {% extends 'proyectos/proyecto.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Listado de Roles
+Gestion de Proyectos | Listado de historia de usuarios
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
@@ -16,7 +16,7 @@ Gestion de Proyectos | Listado de Roles
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Roles</strong>
+                <strong class="card-title">Listado de Historia de Usuarios</strong>
             </div>
         </div>
 
@@ -27,16 +27,22 @@ Gestion de Proyectos | Listado de Roles
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Opciones</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
             <tbody>
-              {% for roles in object_list %}
+              {% for us in object_list %}
                <tr>
-                 <td>{{ roles.id }}</td>
-                 <td>{{ roles.rol }}</td>
-                 <td>
-                   <a href="{%  url 'usuarios:agregar_permisos_roles' roles.id %}">  Agregar permisos</a>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+
+                 <td style="text-align: left;">
+                        <a href="{%  url 'proyectos:configurar_us' us.id %}"> Configurar</a><br>
+                        <a> Agregar a Sprint</a><br>
                  </td>
                </tr>
              {% endfor %}

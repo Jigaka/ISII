@@ -15,6 +15,20 @@ class UserForm(forms.ModelForm):
             'is_active': 'Estado del usuario'
         }
 
+
+class UserForm(forms.ModelForm):
+    """ Formulario para asignar un rol a un usuario """
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name','rol', 'email', 'is_active']
+        labels = {
+            'first_name': 'Nombre del usuario',
+            'last_name': 'Apellidos del usuario',
+            'rol': 'Rol del usuario',
+            'email': 'correo del usuario',
+            'is_active': 'Estado del usuario'
+        }
+
 class PermsForm(forms.ModelForm):
     """ Formulario para usuario, se usa para crear permisos """
     class Meta:

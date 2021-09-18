@@ -6,20 +6,8 @@ Gestion de Proyectos | Listado de Proyectos
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
     <style>
-        .eliminar:hover{
-            color:white;
-            background-color: red;
-            border-radius: 5px;
-        }
-
-        .eliminar{
-            color: red;
-        }
-
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
+        #eliminar:hover{
+            color:red;
         }
     </style>
 {% endblock extra_css %}
@@ -35,7 +23,7 @@ Gestion de Proyectos | Listado de Proyectos
 
     </div>
     <div class="table-stats order-table ov-h">
-        {%  if object_list %}
+        {%  if proyectos %}
             <table style="width:100%">
                 <thead>
                     <tr>
@@ -43,47 +31,36 @@ Gestion de Proyectos | Listado de Proyectos
                         <th>nombre</th>
                         <th>descripcion</th>
                         <th>estado</th>
+                        <th>Fecha de creacion</th>
+                        <th>dias estimados</th>
+                        <th>equipo de trabajo</th>
+                        <th>Encargado del Proyecto</th>
                         <th style="text-align: left;">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for proyec in object_list %}
+                {% for proyec in proyectos %}
                     <tr>
                         <td>{{ proyec.id }}</td>
                         <td>{{ proyec.nombre }}</td>
                         <td>{{ proyec.descripcion }}</td>
                         <td>{{ proyec.estado }}</td>
-
+                        <td>{{ proyec.fecha_creacion }}</td>
+                        <td>{{ proyec.dias_estimados }}</td>
+                         <td>{{ proyec.obtener_equipo}}</td>
+                        <td>{{ proyec.encargado }}</td>
                         <td style="text-align: left;">
-                            {% if  request.user.id == proyec.encargado.id %}
-                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a><br>
-                                <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
-                            {% elif  request.user.is_superuser %}
-                                <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
-                            {% else %}
-                                <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
-                            {% endif %}
+                            <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a><br>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <img src="{% static 'images/ilustration/list_is_empty_1.png' %}" alt="Lista vacia" height="300px" class="center">
+            <h1> No existen proyectos</h1>
         {%  endif %}
     </div>
-</div>
-<div class="modal fade" id="creacion" role="dialog">
 
-</div>
-
-<div class="modal fade" id="edicion" role="dialog">
-
-</div>
-
-<div class="modal fade" id="eliminacion" role="dialog">
-
-</div>
 {% endblock body %}
 
 {% block extrajs %}

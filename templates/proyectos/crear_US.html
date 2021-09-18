@@ -1,13 +1,13 @@
 {% extends 'proyectos/proyecto.html' %}
 {% block titulo %}
-  Gestion de Proyectos | Crear Rol
+  Gestion de Proyectos | Crear US
 {% endblock titulo %}
 {% block body %}
 <form method="POST">
   {% csrf_token %}
   <div class="card">
     <div class="card-header">
-        <strong>Añadir Rol</strong>
+        <strong>Añadir US</strong>
     </div>
     <div class="card-body card-block">
         {{ form.as_p }}

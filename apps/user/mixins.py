@@ -7,7 +7,6 @@ class LoginYSuperStaffMixin(object):
     def dispatch(self, request, *args, **kwargs):
         """ Función que verifica que el usuario esté autenticado y valida si puede ingresar al sitio de administracion"""
         if request.user.is_authenticated:
-            if request.user.is_staff:
                 return super().dispatch(request, *args, **kwargs)
         return redirect('index')
 

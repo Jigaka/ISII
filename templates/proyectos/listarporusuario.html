@@ -31,6 +31,9 @@ Gestion de Proyectos | Listado de Proyectos
                         <th>nombre</th>
                         <th>descripcion</th>
                         <th>estado</th>
+                        {% if not request.user.is_superuser %}
+                        <th style="text-align: left;">modificar</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -40,6 +43,12 @@ Gestion de Proyectos | Listado de Proyectos
                         <td>{{ proyec.nombre }}</td>
                         <td>{{ proyec.descripcion}}</td>
                         <td>{{ proyec.estado }}</td>
+                        {% if not request.user.is_superuser %}
+                        <td style="text-align: left;">
+                            <a href="{%  url 'proyectos:editar_proyectos' proyec.id %}"> Editar</a><br>
+                            <a id="eliminar" href="{%  url 'proyectos:eliminar_proyectos' proyec.id %}"> Eliminar</a>
+                        </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

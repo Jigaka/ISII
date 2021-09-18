@@ -1,4 +1,5 @@
 {% load static %}
+{% load get_id %}
 <!Doctype html>
 <html class="no-js" lang="es">
 <head>
@@ -40,23 +41,33 @@
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
                     </li>
                     {% if request.user.is_superuser %}
-                        <li >
-                            <a href="{%  url 'proyectos:listar_integrantes' proyecto.id %}" > <i
-                                    class="menu-icon fa fa-users"></i>Integrantes del proyecto</a>
-                        </li>
-                        <li class="menu-item-has-children dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                    <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' %}">  Crear Rol</a></li>
-                                    <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' %}">  Listar Roles</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-running"></i> Sprints</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                    <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_sprint' proyecto.id %}">  Crear Sprint</a></li>
-                            </ul>
-                        </li>
+                    {% get_id request.path as id %}
+                    <li>
+                        <a href='{%  url 'proyectos:listar_integrantes' id%}' > <i
+                                class="menu-icon fa fa-users"></i>Integrantes</a>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.is_superuser %}
+                                <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' id%}">  Crear Rol</a></li>
+                                <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' id%}">  Listar Roles</a></li>
+                            {% endif %}
+                        </ul>
+                     </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Historias de Usuario</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_us'  id%}"> Crear Historia de Usuario</a></li>
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar US</a></li>
+                        </ul>
+                     </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Product Backlog</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:ver_pb'  id%}"> Ver Product Backlog</a></li>
+                        </ul>
+                     </li>
                     {% endif %}
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -69,8 +80,8 @@
         <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="./"><img src="{% static 'images/logo.png' %}" alt="Logo"></a>
-                    <a class="navbar-brand hidden" href="./"><img src="{% static 'images/logo.png' %}" alt="Logo"></a>
+                    <a class="navbar-brand" href="/"><img src="{% static 'images/logo.png' %}" alt="Logo"></a>
+                    <a class="navbar-brand hidden" href="/"><img src="{% static 'images/logo.png' %}" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
             </div>

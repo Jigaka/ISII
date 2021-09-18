@@ -1,0 +1,56 @@
+{% extends 'inicio.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de Correos Permitidos
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+         #danger:hover{
+            color:red;
+        }
+    </style>
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Correos Permitidos</strong>
+            </div>
+            <div class="col-md-4">
+                <button type="button" style="float:right" class="btn btn-primary"><a href="{% url 'login:agregar_correos_permitidos'%}">Registrar Correos permitidos</a></button>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Correos</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for permitidos in object_list %}
+               <tr>
+                 <td>{{ permitidos.id }}</td>
+                 <td>{{ permitidos.correo }}</td>
+                 <td>
+                   <a href="{%  url 'login:eliminar_correos_permitidos' permitidos.id %}"> Eliminar</a>
+                 </td>
+               </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

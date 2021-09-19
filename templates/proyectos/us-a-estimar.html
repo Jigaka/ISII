@@ -16,7 +16,7 @@ Gestion de Proyectos | Product Backlog
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Historia de Usuarios</strong>
+                <strong class="card-title">Historias de Usuarios a Estimar</strong>
             </div>
         </div>
 
@@ -29,7 +29,6 @@ Gestion de Proyectos | Product Backlog
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Prioridad</th>
-                    <th>Estimacion</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -40,14 +39,10 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                <td>{{ us.estimacion }}</td>
 
                  <td style="text-align: left;">
-                        <a href="{%  url 'proyectos:configurar_us' us.id %}"> Configurar</a><br>
-                             {% if us.estimacion != 0 %}
-                                <a> Agregar a Sprint</a><br>
-                             {% endif %}
-
+                        <a href="{%  url 'proyectos:estimar_us' us.id %}"> Estimar</a><br>
+                        <a> Agregar a Sprint</a><br>
                  </td>
                </tr>
              {% endfor %}

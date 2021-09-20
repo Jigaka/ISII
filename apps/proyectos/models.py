@@ -151,8 +151,22 @@ def agregar_fecha_inicio(sender, instance, **kwargs):
             x = Proyec.objects.filter(id=instance.id).update(fecha_concluido=instance.fecha)
 
 
+def agregar_encargado(sender, instance, **Kwargs):
+    """ Funcion para agregar el encargado al equipo de trabajo cuando se crea un nuevo proyecto
+
+    Parametros:
+        instance: Instancia del modelo a actualizar
+
+    Retorna:
+        Void. Solo modifica el modelo enviado
+    """
+    if not instance.equipo.all():
+        instance.equipo.add(instance.encargado)
+
+
 pre_save.connect(definir_estadoanterior, sender=Proyec)
 post_save.connect(agregar_fecha_inicio, sender=Proyec)
+post_save.connect(agregar_encargado, sender=Proyec)
 
 
 

@@ -57,11 +57,13 @@ Gestion de Proyectos | Listado de Proyectos
                         <td style="text-align: left;">
                             {% if  request.user.id == proyec.encargado.id %}
                                 <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a><br>
-                                <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
-                            {% elif  request.user.is_superuser %}
+                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
+                            {% endif %}
+                            {% if  request.user.is_superuser %}
                                 <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
-                            {% else %}
-                                <a href="{%  url 'proyectos:loco' proyec.id%}"> Ver proyecto</a>
+                            {% endif %}
+                            {% if request.user.id != proyec.encargado.id and not request.user.is_superuser%}
+                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
                             {% endif %}
                         </td>
                     </tr>

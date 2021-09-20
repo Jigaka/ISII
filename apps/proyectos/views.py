@@ -1,8 +1,7 @@
 from typing import List
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import ProyectoForm, editarUS, editarProyect, CrearUSForm,aprobar_us
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
 from .models import Proyec, RolProyecto, HistoriaUsuario
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
@@ -198,16 +197,16 @@ class ConfigurarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
     template_name = 'proyectos/configurar_us.html'
-    form_class = editarUS
+    form_class = configurarUSform
     def get_success_url(self):
-        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id})
 
 class EditarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     model = HistoriaUsuario
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
-    template_name = 'proyectos/configurar_us.html'
+    template_name = 'proyectos/crear_us.html'
     form_class = CrearUSForm
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
@@ -217,9 +216,13 @@ class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     template_name = 'proyectos/listar_us.html'
 
     def get(self, request, pk, *args, **kwargs):
-        proyecto=Proyec.objects.get(id=pk)
-        us=proyecto.proyecto.all()
+        proyecto = Proyec.objects.get(id=pk)
+        us = proyecto.proyecto.filter(aprobado_PB=False)
         return render(request, 'proyectos/listar_us.html', {'object_list': us})
+
+
+
+
 
 
 class EliminarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,DeleteView):
@@ -234,7 +237,7 @@ class aprobarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,UpdateView ):
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
     template_name = 'proyectos/aprobar_us.html'
-    form_class = aprobar_us
+    form_class = aprobar_usform
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
@@ -242,9 +245,35 @@ class aprobarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,UpdateView ):
 class ProductBacklog(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     model = HistoriaUsuario
     template_name = 'proyectos/ver_PB.html'
-
     def get(self, request, pk, *args, **kwargs):
-
         proyecto=Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=True)
         return render(request, 'proyectos/ver_PB.html', {'object_list': us})
+
+
+class ProductBacklog(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    model = HistoriaUsuario
+    template_name = 'proyectos/ver_PB.html'
+    def get(self, request, pk, *args, **kwargs):
+        proyecto=Proyec.objects.get(id=pk)
+        us = proyecto.proyecto.filter(aprobado_PB=True)
+        return render(request, 'proyectos/ver_PB.html', {'object_list': us})
+
+class Listar_us_a_estimar(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    model = HistoriaUsuario
+    template_name = 'proyectos/us-a-estimar.html'
+    def get(self, request, pk, *args, **kwargs):
+        proyecto=Proyec.objects.get(id=pk)
+        user = User.objects.get(id=request.user.id)
+        us = proyecto.proyecto.filter(asignacion=user, aprobado_PB=True,estimacion=0 )
+        ''', estimacion=0, asignacion=user'''
+        return render(request, 'proyectos/us-a-estimar.html', {'object_list': us})
+
+
+class estimarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,UpdateView ):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    model = HistoriaUsuario
+    template_name = 'proyectos/estimar_us.html'
+    form_class = estimar_userform
+    def get_success_url(self):
+        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })

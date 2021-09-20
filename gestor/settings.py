@@ -5,7 +5,7 @@ from gestor.env import credentials
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', credentials.get('django_secret_key'))
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-ALLOWED_HOSTS = ['apepu-gestor.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['afternoon-hamlet-12630.herokuapp.com,'127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

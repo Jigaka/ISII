@@ -40,20 +40,18 @@ class CrearUSForm(forms.ModelForm):
             'descripcion': 'Descripcion de la Historia de Usuario',
             'prioridad':'Prioridad de la Historia de Usuario'
         }
-class editarUS(forms.ModelForm):
+class configurarUSform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
-        fields = ['estimacion','asignacion']
+        fields = ['estimacion_scrum','asignacion']
         labels = {
-            'estimacion': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_scrum': 'estimacion de tiempo para la historia de usuario',
             'asignacion':'Asignar Historia de Usuario'
         }
         #if (estado == Iniciado):
         #fecha_inicio = forms.DateField("fecha_de_creacion", auto_now=True, auto_now_add=False)
 
-class DateInput(forms.DateInput):
-    input_type='date'
-    
+
 class SprintForm(forms.ModelForm):
     fecha_inicio=forms.DateField(widget=DateInput)
     fecha_fin=forms.DateField(widget=DateInput)
@@ -66,7 +64,15 @@ class SprintForm(forms.ModelForm):
             'fecha_fin': 'Fecha de finalización'
         }
 
-class aprobar_us(forms.ModelForm):
+
+class estimar_userform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['estimacion_user']
+        labels = {
+            'estimacion_user': 'estimacion de tiempo para la historia de usuario',
+        }
+class aprobar_usform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
         fields = ['aprobado_PB']

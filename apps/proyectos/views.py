@@ -76,7 +76,8 @@ class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
     def get(self, request, pk, *args, **kwargs):
-        return render(request, 'proyectos/proyecto.html', {'proyecto_id':pk})
+        proyecto = Proyec.objects.get(id=pk)
+        return render(request, 'proyectos/proyecto.html', {'proyecto':proyecto, 'proyecto_id':pk})
 
 
 
@@ -112,14 +113,6 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         integrantes = [{'user':user, 'rol': Rol.objects.filter(id = user.rol.filter(proyecto_id=pk).first().rol.id if user.rol.filter(proyecto_id=pk).first() else None ).first()} for user in users]
         proyecto = Proyec.objects.get(id=pk)
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
-
-
-
-
-
-
-
-
 
 
 #class listarporencargado( ValidarPermisosMixin, ListView):
@@ -161,7 +154,6 @@ def listarProyectoporEncargado(request):
     user = User.objects.get(id=request.user.id)
     proyectos = user.encargado.all()
     return render(request, 'proyectos/listarporencargado.html', {'proyectos': proyectos})
-
 
 
 class listarProyectosUsuario(ValidarPermisosMixin, ListView):
@@ -230,10 +222,6 @@ class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         proyecto = Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=False)
         return render(request, 'proyectos/listar_us.html', {'object_list': us})
-
-
-
-
 
 
 class EliminarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,DeleteView):

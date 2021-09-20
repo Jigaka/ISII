@@ -1,8 +1,8 @@
 from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
-from .models import Proyec, RolProyecto, HistoriaUsuario
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, SprintForm
+from .models import Proyec, RolProyecto, HistoriaUsuario, Sprint
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
@@ -76,7 +76,8 @@ class Proyecto( ValidarPermisosMixin,TemplateView):
     # permission_required = ('user.view_user', 'user.add_user',
     #                        'user.delete_user', 'user.change_user')
     def get(self, request, pk, *args, **kwargs):
-        return render(request, 'proyectos/proyecto.html', {'proyecto_id':pk})
+        proyecto = Proyec.objects.get(id=pk)
+        return render(request, 'proyectos/proyecto.html', {'proyecto':proyecto, 'proyecto_id':pk})
 
 
 
@@ -114,14 +115,6 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
 
-
-
-
-
-
-
-
-
 #class listarporencargado( ValidarPermisosMixin, ListView):
 #    model = Proyec
 class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
@@ -134,12 +127,33 @@ class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView
     success_url = reverse_lazy('proyectos:listar_proyectos')
 
 
+class CrearSprint(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    permission_required = ('auth.view_permission', 'auth.add_permission',
+                        'auth.delete_permission', 'auth.change_permission')
+    template_name = 'proyectos/crear_sprint.html'
+    model = Sprint
+    form_class = SprintForm
+    success_url = reverse_lazy('proyectos:listar_proyectos')    
+    
+    def form_valid(self, form):
+        proyecto = get_object_or_404(Proyec, id=self.kwargs['pk'])
+        form.instance.proyecto = proyecto
+        return super(CrearSprint, self).form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        context['proyecto'] = Proyec.objects.get(id=pk)
+        return context
+
 
 def listarProyectoporEncargado(request):
     user = User.objects.get(id=request.user.id)
     proyectos = user.encargado.all()
     return render(request, 'proyectos/listarporencargado.html', {'proyectos': proyectos})
-
 
 
 class listarProyectosUsuario(ValidarPermisosMixin, ListView):
@@ -153,17 +167,6 @@ class listarProyectosUsuario(ValidarPermisosMixin, ListView):
         user = User.objects.get(id=request.user.id)
         proyectos = user.equipo.all()
         return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos})
-
-
-
-
-
-
-
-
-
-
-
 
 
 class CrearUS(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
@@ -219,10 +222,6 @@ class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         proyecto = Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=False)
         return render(request, 'proyectos/listar_us.html', {'object_list': us})
-
-
-
-
 
 
 class EliminarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,DeleteView):

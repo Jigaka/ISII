@@ -37,8 +37,9 @@
                     <li class="active">
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
                     </li>
-                    {% if request.user.is_superuser %}
                     {% get_id request.path as id %}
+                    {% if request.user.is_superuser %}
+
                     <li>
                         <a href='{%  url 'proyectos:listar_integrantes' id%}' > <i
                                 class="menu-icon fa fa-users"></i>Integrantes</a>
@@ -59,6 +60,7 @@
                             <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar Historia de UsuarioHistoria de Usuario</a></li>
                         </ul>
                      </li>
+                    {% endif %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i>Sprint Planning</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -66,7 +68,6 @@
                             <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
                         </ul>
                      </li>
-                    {% endif %}
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>

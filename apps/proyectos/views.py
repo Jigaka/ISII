@@ -72,9 +72,9 @@ class EliminarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         return redirect('proyectos:listar_proyectos')
 
 
-class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
-    permission_required = ('user.view_user', 'user.add_user',
-                           'user.delete_user', 'user.change_user')
+class Proyecto( ValidarPermisosMixin,TemplateView):
+    # permission_required = ('user.view_user', 'user.add_user',
+    #                        'user.delete_user', 'user.change_user')
     def get(self, request, pk, *args, **kwargs):
         return render(request, 'proyectos/proyecto.html', {'proyecto_id':pk})
 
@@ -258,6 +258,7 @@ class ProductBacklog(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         proyecto=Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=True)
         return render(request, 'proyectos/ver_PB.html', {'object_list': us})
+
 
 class Listar_us_a_estimar(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     model = HistoriaUsuario

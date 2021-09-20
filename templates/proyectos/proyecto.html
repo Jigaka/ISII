@@ -40,8 +40,8 @@
                     <li class="active">
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
                     </li>
-                    {% if request.user.is_superuser %}
                     {% get_id request.path as id %}
+                    {% if request.user.is_superuser %}
                     <li>
                         <a href='{%  url 'proyectos:listar_integrantes' id%}' > <i
                                 class="menu-icon fa fa-users"></i>Integrantes</a>
@@ -55,11 +55,12 @@
                             {% endif %}
                         </ul>
                      </li>
+                    {% endif %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Historias de Usuario</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_us'  id%}"> Crear Historia de Usuario</a></li>
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar Historia de UsuarioHistoria de Usuario</a></li>
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar Historia de Usuario</a></li>
                         </ul>
                      </li>
                     <li class="menu-item-has-children dropdown">
@@ -68,8 +69,13 @@
                             <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:ver_pb'  id%}"> Ver Product Backlog</a></li>
                             <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
                         </ul>
-                     </li>
-                    {% endif %}
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-running"></i> Sprints</a>
+                        <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_sprint' proyecto.id %}">  Crear Sprint</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>

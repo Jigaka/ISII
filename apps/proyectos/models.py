@@ -8,8 +8,6 @@ Modelo para el proyecto a desarrollar.
 Este represe la clase del proyecto, el cual contiene
 los estados, el nombre, descripcion y los miembros.
 '''
-
-
 class Proyec(models.Model):
     Pendiente = 'Pendiente'
     Iniciado = 'Iniciado'
@@ -95,6 +93,8 @@ class HistoriaUsuario(models.Model):
     prioridad = models.CharField(max_length=15, choices=Prioridad_CHOICES, default=1)
     proyecto = models.ForeignKey(Proyec, on_delete=models.CASCADE, blank=True, null=True, related_name="proyecto")
     aprobado_PB=models.BooleanField(default=False)
+    estimacion_user=models.PositiveIntegerField(editable=True, default=0)
+    estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
 
 
 
@@ -151,8 +151,29 @@ def agregar_fecha_inicio(sender, instance, **kwargs):
             x = Proyec.objects.filter(id=instance.id).update(fecha_concluido=instance.fecha)
 
 
+
+def calcular_estimacion(sender, instance, **kwargs):
+    if (instance.estimacion==0 and  instance.estimacion_scrum!=0 and instance.estimacion_user!=0):
+        x=(instance.estimacion_scrum+instance.estimacion_user)/2
+        HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
+
+        
+def agregar_encargado(sender, instance, **Kwargs):
+    """ Funcion para agregar el encargado al equipo de trabajo cuando se crea un nuevo proyecto
+
+    Parametros:
+        instance: Instancia del modelo a actualizar
+
+    Retorna:
+        Void. Solo modifica el modelo enviado
+    """
+    if not instance.equipo.all():
+        instance.equipo.add(instance.encargado)
+
+
 pre_save.connect(definir_estadoanterior, sender=Proyec)
 post_save.connect(agregar_fecha_inicio, sender=Proyec)
-
+post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
+post_save.connect(agregar_encargado, sender=Proyec)
 
 

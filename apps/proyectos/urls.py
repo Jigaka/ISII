@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs,Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, ListarUS,EliminarUS, aprobarUS,ProductBacklog, Integrantes, CrearSprint
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs,Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, ListarUS,EliminarUS, aprobarUS,ProductBacklog, CrearSprint
 from apps.user.views import listarProyectoporUsuario
 from django.contrib.auth.decorators import login_required
 

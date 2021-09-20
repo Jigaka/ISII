@@ -1,5 +1,6 @@
-from django import forms
-from .models import Proyec, HistoriaUsuario
+from django import  forms
+from django.forms.widgets import Widget
+from .models import Proyec, Sprint, HistoriaUsuario
 
 '''
 Form para rellenar campos para la creacion y/o edicion
@@ -47,6 +48,22 @@ class configurarUSform(forms.ModelForm):
             'estimacion_scrum': 'estimacion de tiempo para la historia de usuario',
             'asignacion':'Asignar Historia de Usuario'
         }
+        #if (estado == Iniciado):
+        #fecha_inicio = forms.DateField("fecha_de_creacion", auto_now=True, auto_now_add=False)
+
+
+class SprintForm(forms.ModelForm):
+    fecha_inicio=forms.DateField(widget=DateInput)
+    fecha_fin=forms.DateField(widget=DateInput)
+    class Meta:
+        model=Sprint
+        fields=['nombre','fecha_inicio','fecha_fin']
+        labels = {
+            'nombre': 'Nombre',
+            'fecha_inicio': 'Fecha de inicio',
+            'fecha_fin': 'Fecha de finalización'
+        }
+
 
 class estimar_userform(forms.ModelForm):
     class Meta:

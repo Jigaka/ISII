@@ -79,7 +79,7 @@ class HistoriaUsuario(models.Model):
     )
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False)
-    asignacion = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="asignacion")
+    asignacion = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True, related_name="asignacion")
     descripcion = models.TextField(blank=False, null=False)
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default=1)
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)

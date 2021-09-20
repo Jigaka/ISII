@@ -192,7 +192,14 @@ class CrearUS(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
         us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto)
         us.save()
         return redirect('proyectos:listar_us', id)
-
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        context['proyecto'] = Proyec.objects.get(id=pk)
+        return context
 
 class ConfigurarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
@@ -209,7 +216,7 @@ class EditarUs(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     model = HistoriaUsuario
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')
-    template_name = 'proyectos/crear_us.html'
+    template_name = 'proyectos/crear_US.html'
     form_class = CrearUSForm
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
@@ -221,7 +228,7 @@ class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=False)
-        return render(request, 'proyectos/listar_us.html', {'object_list': us})
+        return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
 
 
 class EliminarUS(LoginYSuperStaffMixin, ValidarPermisosMixin,DeleteView):

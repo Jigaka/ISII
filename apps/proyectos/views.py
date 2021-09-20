@@ -27,6 +27,8 @@ class CrearProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
 
 
 class ListarProyectos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    """Vista basada en clase para mostrar todos los proyectos para el admin"""
+
 
     model = Proyec
     permission_required = ('user.view_user', 'user.add_user',
@@ -130,18 +132,27 @@ class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView
     form_class = ProyectoForm
     template_name = 'proyectos/asignar_rol.html'
     success_url = reverse_lazy('proyectos:listar_proyectos')
+
+
+
 def listarProyectoporEncargado(request):
     user = User.objects.get(id=request.user.id)
     proyectos = user.encargado.all()
     return render(request, 'proyectos/listarporencargado.html', {'proyectos': proyectos})
 
 
-class listarProyectosUsuario( ValidarPermisosMixin, ListView):
+
+class listarProyectosUsuario(ValidarPermisosMixin, ListView):
+    """Vista basada en clase para listar los proyectos en los que se esta
+    ya sea como encargado o solo miembro.
+    """
+
+
     model = Proyec
-    def listarporUsuario(request):
+    def get(self, request, *args, **kwargs):
         user = User.objects.get(id=request.user.id)
         proyectos = user.equipo.all()
-        return render(request, 'proyectos/listarporusuario.html', {'proyectos': proyectos})
+        return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos})
 
 
 

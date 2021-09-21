@@ -7,7 +7,7 @@
     color: red;
 }
 .opciones a{
-    padding: 0 7px;
+    padding: 0 8px;
     display: block;
     float: left;
     clear:left;
@@ -26,4 +26,12 @@
 }
 .boton-correos:hover a{
     color:white;
+}
+.aprobar:hover{
+    color:white;
+    background-color:green;
+    border-radius: 2px;
+}   
+.aprobar{
+    color: green;
 }

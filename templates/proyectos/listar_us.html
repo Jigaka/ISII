@@ -5,18 +5,14 @@ Gestion de Proyectos | Listado de historia de usuarios
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <style>
-         #danger:hover{
-            color:red;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
 {% endblock extra_css %}
 {% block body %}
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Historia de Usuarios</strong>
+                <strong class="card-title">Listado de Historias de Usuario</strong>
             </div>
         </div>
 
@@ -40,10 +36,10 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
 
-                 <td style="text-align: left;">
-                        <a href="{%  url 'proyectos:aprobar_us' us.id%}">Aprobar</a><br>
-                        <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a><br>
-                        <a href="{%  url 'proyectos:eliminar_us' us.id %}"> Eliminar</a>
+                 <td class="opciones">
+                        <a href="{%  url 'proyectos:aprobar_us' us.id%}" class="aprobar">Aprobar</a>
+                        <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a>
+                        <a href="{%  url 'proyectos:eliminar_us' us.id %}" class="eliminar"> Eliminar</a>
                  </td>
                </tr>
              {% endfor %}

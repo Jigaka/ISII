@@ -1,0 +1,19 @@
+.eliminar:hover{
+    color:white;
+    background-color: red;
+    border-radius: 2px;
+}   
+.eliminar{
+    color: red;
+}
+.opciones a{
+    padding: 0 7px;
+    display: block;
+    float: left;
+    clear:left;
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

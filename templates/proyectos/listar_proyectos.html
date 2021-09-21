@@ -5,23 +5,7 @@ Gestion de Proyectos | Listado de Proyectos
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <style>
-        .eliminar:hover{
-            color:white;
-            background-color: red;
-            border-radius: 5px;
-        }
-
-        .eliminar{
-            color: red;
-        }
-
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}" type="text/css">
 {% endblock extra_css %}
 
 {% block body %}
@@ -54,10 +38,10 @@ Gestion de Proyectos | Listado de Proyectos
                         <td>{{ proyec.descripcion }}</td>
                         <td>{{ proyec.estado }}</td>
 
-                        <td style="text-align: left;">
+                        <td style="text-align: left;" class="opciones">
                             {% if  request.user.id == proyec.encargado.id %}
-                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a><br>
-                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a><br>
+                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a>
+                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
                             {% endif %}
                             {% if  request.user.is_superuser %}
                                 <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>

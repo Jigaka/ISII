@@ -227,7 +227,7 @@ class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=False)
+        us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
 
 

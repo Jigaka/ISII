@@ -1,0 +1,37 @@
+.eliminar:hover{
+    color:white;
+    background-color: red;
+    border-radius: 2px;
+}   
+.eliminar{
+    color: red;
+}
+.opciones a{
+    padding: 0 8px;
+    display: block;
+    float: left;
+    clear:left;
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.boton-correos a{
+    color:#03A9F3;
+}
+.boton-correos:hover{
+    background-color: #03A9F3;
+}
+.boton-correos:hover a{
+    color:white;
+}
+.aprobar:hover{
+    color:white;
+    background-color:green;
+    border-radius: 2px;
+}   
+.aprobar{
+    color: green;
+}

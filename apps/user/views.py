@@ -77,7 +77,7 @@ class ListarPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     permission_required = ('auth.view_permission', 'auth.add_permission',
                            'auth.delete_permission', 'auth.change_permission')
     template_name = 'user/listar_permisos.html'
-    queryset = permisos.objects.all()
+    queryset = permisos.objects.all().order_by('id')
 
 class CrearPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     """Vista basada en clase, se utiliza para crear permisos"""

@@ -5,11 +5,7 @@ Gestion de Proyectos | Listado de Usuarios
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <style>
-         #danger:hover{
-            color:red;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
 {% endblock extra_css %}
 {% block body %}
 <div class="card">
@@ -19,7 +15,7 @@ Gestion de Proyectos | Listado de Usuarios
                 <strong class="card-title">Listado de Usuarios</strong>
             </div>
             <div class="col-md-4">
-                <button type="button" style="float:right" class="btn btn-primary"><a href="{% url 'login:listar_correos_permitidos'%}">Correos permitidos</a></button>
+                <button type="button" style="float:right" class="btn boton-correos"><a href="{% url 'login:listar_correos_permitidos'%}">Correos permitidos</a></button>
             </div>
         </div>
 
@@ -48,9 +44,9 @@ Gestion de Proyectos | Listado de Usuarios
                  <td>{{ user.last_name}}</td>
                  <td>{{ user.rol }}</td>
                  <td>{{ user.email }}</td>
-                 <td>
-                    <a href="{% url 'usuarios:actualizar_usuario' user.id %}">Editar</a><br>
-                    <a id="danger" href="{% url 'usuarios:eliminar_usuario' user.id %}">Eliminar</a>
+                 <td class="opciones">
+                    <a href="{% url 'usuarios:actualizar_usuario' user.id %}">Editar</a>
+                    <a class="eliminar" href="{% url 'usuarios:eliminar_usuario' user.id %}">Eliminar</a>
                  </td>
                </tr>
              {% endfor %}

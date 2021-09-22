@@ -41,7 +41,8 @@
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
                     </li>
                     {% get_id request.path as id %}
-                    {% if request.user.is_superuser %}
+                    
+                    {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                     <li>
                         <a href='{%  url 'proyectos:listar_integrantes' id%}' > <i
                                 class="menu-icon fa fa-users"></i>Integrantes</a>
@@ -49,31 +50,33 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
                         <ul class="sub-menu children dropdown-menu">
-                            {% if request.user.is_superuser %}
-                                <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' id%}">  Crear Rol</a></li>
-                                <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' id%}">  Listar Roles</a></li>
-                            {% endif %}
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' id%}">  Crear Rol</a></li>
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' id%}">  Listar Roles</a></li>
                         </ul>
                      </li>
+                    {% endifequal %}
+
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Historias de Usuario</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_us'  id%}"> Crear Historia de Usuario</a></li>
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar Historia de Usuario</a></li>
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar Historias de Usuario</a></li>
                         </ul>
                      </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-running"></i> Sprints</a>
                         <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_sprint' id %}">  Crear Sprint</a></li>
+                            {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}    
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_sprint' id %}">  Crear Sprint</a></li>
+                            {% endifequal %}
+                            <li><i class="fa fa-bars"></i> <a href=""> Listar Sprints</a></li>
                         </ul>
                     </li>
-                    {% endif %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i>Sprint Planning</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:ver_pb'  id%}"> Ver Product Backlog</a></li>
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
+                            <li><i class="fas fa-layer-group"></i> <a href="{%  url 'proyectos:ver_pb'  id%}"> Product Backlog</a></li>
+                            <li><i class="fas fa-sort-numeric-up-alt"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
                         </ul>
                      </li>
                     </li>

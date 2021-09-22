@@ -5,11 +5,7 @@ Gestion de Proyectos | Listado de Correos Permitidos
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <style>
-         #danger:hover{
-            color:red;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css'%}">
 {% endblock extra_css %}
 {% block body %}
 <div class="card">
@@ -19,7 +15,7 @@ Gestion de Proyectos | Listado de Correos Permitidos
                 <strong class="card-title">Listado de Correos Permitidos</strong>
             </div>
             <div class="col-md-4">
-                <button type="button" style="float:right" class="btn btn-primary"><a href="{% url 'login:agregar_correos_permitidos'%}">Registrar Correos permitidos</a></button>
+                <button type="button" style="float:right" class="btn boton-correos"><a href="{% url 'login:agregar_correos_permitidos'%}">Registrar Correos permitidos</a></button>
             </div>
         </div>
 
@@ -38,8 +34,8 @@ Gestion de Proyectos | Listado de Correos Permitidos
                <tr>
                  <td>{{ permitidos.id }}</td>
                  <td>{{ permitidos.correo }}</td>
-                 <td>
-                   <a href="{%  url 'login:eliminar_correos_permitidos' permitidos.id %}"> Eliminar</a>
+                 <td class="opciones">
+                   <a href="{%  url 'login:eliminar_correos_permitidos' permitidos.id %}" class="eliminar" style="float: right;clear:right"> Eliminar</a>
                  </td>
                </tr>
              {% endfor %}

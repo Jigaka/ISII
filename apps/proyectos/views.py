@@ -227,7 +227,7 @@ class ListarUS(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=False)
+        us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
 
 
@@ -254,16 +254,7 @@ class ProductBacklog(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=True)
-        return render(request, 'proyectos/ver_PB.html', {'object_list': us})
-
-
-class ProductBacklog(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
-    model = HistoriaUsuario
-    template_name = 'proyectos/ver_PB.html'
-    def get(self, request, pk, *args, **kwargs):
-        proyecto=Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=True)
-        return render(request, 'proyectos/ver_PB.html', {'object_list': us})
+        return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 
 class Listar_us_a_estimar(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):

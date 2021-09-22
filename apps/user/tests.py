@@ -3,9 +3,10 @@ import pytest
 import factory
 from faker import Faker
 from django.test import TestCase, Client
-from apps.user.models import User
+from apps.user.models import User, Rol
 from apps.user.forms import UserForm
 from ddf import G, F
+
 
 class UserTestCase(TestCase):
     #con ddf se prueba si en verdad se crea un objeto user
@@ -29,3 +30,11 @@ class UserTestCase(TestCase):
         self.assertEquals(field_label, 'dirección de correo electrónico')
 
     #@pytest.mark.django_db
+
+
+###############################################################################################################################################
+class RolTestCase(TestCase):
+    #con ddf se prueba si en verdad se crea un objeto rol
+    def test_create_rol(self):
+        rol=G(Rol)
+        assert rol

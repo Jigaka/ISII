@@ -41,9 +41,7 @@ Gestion de Proyectos | Listado de integrantes
                     <tr>
                         <th>username</th>
                         <th>rol</th>
-                        {% if request.user.is_superuser %}
                         <th style="text-align: left;">Opciones</th>
-                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -55,11 +53,9 @@ Gestion de Proyectos | Listado de integrantes
                         {% else %}
                             <td>Sin rol</td>
                         {% endif %}
-                        {% if  request.user.is_superuser %}
                         <td style="text-align: left;">
                             <button class="btn btn-primary" onclick="abrirModalRol('{% url 'usuarios:asignar_rol' user.user.id id%}')"> Asignar Rol</button>
                         </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

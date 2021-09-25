@@ -5,9 +5,9 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView,Te
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.contrib.auth import logout
 from django.contrib.auth.models import Permission, Group
-from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin
+from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, ValidarPermisosMixinPermisos, LoginYSuperUser
 from apps.user.models import User, Rol
-from apps.user.forms import UserForm, PermsForm, RolForm, GroupForm
+from apps.user.forms import UserForm, PermsForm, RolForm, GroupForm, ActualizarForm
 from apps.login.models import ListaPermitidos
 from apps.proyectos.models import RolProyecto, Proyec
 
@@ -21,7 +21,7 @@ def logout_Usuario(request):
     return HttpResponseRedirect('/')
 
 
-class ListarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+class ListarUsuario(LoginYSuperUser, ListView):
     """ Vista basada en clase, se utiliza para listar todos los usuarios del sistema
 
 
@@ -33,17 +33,17 @@ class ListarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 
       """
     model = User
-    permission_required = ('user.view_user', 'user.add_user',
-                           'user.delete_user', 'user.change_user')
+    permission_required = ('view_user', 'add_user',
+                           'delete_user', 'change_user')
     template_name = 'user/listar_usuario.html'
     queryset = User.objects.all()
 
 
-class ActivosUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+class ActivosUsuario(LoginYSuperUser, ListView):
     """ Vista basada en clase, se utiliza para listar los usuarios activos del sistema"""
     model = User
-    permission_required = ('user.view_user', 'user.add_user',
-                           'user.delete_user', 'user.change_user')
+    permission_required = ('view_user', 'add_user',
+                           'delete_user', 'change_user')
     template_name = 'user/listar_userActivos.html'
     queryset = User.objects.filter(is_active=True)
 
@@ -51,18 +51,20 @@ class ActivosUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
 class ActualizaUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     model = User
-    permission_required = ('user.view_user', 'user.add_user',
-                           'user.delete_user', 'user.change_user')
+    permission_required = ('view_user', 'add_user',
+                           'delete_user', 'change_user')
     template_name = 'user/actualizar_usuario.html'
-    form_class = UserForm
-    success_url = reverse_lazy('usuarios:listar_usuario')
+    form_class = ActualizarForm
 
-class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
+    def get_success_url(self):
+        return reverse_lazy('usuarios:listar_usuario')
+
+class EliminarUsuario(LoginYSuperUser, DeleteView):
     """ Vista basada en clase, se utiliza para desactivar a los usuarios del sistema"""
     model = User
     model2 = ListaPermitidos
-    permission_required = ('user.view_user', 'user.add_user',
-                           'user.delete_user', 'user.change_user')
+    permission_required = ('view_user', 'add_user',
+                           'delete_user', 'change_user')
 
     def post(self,request,pk,*args,**kwargs):#Eliminacion logica
         object = User.objects.get(id = pk)
@@ -71,19 +73,19 @@ class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         object2.delete()
         return redirect('usuarios:listar_usuario')
 
-class ListarPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+class ListarPermisos(LoginYSuperUser, ListView):
     """ Vista basada en clase, se utiliza para listar los permisos del sistema"""
     permisos = Permission
-    permission_required = ('auth.view_permission', 'auth.add_permission',
-                           'auth.delete_permission', 'auth.change_permission')
+    permission_required = ('view_permission', 'add_permission',
+                           'delete_permission', 'change_permission')
     template_name = 'user/listar_permisos.html'
     queryset = permisos.objects.all().order_by('id')
 
-class CrearPermisos(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
+class CrearPermisos(LoginYSuperUser, CreateView):
     """Vista basada en clase, se utiliza para crear permisos"""
     model = Permission
-    permission_required = ('auth.view_permission', 'auth.add_permission',
-                           'auth.delete_permission', 'auth.change_permission')
+    permission_required = ('view_permission', 'add_permission',
+                           'delete_permission', 'change_permission')
     form_class = PermsForm
     template_name = 'user/crear_permisos.html'
     success_url = reverse_lazy('usuarios:listar_permisos')
@@ -93,8 +95,8 @@ class ListarRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     """Vista basada en clases para listar los roles de un proyecto"""
 
     roles = Rol
-    permission_required = ('auth.view_permission', 'auth.add_permission',
-                           'auth.delete_permission', 'auth.change_permission')
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
     template_name = 'user/listar_roles.html'
 
     def get(self, request, pk, *args, **kwargs):
@@ -120,6 +122,8 @@ class AsignarRolUserProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, Create
     model = User
     form_class = UserForm
     template_name = 'user/asignar_rol_proyecto.html'
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
 
     def get_context_data(self, **kwargs):
         """Funcion para agregar al context el user, el proyectoo_id y los roles
@@ -138,13 +142,6 @@ class AsignarRolUserProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, Create
         return context
 
     def post(self, request, *args, **kwargs):
-        """Funcion para trabajar con los datos devueltos por el form
-
-        Se obtiene el user en cuestion, luego se verifica si ya tiene un rol en el
-        proyecto actual. Si ha seleccionado un rol, se continua, sino se redirije
-        a la lista de roles, luego si ya tiene se borra la actual, luego se añade la nueva.
-        """
-
 
         proyecto_id = request.POST['proyecto_id']
         user_id = request.POST['usuario_id']
@@ -154,11 +151,47 @@ class AsignarRolUserProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, Create
             user = User.objects.get(id=user_id)
             rol = user.rol.filter(proyecto_id=proyecto_id).first()
             rolProyecto = RolProyecto.objects.get(rol_id=rol_id, proyecto_id=proyecto_id)
+            rolProyecto2 = RolProyecto.objects.get(rol_id=rol_id)
+            print("rolProyecto2 ",rolProyecto2.proyecto_id)
             print(user.rol.all())
+            print("ROLLLL", rol)
             if rol:
+                grupo_antiguo = User.objects.filter(id=kwargs['pk']).values('rol__rol__rol').all()
+                print("GRUPO ANTIGUO",grupo_antiguo)
+                print(self)
+                grupo =  Group.objects.filter(name=rol.nombre).first()
+                print("GRUPO",grupo)
+                user.groups.remove(grupo)
                 user.rol.remove(rol)
+
             user.rol.add(rolProyecto)
+            User.save(user, *args, **kwargs)
         return redirect('proyectos:listar_integrantes', proyecto_id)
+
+class EliminarRol(LoginYSuperStaffMixin, ValidarPermisosMixinPermisos, DeleteView):
+    """Elimina un rol de un proyecto, y elimina el grupo asociado a ese rol"""
+    model = Rol
+    model2 = Group
+    model3 = RolProyecto
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+
+    def post(self,request,pk,*args,**kwargs):#Eliminacion logica
+        object = Rol.objects.get(id = pk)
+        object2 = Group.objects.get(name = object.rol)
+        print("Rol a eliminar", object)
+        print("Grupo a eliminar", object2)
+        print("SELF", request.user.rol.filter(id = pk))
+        print("REQ", request)
+        print("args", args)
+        print("kwargs", kwargs)
+        print("pk", pk)
+        print("id pro", RolProyecto.objects.get(id = pk).proyecto.id)
+        id_proyecto = RolProyecto.objects.get(id = pk).proyecto.id
+        object.delete()
+        object2.delete()
+        return redirect('usuarios:listar_roles', id_proyecto)
+
 
 
 
@@ -167,10 +200,10 @@ class CrearRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
 
 
     model = Rol
-    permission_required = ('auth.view_rol', 'auth.add_rol',
-                           'auth.delete_rol', 'auth.change_rol')
     form_class = RolForm
     template_name = 'user/crear_rol.html'
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
 
     def post(self, request, *args, **kwargs):
         """ Funcion para crear un rol con los datos devueltos por el form
@@ -183,21 +216,24 @@ class CrearRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
         id = request.path.split('/')[-1]
         nombreProyecto = Proyec.objects.get(id=id).nombre
         nombreRol = request.POST['rol']
-        rol = Rol(rol = nombreRol)
+        rol = Rol(rol = f'{nombreRol}-{nombreProyecto}')
+        print("LLAMADA")
         rol.save()
         rolProyecto = RolProyecto(rol_id=rol.id, proyecto_id=id, nombre = f'{nombreRol}-{nombreProyecto}')
         rolProyecto.save()
+        print("ROL PROYECTO", rolProyecto)
+        #print("ID ROL PROYECTO", rolProyecto.proyecto_id.filter(rol_id=rol.id))
         return redirect('usuarios:listar_roles', id)
 
-class AgregarPermisosAlRol(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
-    """docstring for AgregarPermisosAlRol."""
+class AgregarPermisosAlRol(LoginYSuperStaffMixin, ValidarPermisosMixinPermisos, UpdateView):
+    """Agrega permisos al rol"""
     model = Group
-    permission_required = ('auth.view_rol', 'auth.add_rol',
-                           'auth.delete_rol', 'auth.change_rol', 'auth.view_permission', 'auth.add_permission',
-                            'auth.change_permission')
     form_class = GroupForm
     template_name = 'user/agregar_permisos_roles.html'
-    success_url = reverse_lazy('usuarios:listar_roles')
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    def get_success_url(self, *args, **kwargs):
+        return reverse_lazy('usuarios:listar_roles', kwargs={'pk': RolProyecto.objects.get(id=self.object.pk).proyecto.id})
 
 
 

@@ -1,4 +1,4 @@
-{% extends 'inicio.html' %}
+{% extends 'proyectos/proyecto.html' %}
 {% block titulo %}
   Gestion de Proyectos | Confirmación de Eliminación
 {% endblock titulo %}
@@ -6,10 +6,10 @@
 {% block body %}
 <form method="post">
   {% csrf_token %}
-  <p><strong>¿Desea eliminar el proyecto {{ proyecto.nombre  }}<strong></p>
+  <p><strong>¿Desea eliminar el rol {{ object.rol }}<strong></p>
   <button type="submit" class="btn btn-danger">Confirmar</button>
-  <a class="btn btn-primary" href="{%  url 'proyectos:listar_proyectos' %}" role="button">Cancelar</a>
-    
+<!--  <a class="btn btn-primary" href="" role="button">Cancelar</a> -->
+
 
 </form>
 

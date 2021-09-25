@@ -20,6 +20,7 @@ class Rol(models.Model):
         return self.rol
 
     def save(self, *args, **kwargs):
+        """ Se llama cada vez que se crea un rol, y crea un grupo asociado al rol, se crea con el mismo nombre"""
         permisos_defecto = ['add', 'change', 'delete', 'view']
         if not self.id:
             nuevo_grupo, creado = Group.objects.get_or_create(name=f'{self.rol}')
@@ -62,28 +63,61 @@ class User(AbstractUser):
     def getEmail(self):
         return self.email
 
-    # def save(self, *args, **kwargs):
-    #     print('1111111111111111111111111111111111111')
-    #     print(*args)
-    #     print('1111111111111111111111111111111111111')
-    #     if not self.id:
-    #         super().save(*args, **kwargs)
-    #         if self.rol is not None:
-    #             grupo = Group.objects.filter(name=self.rol.rol).first()
-    #             if grupo:
-    #                 self.groups.add(grupo)
-    #             super().save(*args, **kwargs)
-    #     else:
-    #         if self.rol is not None:
-    #             grupo_antiguo = User.objects.filter(id=self.id).values('rol__rol').first()
-    #             if grupo_antiguo['rol__rol'] == self.rol.rol:
-    #                 super().save(*args, **kwargs)
-    #             else:
-    #                 grupo_anterior = Group.objects.filter(name=grupo_antiguo['rol__rol']).first()
-    #                 if grupo_anterior:
-    #                     print(grupo_anterior)
-    #                     self.groups.remove(grupo_anterior)
-    #                 nuevo_grupo = Group.objects.filter(name=self.rol.rol).first()
-    #                 if nuevo_grupo:
-    #                     self.groups.add(nuevo_grupo)
-    #                 super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        """Esta función se llama cada vez que se le asigna un rol a un usuario para asociarle el grupo correspondiente.
+            Si se le asigna un nuevo rol, se remueve el grupo anterior y se le agrega el nuevo grupo
+        """
+        if kwargs.get('pl') != None:
+            print('1111111111111111111111111111111111111')
+            print('1111111111111111111111111111111111111')
+            idProyecto = self.rol.filter(proyecto_id=kwargs['pl']).first().rol.id
+            rolProyecto = self.rol.filter(proyecto_id=kwargs['pl']).first().rol.rol
+            if not idProyecto:
+                print("MMMMMMMMMMMMM")
+                super().save(*args, **kwargs)
+                if rolProyecto is not None:
+                    grupo =  Group.objects.filter(name=self.rol.filter(proyecto_id=kwargs['pl']).first().rol.rol).first()
+                    if grupo:
+                        self.groups.add(grupo)
+                        print("POR AQUI")
+                        super().save(*args, **kwargs)
+            else:
+
+                if self.rol is not None:
+                    rol_proyecto = self.rol.filter(proyecto_id=kwargs['pl']).first() #rol por proyecto
+                    usuario = User.objects.get(id=kwargs['pk']) #id del usuario
+                    usuario2 = User.objects.filter(id=self.id)
+                    rol = usuario.rol.filter(proyecto_id=kwargs['pl']).first() #id del proyecto
+                    grupo_antiguo_lista = User.objects.filter(id=kwargs['pk']).values('rol__nombre').all() #En grupo_antiguo_lista guarda todos los roles que tiene el usuario
+                    print("Grupo antiguo+++++",User.objects.filter(id=kwargs['pk']).values('rol__nombre').all())
+                    usu = User.objects.filter(id=kwargs['pk']).values('rol__nombre')
+                    print("Grupo del forms")
+                    print(self.rol.filter(proyecto_id=kwargs['pl']).first().rol.rol)
+                    print("LISTAAAAAAAAAAAA")
+                    lista = User.objects.filter(id=kwargs['pk']).values('rol')
+                    lista = User.objects.filter(id=kwargs['pk'])
+                    print(lista)
+
+                    id_grupo = self.rol.filter(proyecto_id=kwargs['pl']).first().id  #se obtiene el id del grupo relacionado con el rol
+                    nombre_grupo = self.rol.filter(proyecto_id=kwargs['pl']).first().nombre # se obtiene el nombre del grupo apartir del nombre del rol
+                    print("GRUU", id_grupo)
+                    print(type(grupo_antiguo_lista))
+
+                    """"En esta parte se verifica si el usuario ya tiene asignado el grupo
+                            si exite no pasa nada
+                            si no existe el grupo se le agrega al usuario
+                    """
+                    if grupo_antiguo_lista.filter(groups=id_grupo).exists():
+                        print("EXISTE")
+                        print(Group.objects.filter(id = id_grupo))
+                        print(nombre_grupo)
+                    else:
+                        print("No existe")
+                        nuevo_grupo = Group.objects.filter(name=self.rol.filter(proyecto_id=kwargs['pl']).first().rol.rol).first()
+                        print("NUEVOOOO")
+                        print(nuevo_grupo)
+                        self.groups.add(nuevo_grupo)
+                    ############################################################################################
+
+        else:
+            super().save(*args, **kwargs)

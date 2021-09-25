@@ -6,9 +6,29 @@ Gestion de Proyectos | Listado de Roles
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
     <style>
-         #danger:hover{
-            color:red;
-        }
+      .eliminar:hover{
+          color:white;
+          background-color: red;
+          border-radius: 5px;
+      }
+
+      .eliminar{
+          color: red;
+      }
+      .opcion:hover{
+          color:white;
+          background-color: blue;
+          border-radius: 5px;
+      }
+      .opcion:{
+          color:blue;
+
+      }
+      .center {
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+      }
     </style>
 {% endblock extra_css %}
 {% block body %}
@@ -35,8 +55,9 @@ Gestion de Proyectos | Listado de Roles
                <tr>
                  <td>{{ roles.id }}</td>
                  <td>{{ roles.rol }}</td>
-                 <td>
-                   <a href="{%  url 'usuarios:agregar_permisos_roles' roles.id %}">  Agregar permisos</a>
+                 <td class="opciones">
+                   <a class="opcion" href="{%  url 'usuarios:agregar_permisos_roles' roles.id %}">  Agregar permisos</a>
+                   <a class="eliminar" href="{%  url 'usuarios:eliminar_rol' roles.id %}">  Eliminar </a>
                  </td>
                </tr>
              {% endfor %}

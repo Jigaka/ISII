@@ -1,9 +1,17 @@
-<form method="post">{% csrf_token %}
+
+{% extends 'proyectos/proyecto.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Confirmación de Eliminación
+{% endblock titulo %}
+
+{% block body %}
+<form method="post">
+  {% csrf_token %}
+  <p><strong>¿Desea eliminar la historia de usuario "{{ object }}"<strong></p>
+  <button type="submit" class="btn btn-danger">Confirmar</button>
+  <a class="btn btn-primary" href="{%  url 'proyectos:listar_us' object.proyecto.id%}" role="button">Cancelar</a>
 
 
-<p>Desea eliminar la historia de usuario "{{ object }}"?</p>
-
-
-     <button type="submit">Eliminar</button>
-     <a href="{%  url "proyectos:listar_us" object.proyecto.id%}">Cancelar</a>
 </form>
+
+{% endblock body %}

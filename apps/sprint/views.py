@@ -10,7 +10,7 @@ from django.urls import reverse_lazy, reverse
 
 
 # Create your views here.
-class CrearSprint( CreateView):
+class CrearSprint( CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     #permission_required = ('view_rol', 'add_rol',
      #                      'delete_rol', 'change_rol')
@@ -35,11 +35,13 @@ class CrearSprint( CreateView):
         return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
 
 
-class ListarSprint( ListView):
+class ListarSprint( ListView ):
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = Sprint
     template_name = 'sprint/listar_sprint.html'
     #permission_required = ('view_historiausuario', 'delete_historiausuario')
+
+
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
@@ -54,5 +56,38 @@ class AgregarHU_sprint(UpdateView):
     #                      'delete_rol', 'change_rol')
     template_name = 'sprint/agregarHU.html'
     form_class = agregar_hu_form
+
+    def get_context_data(self, **kwargs):
+        """Funcion para obtener el context, y enviar el proyecto en el template
+
+        Retorna:
+            context: el contexto
+        """
+
+
+        context = super().get_context_data(**kwargs)
+        context['object'] = self.get_object()
+        pk = self.kwargs.get('pk')
+        proyecto = Proyec.objects.filter(id=pk).first()
+        context['proyecto'] = proyecto
+
+        return context
     def get_success_url(self):
-        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id})
+        id_proyecto = Sprint.objects.get(id=self.object.pk).proyecto.id
+        return reverse('sprint:listar_sprint', kwargs={'pk': id_proyecto})
+
+
+
+class VerSprint(TemplateView):
+    """
+        Vista basada en clase para mostrar el menu de un sprint
+    """
+
+
+    def get(self, request, *args, **kwargs):
+        """
+            funcion para renderizar el menu del sprint
+        """
+
+        # sprint = Sprint.objects.get(id=pk)
+        return render(request, 'sprint/sprint.html')

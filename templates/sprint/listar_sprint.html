@@ -33,6 +33,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ sprint.nombre }}</td>
                  <td class="opciones">
                         <a href="{%  url 'sprint:agregar_hu' sprint.id %}">Agregar Historia de Usuario</a>
+                        <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>
                  </td>
 
                </tr>

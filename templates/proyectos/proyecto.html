@@ -69,7 +69,7 @@
                             {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                             <li><i class="fa fa-plus"></i> <a href="{%  url 'sprint:crear_sprint' id %}">  Crear Sprint</a></li>
                             {% endifequal %}
-                            <li><i class="fa fa-bars"></i> <a href=""> Listar Sprints</a></li>
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'sprint:listar_sprint' id %}">  Listar Sprint</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">

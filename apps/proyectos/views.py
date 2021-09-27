@@ -148,6 +148,7 @@ class listarProyectosUsuario(LoginYSuperStaffMixin, ListView):
 
 
 class CrearUS(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
+
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     permission_required = ('view_historiausuario', 'add_historiausuario',
                             'delete_historiausuario', 'change_historiausuario')
@@ -198,8 +199,8 @@ class EditarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateVie
     form_class = CrearUSForm
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
-
 class ListarUS(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = HistoriaUsuario
     template_name = 'proyectos/listar_us.html'
@@ -231,6 +232,7 @@ class aprobarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateVie
 
 
 class ProductBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
     model = HistoriaUsuario
     template_name = 'proyectos/ver_PB.html'
     permission_required = ('view_rol', 'add_rol',

@@ -1,0 +1,50 @@
+{% extends 'proyectos/proyecto.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de historia de usuarios
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Listado de Sprint</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for sprint in object_list %}
+               <tr>
+                 <td>{{ sprint.id }}</td>
+                 <td>{{ sprint.nombre }}</td>
+                 <td class="opciones">
+                        <a href="{%  url 'sprint:agregar_hu' sprint.id %}">Agregar Historia de Usuario</a>
+                 </td>
+
+               </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

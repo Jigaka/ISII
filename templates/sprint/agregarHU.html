@@ -1,0 +1,29 @@
+{% extends 'proyectos/proyecto.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Agregar Historia de Usuario al Sprint
+{% endblock titulo %}
+{% block body %}
+<form method="POST">
+  {% csrf_token %}
+  {% if error %}
+    <h2>{{ error }}</h2>
+  {% else %}
+    <div class="card">
+      <div class="card-header">
+          <strong>Agregar HU a sprint</strong>
+      </div>
+      <div class="card-body card-block">
+        <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
+            <div class="row form-group">
+              <div class="col col-md-3">{{ form.hu.label}}</div>
+              <div class="col-12 col-md-9">{{ form.hu}}</div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+</form>
+{% endblock body %}

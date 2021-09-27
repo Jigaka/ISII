@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs, Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, ListarUS,EliminarUS, aprobarUS,ProductBacklog, CrearSprint, Listar_us_a_estimar,estimarUS
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs, Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS
 from apps.user.views import listarProyectoporUsuario
 from django.contrib.auth.decorators import login_required
 
@@ -13,7 +13,7 @@ urlpatterns = [
     path('listar_integrantes/<int:pk>',ListadoIntegrantes.as_view(), name='listar_integrantes'),
     # path('asignar_roles/<int:pk>/',AsignarRolProyecto.as_view(), name='asignar_roles'),
     path('ver_proyecto/<int:pk>', Proyecto.as_view(), name='ver_proyecto'),
-    path('crear_sprint/<int:pk>',CrearSprint.as_view(),name='crear_sprint'),
+
     path('mis_proyectos/', listarProyectosUsuario.as_view(), name='mis_proyectos'),
     path('proyectos_por_encargado/', listarProyectoporEncargado, name='mis_proyectos(encargado)'),
     path('ver_proyecto/<int:pk>', Proyecto.as_view(), name='ver_proyecto'),

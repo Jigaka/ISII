@@ -67,7 +67,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-running"></i> Sprints</a>
                         <ul class="sub-menu children dropdown-menu">
                             {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
-                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_sprint' id %}">  Crear Sprint</a></li>
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'sprint:crear_sprint' id %}">  Crear Sprint</a></li>
                             {% endifequal %}
                             <li><i class="fa fa-bars"></i> <a href=""> Listar Sprints</a></li>
                         </ul>

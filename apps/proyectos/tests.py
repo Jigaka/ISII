@@ -57,7 +57,7 @@ class HistoriaUsuarioModelTest(TestCase):
         expected_object_name = '%s' % (Us.nombre)
         self.assertEquals(expected_object_name, str(Us))
 # con ddf se generan objetos para luego comprobar la correcta creacion, tambien se comprueba la relacion ManytoMany entre los usuarios y el proyecto
-    def test_create_Proyec(self):
+    def test_create_HU(self):
         Us = G(HistoriaUsuario)
         assert Us
     @pytest.mark.django_db

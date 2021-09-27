@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'apps.login',
     'apps.user',
     'apps.proyectos',
-
+    'apps.sprint',
 ]
 
 SITE_ID = 1

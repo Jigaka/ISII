@@ -1,5 +1,6 @@
 from django.db import models
 from apps.user.models import User, Rol
+
 from django.db.models.signals import post_save, pre_save
 
 
@@ -55,34 +56,6 @@ class Proyec(models.Model):
         encargado_del_proyecto = self.encargado.all().values_list('username', flat=True)
         return encargado_del_proyecto
 
-class Sprint(models.Model):
-    Pendiente='Pendiente'
-    Iniciado='Iniciado'
-    Finalizado='Finalizado'
-    STATUS_CHOICES = (
-        (Pendiente, "Pendiente"),
-        (Iniciado, "Iniciado"),
-        (Finalizado, "Finalizado")
-    )
-    nombre=models.CharField(max_length=200,blank=False, null= False )
-    proyecto=models.ForeignKey(Proyec, blank=False, null=False, on_delete=models.CASCADE)
-    fecha_inicio=models.DateField()
-    fecha_fin=models.DateField()
-    estado= models.CharField(max_length=15, choices=STATUS_CHOICES, default=1) #pendiente,iniciado,finalizado
-    #capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días)
-  
-    #La cantidad de días incluye fines de semana (¿cómo resolver esto?)
-    @property
-    def duracion_dias(self): 
-        if (self.fecha_inicio and self.fecha_fin):
-            duracion_dias=self.fecha_fin.day -self.fecha_inicio.day
-            return duracion_dias
-
-    class Meta:
-        verbose_name='Sprint'
-        verbose_name_plural = 'Sprints'
-    def __str__(self):
-        return self.nombre
 
 class HistoriaUsuario(models.Model):
     Pendiente = 'Pendiente'
@@ -125,7 +98,7 @@ class HistoriaUsuario(models.Model):
     aprobado_PB=models.BooleanField(default=False)
     estimacion_user=models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
-    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint")
+
 
     def save(self, *args, **kwargs): # redefinicion del metodo save() que contiene nuestro trigger
         # Aqui ponemos el codigo del trigger -------

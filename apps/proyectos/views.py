@@ -1,8 +1,8 @@
 from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, SprintForm
-from .models import Proyec, RolProyecto, HistoriaUsuario, Sprint
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
+from .models import Proyec, RolProyecto, HistoriaUsuario
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
@@ -126,28 +126,6 @@ class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView
     template_name = 'proyectos/asignar_rol.html'
     success_url = reverse_lazy('proyectos:listar_proyectos')
 
-
-class CrearSprint(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
-    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
-    template_name = 'proyectos/crear_sprint.html'
-    model = Sprint
-    form_class = SprintForm
-    success_url = reverse_lazy('proyectos:listar_proyectos')
-
-    def form_valid(self, form):
-        proyecto = get_object_or_404(Proyec, id=self.kwargs['pk'])
-        form.instance.proyecto = proyecto
-        return super(CrearSprint, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        pk=self.kwargs['pk']
-        context['proyecto'] = Proyec.objects.get(id=pk)
-        return context
 
 
 def listarProyectoporEncargado(request):
@@ -276,7 +254,7 @@ class Listar_us_a_estimar(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
         return render(request, 'proyectos/us-a-estimar.html', {'object_list': us})
 
 
-class estimarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+class estimarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = HistoriaUsuario
     permission_required = ('view_proyec', 'change_proyec')

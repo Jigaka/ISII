@@ -16,5 +16,6 @@ urlpatterns = [
     path('usuarios/',include(('apps.user.urls','usuarios'))),
     path('login/',include(('apps.login.urls','login'))),
     path('logout/',logout_Usuario, name = 'logout'),
-    path('proyectos/', include(('apps.proyectos.urls', 'proyectos')))
+    path('proyectos/', include(('apps.proyectos.urls', 'proyectos'))),
+    path('sprint/', include(('apps.sprint.urls', 'sprint')))
 ]

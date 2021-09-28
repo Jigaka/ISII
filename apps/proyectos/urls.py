@@ -1,9 +1,12 @@
 from django.urls import path
 from django.views.generic import TemplateView
-
-from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs, Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS
-from apps.user.views import listarProyectoporUsuario
 from django.contrib.auth.decorators import login_required
+from apps.user.views import listarProyectoporUsuario
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs, \
+    Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, \
+    ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes
+
+
 
 urlpatterns = [
     path('crear_proyecto/',CrearProyecto.as_view(), name='crear_proyecto'),
@@ -13,7 +16,6 @@ urlpatterns = [
     path('listar_integrantes/<int:pk>',ListadoIntegrantes.as_view(), name='listar_integrantes'),
     # path('asignar_roles/<int:pk>/',AsignarRolProyecto.as_view(), name='asignar_roles'),
     path('ver_proyecto/<int:pk>', Proyecto.as_view(), name='ver_proyecto'),
-
     path('mis_proyectos/', listarProyectosUsuario.as_view(), name='mis_proyectos'),
     path('proyectos_por_encargado/', listarProyectoporEncargado, name='mis_proyectos(encargado)'),
     path('ver_proyecto/<int:pk>', Proyecto.as_view(), name='ver_proyecto'),
@@ -26,4 +28,5 @@ urlpatterns = [
     path('listar_us_a_estimar_us/<int:pk>',Listar_us_a_estimar.as_view(), name='listar-us-a-estimar'),
     path('estimar_us/<int:pk>',estimarUS.as_view(), name='estimar_us'),
     path('ver_PB/<int:pk>', ProductBacklog.as_view(), name='ver_pb'),
+    path('expulsar_integrante/<int:pk>/<int:pl>',ExpulsarIntegrantes.as_view(), name='expulsar_integrante'),
 ]

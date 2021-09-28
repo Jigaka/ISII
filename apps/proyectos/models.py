@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import Permission, Group
+from django.db.models.signals import post_save, pre_save
 from apps.user.models import User, Rol
 
-from django.db.models.signals import post_save, pre_save
+
 
 
 '''
@@ -70,7 +72,7 @@ class HistoriaUsuario(models.Model):
         (Done, 'Done'),
         (QA, 'QA')
     )
-    
+
     Baja = 'Baja'
     Media = 'Media'
     Alta = 'Alta'
@@ -109,7 +111,7 @@ class HistoriaUsuario(models.Model):
         elif (self.prioridad=='Alta'):
             self.prioridad_numerica=3
         super(HistoriaUsuario,self).save(*args,**kwargs)
-        # fin de trigger ------	
+        # fin de trigger ------
 
     class Meta:
         verbose_name = 'Historia de Usuario'
@@ -170,22 +172,46 @@ def calcular_estimacion(sender, instance, **kwargs):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
 
-        
+
 def agregar_encargado(sender, instance, **Kwargs):
     """ Funcion para agregar el encargado al equipo de trabajo cuando se crea un nuevo proyecto
-
+        Además asigna al encargado el rol de Scrum Master
     Parametros:
         instance: Instancia del modelo a actualizar
 
     Retorna:
         Void. Solo modifica el modelo enviado
     """
+    model = RolProyecto
     if not instance.equipo.all():
         instance.equipo.add(instance.encargado)
+        nombreProyecto = instance.nombre
+        nombreRol = "Scrum Master"
+        rol = Rol(rol = f'{nombreRol}-{nombreProyecto}')
+        user = instance.encargado
+        print("USER", user)
+        print(user.rol.filter(proyecto_id=instance.id).all())
+        rol.save()
+        print(rol.rol)
+        print(rol.id)
+        print(type(rol))
+        rolProyecto = RolProyecto(nombre = rol.rol, proyecto=instance, rol = rol)
+        rolProyecto.save()
+        print(rolProyecto)
+        user.rol.add(rolProyecto)
+        grupo = Group.objects.filter(name=rol.rol).first()
+        permiso1 = Permission.objects.get(codename='view_rol')
+        permiso2 = Permission.objects.get(codename='add_rol')
+        permiso3 = Permission.objects.get(codename='delete_rol')
+        permiso4 = Permission.objects.get(codename='change_rol')
+        permiso5 = Permission.objects.get(codename='delete_rol')
+        permiso6 = Permission.objects.get(codename='view_historiausuario')
+        permiso7 = Permission.objects.get(codename='delete_historiausuario')
+        grupo.permissions.add(permiso1, permiso2, permiso3, permiso4, permiso5, permiso6, permiso7)
+        user.groups.add(grupo)
 
 
 pre_save.connect(definir_estadoanterior, sender=Proyec)
 post_save.connect(agregar_fecha_inicio, sender=Proyec)
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
 post_save.connect(agregar_encargado, sender=Proyec)
-

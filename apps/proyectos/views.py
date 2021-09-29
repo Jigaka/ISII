@@ -1,6 +1,7 @@
 from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth.models import Permission, Group
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
 from .models import Proyec, RolProyecto, HistoriaUsuario
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
@@ -114,6 +115,34 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         proyecto = Proyec.objects.get(id=pk)
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
+
+class ExpulsarIntegrantes(ValidarPermisosMixin, CreateView):
+    """Vista basada en clase se utiliza para expulsar un integrante del proyecto"""
+
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    model = Proyec
+    print("ExpulsarIntegrantes")
+    fields = '__all__'
+    def get(self, request, *args, **kwargs):
+        print(kwargs)
+        print(self)
+        print(request)
+        print(args)
+        user = User.objects.get(id = kwargs['pk'])
+        proyecto = Proyec.objects.get(id=kwargs['pl'])
+        print("USER", user, "PROYECTO", proyecto)
+        rol = user.rol.filter(proyecto_id=kwargs['pl']).first()
+        print(rol)
+        if rol == None:
+            proyecto.equipo.remove(user)
+            return redirect('proyectos:listar_integrantes', kwargs['pl'])
+        grupo =  Group.objects.filter(name=rol.nombre).first()
+        print("ROL", rol, "GRUPO", grupo)
+        proyecto.equipo.remove(user)
+        user.groups.remove(grupo)
+        user.rol.remove(rol)
+        return redirect('proyectos:listar_integrantes', kwargs['pl'])
 
 #class listarporencargado( ValidarPermisosMixin, ListView):
 #    model = Proyec Clase No usada???

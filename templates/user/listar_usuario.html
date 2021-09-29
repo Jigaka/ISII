@@ -29,7 +29,6 @@ Gestion de Proyectos | Listado de Usuarios
                     <th>Username</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
-                    <th>Rol</th>
                     <th>Email</th>
                     <th>Opciones</th>
                 </tr>
@@ -42,7 +41,6 @@ Gestion de Proyectos | Listado de Usuarios
                  <td>{{ user.username }}</td>
                  <td>{{ user.first_name }}</td>
                  <td>{{ user.last_name}}</td>
-                 <td>{{ user.rol }}</td>
                  <td>{{ user.email }}</td>
                  <td class="opciones">
                     <a href="{% url 'usuarios:actualizar_usuario' user.id %}">Editar</a>

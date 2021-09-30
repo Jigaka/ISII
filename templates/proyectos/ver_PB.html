@@ -43,11 +43,7 @@ Gestion de Proyectos | Product Backlog
                 <td>{{ us.estimacion }}</td>
 
                  <td style="text-align: left;">
-                        <a href="{%  url 'proyectos:configurar_us' us.id %}"> Configurar</a><br>
-                             {% if us.estimacion != 0 %}
-                                <a> Agregar a Sprint</a><br>
-                             {% endif %}
-
+                        <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a>
                  </td>
                </tr>
              {% endfor %}

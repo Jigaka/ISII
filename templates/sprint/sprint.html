@@ -40,14 +40,22 @@
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
                     </li>
                     {% get_id request.path as id %}
-                    <li>
-                        <a href='#' ><i class="menu-icon fa fa-users"></i>Equipo</a>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="menu-icon fa fa-users" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-users"></i> Equipo</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:configurar_equipo' id%}">Configurar Equipo</a></li>
+                                <li><i class="fas fa-sort-numeric-up-alt"></i> <a> Ver Equipo</a></li>
+                            </ul>
                     </li>
                     <li>
                         <a href='#' ><i class="menu-icon fa fa-users"></i>Tablero Kanban</a>
                     </li>
-                    <li>
-                        <a href='#' ><i class="menu-icon fa fa-users"></i>Sprint Backlog</a>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Sprint Backlog</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:ver_sb' id%}">Ver Sprint Backlog</a></li>
+                                <li><i class="fas fa-sort-numeric-up-alt"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
+                            </ul>
                     </li>
                     <li>
                         <a href='#' ><i class="menu-icon fa fa-users"></i>Capacidad del equipo</a>

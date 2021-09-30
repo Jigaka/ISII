@@ -26,13 +26,36 @@ class SprintForm(forms.ModelForm):
         if date.today() > start_date:
             raise forms.ValidationError('¡La fecha de inicio no debe estar en el pasado!')
 class agregar_hu_form(forms.ModelForm):
+    '''funcion para que filtre solo los sprints de un proyecto en especifico'''
     class Meta:
-        model=Sprint
-        fields=['hu']
-        #def __init__(self, *args, **kwargs):
-        #    super(agregar_hu_form, self).__init__(*args, **kwargs)
-        #    self.fields['hu'].queryset = HistoriaUsuario.objects.filter(aprobado_PB=True,sprint_backlog=False )
+        model = HistoriaUsuario
+        fields = ['sprint']
         labels = {
-            'hu': 'seleccione Historia de Usuario'
+            'sprint': 'Seleccione un sprint'
         }
+    def __init__(self,*args, **kwargs):
+        super(agregar_hu_form, self).__init__(*args, **kwargs)
+        HU=HistoriaUsuario.objects.get(nombre=kwargs.get('instance'))
+        self.fields['sprint'].queryset = Sprint.objects.filter(proyecto_id=HU.proyecto.id, estado='Pendiente')
 
+
+class configurarEquipoSprintform(forms.ModelForm):
+    class Meta:
+        model = Sprint
+        fields = ['equipo']
+        labels = {
+            'equipo': 'Seleccione los integrantes del equipo de este Sprint'
+
+        }
+    def __init__(self, *args, **kwargs):
+        super(configurarEquipoSprintform, self).__init__(*args, **kwargs)
+        sprint = Sprint.objects.get(nombre=kwargs.get('instance'))
+        self.fields['equipo'].queryset = Proyec.objects.get(id=sprint.proyecto_id).equipo
+
+class cambio_estadoHU_form(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['estado']
+        labels = {
+            'estado': 'Seleccione estado de la Historia de Usuario'
+        }

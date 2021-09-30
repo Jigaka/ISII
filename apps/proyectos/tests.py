@@ -4,7 +4,8 @@ from django.test import TestCase
 from faker import Faker
 from ddf import G, F
 from apps.user.models import User
-from apps.proyectos.models import Proyec, HistoriaUsuario
+from apps.proyectos.models import Proyec
+from apps.sprint.models import HistoriaUsuario
 from apps.proyectos.forms import ProyectoForm,configurarUSform, aprobar_usform, CrearUSForm, estimar_userform
 
 fake = Faker()

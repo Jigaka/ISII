@@ -2,7 +2,8 @@ from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
-from .models import Proyec, RolProyecto, HistoriaUsuario
+from .models import Proyec, RolProyecto
+from apps.sprint.models import HistoriaUsuario, Sprint
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
@@ -188,7 +189,7 @@ class ConfigurarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, Updat
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
     def get_success_url(self):
-        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id})
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
 class EditarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
@@ -239,28 +240,28 @@ class ProductBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=True)
+        us = proyecto.proyecto.filter(aprobado_PB=True, sprint_backlog=False)
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 
 class Listar_us_a_estimar(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
-    template_name = 'proyectos/us-a-estimar.html'
+    template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
     def get(self, request, pk, *args, **kwargs):
-        proyecto=Proyec.objects.get(id=pk)
+        sprint=Sprint.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
-        us = proyecto.proyecto.filter(asignacion=user, aprobado_PB=True,estimacion=0 )
-        ''', estimacion=0, asignacion=user'''
-        return render(request, 'proyectos/us-a-estimar.html', {'object_list': us})
+        us = sprint.sprint.filter(asignacion=user, sprint_backlog=True,estimacion=0 )
+        return render(request, 'sprint/us-a-estimar.html', {'object_list': us})
 
 
 class estimarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = HistoriaUsuario
     permission_required = ('view_proyec', 'change_proyec')
-    template_name = 'proyectos/estimar_us.html'
+    template_name = 'sprint/estimar_us.html'
     form_class = estimar_userform
     def get_success_url(self):
-        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

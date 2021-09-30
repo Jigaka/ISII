@@ -56,3 +56,31 @@ class AgregarHU_sprint(UpdateView):
     form_class = agregar_hu_form
     def get_success_url(self):
         return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id})
+
+#class EliminarSprint(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,DeleteView):
+class EliminarSprint(LoginNOTSuperUser  ,DeleteView):
+    """ Vista basada en clase, se utiliza para eliminar un proyecto"""
+    model = Sprint
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get_success_url(self):
+        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
+
+class EditarSprint(LoginNOTSuperUser, UpdateView):
+    """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
+    model = Sprint
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    template_name = 'sprint/editar_sprint.html'
+    form_class = SprintForm
+    def get_success_url(self):
+        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto= Sprint.objects.get(id=self.object.pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context

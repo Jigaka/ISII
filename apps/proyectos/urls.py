@@ -1,8 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
-from apps.user.views import listarProyectoporUsuario
-from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, ConfigurarUs, \
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, \
     Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, \
     ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes
 
@@ -22,7 +21,6 @@ urlpatterns = [
     path('crear_us/<int:pk>',CrearUS.as_view(),name='crear_us'),
     path('listar_us/<int:pk>', ListarUS.as_view(), name='listar_us'),
     path('editar_us/<int:pk>', EditarUs.as_view(), name='editar_us'),
-    path('configurar_us/<int:pk>', ConfigurarUs.as_view(), name='configurar_us'),
     path('eliminar_us/<int:pk>',EliminarUS.as_view(), name='eliminar_us'),
     path('aprobar_us/<int:pk>',aprobarUS.as_view(), name='aprobar_us'),
     path('listar_us_a_estimar_us/<int:pk>',Listar_us_a_estimar.as_view(), name='listar-us-a-estimar'),

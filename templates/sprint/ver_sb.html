@@ -1,18 +1,22 @@
-{% extends 'proyectos/proyecto.html' %}
+{% extends 'sprint/sprint.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Listado de historia de usuarios
+Gestion de Proyectos | Sprint Backlog
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
+    <style>
+         #danger:hover{
+            color:red;
+        }
+    </style>
 {% endblock extra_css %}
 {% block body %}
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Sprint</strong>
+                <strong class="card-title">Sprint Backlog</strong>
             </div>
         </div>
 
@@ -23,18 +27,27 @@ Gestion de Proyectos | Listado de historia de usuarios
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Planning Poker</th>
+                    <th>Estado</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
             <tbody>
-              {% for sprint in object_list %}
+              {% for us in object_list %}
                <tr>
-                 <td>{{ sprint.id }}</td>
-                 <td>{{ sprint.nombre }}</td>
-                 <td class="opciones">
-                        <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>
-                 </td>
-
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                 <td>{{ us.estimacion }}</td>
+                  <td>{{ us.estado }}</td>
+                   <td style="text-align: left;">
+                        <a href="{%  url 'sprint:configurar_us' us.id %}">Configurar</a><br>
+                       {% if us.estimacion != 0%}
+                        <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a><br>
+                        {% endif %}
                </tr>
              {% endfor %}
             </tbody>

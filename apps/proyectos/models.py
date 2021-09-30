@@ -58,7 +58,6 @@ class Proyec(models.Model):
         encargado_del_proyecto = self.encargado.all().values_list('username', flat=True)
         return encargado_del_proyecto
 
-
 class HistoriaUsuario(models.Model):
     Pendiente = 'Pendiente'
     ToDo = 'ToDo'
@@ -131,7 +130,6 @@ class HistoriaUsuario(models.Model):
         asignacion_user = self.asignacion.all().values_list('username', flat=True)
         return asignacion_user
 
-
 class RolProyecto(models.Model):
     '''
     Modelo para relacionar un rol con un proyecto.
@@ -162,14 +160,8 @@ def agregar_fecha_inicio(sender, instance, **kwargs):
         elif instance.estado == 'Concluido':
             x = Proyec.objects.filter(id=instance.id).update(fecha_concluido=instance.fecha)
 
-
-
-def calcular_estimacion(sender, instance, **kwargs):
-    if (instance.estimacion==0 and  instance.estimacion_scrum!=0 and instance.estimacion_user!=0):
-        x=(instance.estimacion_scrum+instance.estimacion_user)/2
-        HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
-
-
+        
+        
 def agregar_encargado(sender, instance, **Kwargs):
     """ Funcion para agregar el encargado al equipo de trabajo cuando se crea un nuevo proyecto
         Además asigna al encargado el rol de Scrum Master
@@ -210,5 +202,4 @@ def agregar_encargado(sender, instance, **Kwargs):
 
 pre_save.connect(definir_estadoanterior, sender=Proyec)
 post_save.connect(agregar_fecha_inicio, sender=Proyec)
-post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
 post_save.connect(agregar_encargado, sender=Proyec)

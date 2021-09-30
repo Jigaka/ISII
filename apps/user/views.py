@@ -111,7 +111,8 @@ class ListarRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         """
 
         rolesProyecto = RolProyecto.objects.filter(proyecto_id=pk)
-        return render(request, 'user/listar_roles.html',{'object_list':rolesProyecto})
+        proyecto = Proyec.objects.filter(id=pk).first()
+        return render(request, 'user/listar_roles.html',{'object_list':rolesProyecto, 'proyecto':proyecto})
 
 
 class AsignarRolUserProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
@@ -204,6 +205,21 @@ class CrearRoles(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     template_name = 'user/crear_rol.html'
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
+
+    def get_context_data(self, **kwargs):
+        """Funcion para obtener el context, y enviar el proyecto en el template
+
+        Retorna:
+            context: el contexto
+        """
+
+
+        context = super().get_context_data(**kwargs)
+        context['object'] = self.get_object()
+        pk = self.kwargs.get('pk')
+        proyecto = Proyec.objects.filter(id=pk).first()
+        context['proyecto'] = proyecto
+        return context
 
     def post(self, request, *args, **kwargs):
         """ Funcion para crear un rol con los datos devueltos por el form

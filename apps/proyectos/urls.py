@@ -1,11 +1,11 @@
 from django.urls import path
 from django.views.generic import TemplateView
-
-from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto,\
-    Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs,\
-    ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS
-from apps.user.views import listarProyectoporUsuario
 from django.contrib.auth.decorators import login_required
+from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, \
+    Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, \
+    ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes
+
+
 
 urlpatterns = [
     path('crear_proyecto/',CrearProyecto.as_view(), name='crear_proyecto'),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('listar_us_a_estimar_us/<int:pk>',Listar_us_a_estimar.as_view(), name='listar-us-a-estimar'),
     path('estimar_us/<int:pk>',estimarUS.as_view(), name='estimar_us'),
     path('ver_PB/<int:pk>', ProductBacklog.as_view(), name='ver_pb'),
+    path('expulsar_integrante/<int:pk>/<int:pl>',ExpulsarIntegrantes.as_view(), name='expulsar_integrante'),
 ]

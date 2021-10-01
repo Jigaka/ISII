@@ -37,11 +37,11 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ sprint.fecha_inicio }}</td>
                  <td>{{sprint.fecha_fin}}</td>
                  <td>{{ sprint.get_estado_display }}</td>
-                 <td class="opciones">
+                 <td class="opciones" style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' sprint.id %}">Agregar Historia de Usuario</a>
                         <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>
-                        <a href="{%  url 'sprint:editar_sprint' sprint.id %}">Editar sprint</a>
-                        <a href="{%  url 'sprint:eliminar_sprint' sprint.id %}" class="eliminar">Eliminar sprint</a>
+                        <a href="{%  url 'sprint:editar_sprint' sprint.id %}">Editar Sprint</a>
+                        <a href="{%  url 'sprint:eliminar_sprint' sprint.id %}" class="eliminar">Eliminar Sprint</a>
                  </td>
 
                </tr>

@@ -1,6 +1,6 @@
 {% extends 'sprint/sprint.html' %}
 {% block titulo %}
-  Gestion de Proyectos | Agregar Historia de Usuario al Sprint
+  Gestion de Proyectos | Configurar Equipo del Sprint
 {% endblock titulo %}
 {% block body %}
 <form method="POST">
@@ -10,13 +10,13 @@
   {% else %}
     <div class="card">
       <div class="card-header">
-          <strong>Agregar HU a sprint</strong>
+          <strong>Configurar Equipo del Sprint</strong>
       </div>
       <div class="card-body card-block">
         <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
             <div class="row form-group">
-              <div class="col col-md-3">{{ form.sprint.label}}</div>
-              <div class="col-12 col-md-9">{{ form.sprint}}</div>
+              <div class="col col-md-3">{{ form.equipo.label}}</div>
+              <div class="col-12 col-md-9">{{ form.equipo}}</div>
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Guardar</button>

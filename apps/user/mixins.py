@@ -2,7 +2,8 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import Permission,Group
 from django.urls import reverse_lazy
-from apps.proyectos.models import RolProyecto, HistoriaUsuario
+from apps.proyectos.models import RolProyecto
+from apps.sprint.models import HistoriaUsuario
 
 class LoginYSuperStaffMixin(object):
 

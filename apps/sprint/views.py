@@ -21,6 +21,7 @@ class CrearSprint( CreateView ):
 
     def get_form_kwargs(self):
         kwargs = super(CrearSprint,self).get_form_kwargs()
+        self.kwargs['id_sprint']=0
         kwargs.update(self.kwargs)
         return kwargs
 
@@ -50,7 +51,7 @@ class ListarSprint( ListView ):
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        sprint=proyecto.proyecto_s.all()
+        sprint=proyecto.proyecto_s.all().order_by('fecha_inicio')
         #us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
@@ -92,6 +93,16 @@ class EditarSprint(LoginNOTSuperUser, UpdateView):
     #                       'delete_rol', 'change_rol')
     template_name = 'sprint/editar_sprint.html'
     form_class = SprintForm
+    
+    def get_form_kwargs(self):
+        kwargs = super(EditarSprint,self).get_form_kwargs()
+        id_sprint=self.kwargs['pk']
+        id_proyecto= Sprint.objects.get(id=id_sprint).proyecto.id
+        self.kwargs['pk']=id_proyecto
+        self.kwargs['id_sprint']=id_sprint
+        kwargs.update(self.kwargs)
+        return kwargs
+
     def get_success_url(self):
         return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
     

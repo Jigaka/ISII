@@ -148,30 +148,16 @@ class ValidarPermisosMixinPermisos(object):
             messages.error(request, 'No tienes ningun rol asociado.')
             return redirect(self.get_url_redirect())
         else:
-
-            #if request.path.find("agregar_permisos_roles") or request.path.find("eliminar_rol"):
             print("DEBES ESTAR AQUI")
             print("Request PWTH",request.path)
             print("ROL USUARIOOO A MODIFICAR",request.user.rol.filter(id = kwargs['pk']))
-            #rolProyecto = RolProyecto.objects.get(rol_id=kwargs['pk'])
             rolProyecto = RolProyecto.objects.get(rol_id=kwargs['pk'])
             id_proyecto = rolProyecto.proyecto_id
             print("rolProyecto2",rolProyecto)
             print("IDProyecto2",id_proyecto)
-
-            #elif request.path.find("editar_us") or request.path.find("aprobar_us") or request.path.find("eliminar_us"):
-            #    print("Request PWTH",request.path)
-            #    print("QUE HACES AQUI")
-                #print("HistoriaUsuario",HistoriaUsuario.objects.get(id=kwargs['pk']))
-            #    id_proyecto = HistoriaUsuario.objects.get(id=kwargs['pk']).proyecto.id #id del proyecto se obtiene por us
-                #self.url_redirect = '/../proyectos/ver_proyecto/' + str(id_proyecto)
-
-
             rol = request.user.rol.filter(proyecto_id=id_proyecto).first()
             print("ROL USUARIOOO QUE MODIFICA", rol)
             grupo =  Group.objects.filter(name=rol.rol).first()
-            #path = request.path.rsplit('/', 2)[0]
-            #print("PATHHHH",path)
             perms = self.get_perms()
             print(perms)
             print(grupo)
@@ -204,7 +190,6 @@ class ValidarPermisosMixinHistoriaUsuario(object):
         return self.url_redirect
 
     def dispatch(self, request, *args, **kwargs):
-        #request = get_current_request()
         """ Función que verifica si tiene los permisos, si los tiene continua la ejecución,
         si no los tiene redirecciona a URL_REDIRECT llamando a la Función get_url_redirect"""
         if request.user.is_superuser: #Si es super user ignora los permisos requeridos, quitar al if para restringir por roles y no exista un super user
@@ -217,17 +202,12 @@ class ValidarPermisosMixinHistoriaUsuario(object):
             messages.error(request, 'No tienes ningun rol asociado.')
             return redirect(self.get_url_redirect())
         else:
-            request.path.find("editar_us") or request.path.find("aprobar_us") or request.path.find("eliminar_us")
             print("Request PWTH",request.path)
             print("QUE HACES AQUI")
-            #print("HistoriaUsuario",HistoriaUsuario.objects.get(id=kwargs['pk']))
             id_proyecto = HistoriaUsuario.objects.get(id=kwargs['pk']).proyecto.id #id del proyecto se obtiene por us
-            #self.url_redirect = '/../proyectos/ver_proyecto/' + str(id_proyecto)
             rol = request.user.rol.filter(proyecto_id=id_proyecto).first()
             print("ROL USUARIOOO QUE MODIFICA", rol)
             grupo =  Group.objects.filter(name=rol.rol).first()
-            #path = request.path.rsplit('/', 2)[0]
-            #print("PATHHHH",path)
             perms = self.get_perms()
             print(perms)
             print(grupo)

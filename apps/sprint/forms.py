@@ -17,6 +17,10 @@ class SprintForm(forms.ModelForm):
             'fecha_inicio': 'Fecha de inicio',
             'fecha_fin': 'Fecha de finalización'
         }
+    def __init__(self, pk,*args, **kwargs):
+        self.id_proyecto= pk
+        super(SprintForm, self).__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = super().clean()
         start_date = cleaned_data.get("fecha_inicio")
@@ -25,6 +29,16 @@ class SprintForm(forms.ModelForm):
             raise forms.ValidationError('La fecha de fin debe ser mayor a la fecha de inicio')
         if date.today() > start_date:
             raise forms.ValidationError('¡La fecha de inicio no debe estar en el pasado!')
+
+        #raise forms.ValidationError(self.id_proyecto)
+        
+        sprints=Sprint.objects.filter(proyecto__id=1)
+        for e in sprints:
+            nombre=e.nombre
+            f_inicio=e.fecha_inicio
+            f_fin=e.fecha_fin
+            raise forms.ValidationError(nombre+" ---- "+str(f_inicio)+" ---- "+str(f_fin))
+
 class agregar_hu_form(forms.ModelForm):
     '''funcion para que filtre solo los sprints de un proyecto en especifico'''
     class Meta:

@@ -19,6 +19,11 @@ class CrearSprint( CreateView ):
     form_class = SprintForm
     success_url = reverse_lazy('proyectos:listar_proyectos')
 
+    def get_form_kwargs(self):
+        kwargs = super(CrearSprint,self).get_form_kwargs()
+        kwargs.update(self.kwargs)
+        return kwargs
+
     def form_valid(self, form):
         proyecto = get_object_or_404(Proyec, id=self.kwargs['pk'])
         form.instance.proyecto = proyecto

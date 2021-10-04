@@ -1,8 +1,10 @@
 from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth.models import Permission, Group
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
-from .models import Proyec, RolProyecto, HistoriaUsuario
+from .models import Proyec, RolProyecto
+from apps.sprint.models import HistoriaUsuario, Sprint
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
@@ -115,6 +117,34 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
 
+class ExpulsarIntegrantes(ValidarPermisosMixin, CreateView):
+    """Vista basada en clase se utiliza para expulsar un integrante del proyecto"""
+
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    model = Proyec
+    print("ExpulsarIntegrantes")
+    fields = '__all__'
+    def get(self, request, *args, **kwargs):
+        print(kwargs)
+        print(self)
+        print(request)
+        print(args)
+        user = User.objects.get(id = kwargs['pk'])
+        proyecto = Proyec.objects.get(id=kwargs['pl'])
+        print("USER", user, "PROYECTO", proyecto)
+        rol = user.rol.filter(proyecto_id=kwargs['pl']).first()
+        print(rol)
+        if rol == None:
+            proyecto.equipo.remove(user)
+            return redirect('proyectos:listar_integrantes', kwargs['pl'])
+        grupo =  Group.objects.filter(name=rol.nombre).first()
+        print("ROL", rol, "GRUPO", grupo)
+        proyecto.equipo.remove(user)
+        user.groups.remove(grupo)
+        user.rol.remove(rol)
+        return redirect('proyectos:listar_integrantes', kwargs['pl'])
+
 #class listarporencargado( ValidarPermisosMixin, ListView):
 #    model = Proyec Clase No usada???
 class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
@@ -148,6 +178,7 @@ class listarProyectosUsuario(LoginYSuperStaffMixin, ListView):
 
 
 class CrearUS(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
+
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     permission_required = ('view_historiausuario', 'add_historiausuario',
                             'delete_historiausuario', 'change_historiausuario')
@@ -187,7 +218,7 @@ class ConfigurarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, Updat
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
     def get_success_url(self):
-        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id})
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
 class EditarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
@@ -198,8 +229,8 @@ class EditarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateVie
     form_class = CrearUSForm
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
-
 class ListarUS(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = HistoriaUsuario
     template_name = 'proyectos/listar_us.html'
@@ -231,34 +262,35 @@ class aprobarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateVie
 
 
 class ProductBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
     model = HistoriaUsuario
     template_name = 'proyectos/ver_PB.html'
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=True)
+        us = proyecto.proyecto.filter(aprobado_PB=True, sprint_backlog=False)
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 
 class Listar_us_a_estimar(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
-    template_name = 'proyectos/us-a-estimar.html'
+    template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
     def get(self, request, pk, *args, **kwargs):
-        proyecto=Proyec.objects.get(id=pk)
+        sprint=Sprint.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
-        us = proyecto.proyecto.filter(asignacion=user, aprobado_PB=True,estimacion=0 )
-        ''', estimacion=0, asignacion=user'''
-        return render(request, 'proyectos/us-a-estimar.html', {'object_list': us})
+        us = sprint.sprint.filter(asignacion=user, sprint_backlog=True,estimacion=0 )
+        return render(request, 'sprint/us-a-estimar.html', {'object_list': us})
 
 
 class estimarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = HistoriaUsuario
     permission_required = ('view_proyec', 'change_proyec')
-    template_name = 'proyectos/estimar_us.html'
+    template_name = 'sprint/estimar_us.html'
     form_class = estimar_userform
     def get_success_url(self):
-        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

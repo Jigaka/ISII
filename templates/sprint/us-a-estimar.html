@@ -1,7 +1,7 @@
-{% extends 'proyectos/proyecto.html' %}
+{% extends 'sprint/sprint.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Product Backlog
+Gestion de Proyectos | Historias de Usuarios a Estimar
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
@@ -16,7 +16,7 @@ Gestion de Proyectos | Product Backlog
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Product Backlog</strong>
+                <strong class="card-title">Historias de Usuarios a Estimar</strong>
             </div>
         </div>
 
@@ -29,7 +29,6 @@ Gestion de Proyectos | Product Backlog
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Prioridad</th>
-                    <th>Estimacion</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -40,10 +39,8 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                <td>{{ us.estimacion }}</td>
-
                  <td style="text-align: left;">
-                        <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a>
+                        <a href="{%  url 'proyectos:estimar_us' us.id %}"> Estimar</a><br>
                  </td>
                </tr>
              {% endfor %}

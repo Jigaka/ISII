@@ -33,7 +33,7 @@
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
             <div id="main-menu" class="main-menu">
-                <div style="text-align: center;margin:20px 5px;font-weight: bold;text-transform: uppercase;">
+                <div style="text-align: center;margin:20px 5px;font-weight: bold;text-transform: uppercase;background-color: cornflowerblue; color: white">
                     {{proyecto.nombre}}
                 </div>
                 <ul class="nav navbar-nav">
@@ -42,7 +42,7 @@
                     </li>
                     {% get_id request.path as id %}
 
-                    {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+                    {% if request.user.id == proyecto.encargado.id %}
                     <li>
                         <a href='{%  url 'proyectos:listar_integrantes' id%}' > <i
                                 class="menu-icon fa fa-users"></i>Integrantes</a>
@@ -54,7 +54,7 @@
                             <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' id%}">  Listar Roles</a></li>
                         </ul>
                      </li>
-                    {% endifequal %}
+                    {% endif %}
 
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Historias de Usuario</a>
@@ -69,14 +69,14 @@
                             {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                             <li><i class="fa fa-plus"></i> <a href="{%  url 'sprint:crear_sprint' id %}">  Crear Sprint</a></li>
                             {% endifequal %}
-                            <li><i class="fa fa-bars"></i> <a href=""> Listar Sprints</a></li>
+                            <li><i class="fa fa-plus"></i> <a href="{%  url 'sprint:listar_sprint' id %}">  Listar Sprint</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i>Sprint Planning</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fas fa-layer-group"></i> <a href="{%  url 'proyectos:ver_pb'  id%}"> Product Backlog</a></li>
-                            <li><i class="fas fa-sort-numeric-up-alt"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
+
                         </ul>
                      </li>
                     </li>
@@ -99,6 +99,7 @@
             </div>
             <div class="top-right">
                 <div class="header-menu">
+                    <h3>{{ request.user.username }}</h3>
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="user-avatar rounded-circle" src="{% static 'images/admin.png' %}" alt="User Avatar">

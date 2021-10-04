@@ -1,22 +1,18 @@
 {% extends 'proyectos/proyecto.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Product Backlog
+Gestion de Proyectos | Listado de historia de usuarios
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <style>
-         #danger:hover{
-            color:red;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
 {% endblock extra_css %}
 {% block body %}
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Product Backlog</strong>
+                <strong class="card-title">Listado de Sprint</strong>
             </div>
         </div>
 
@@ -27,24 +23,18 @@ Gestion de Proyectos | Product Backlog
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Prioridad</th>
-                    <th>Estimacion</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
             <tbody>
-              {% for us in object_list %}
+              {% for sprint in object_list %}
                <tr>
-                 <td>{{ us.id }}</td>
-                 <td>{{ us.nombre }}</td>
-                 <td>{{ us.descripcion }}</td>
-                 <td>{{ us.prioridad }}</td>
-                <td>{{ us.estimacion }}</td>
-
-                 <td style="text-align: left;">
-                        <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a>
+                 <td>{{ sprint.id }}</td>
+                 <td>{{ sprint.nombre }}</td>
+                 <td class="opciones">
+                        <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>
                  </td>
+
                </tr>
              {% endfor %}
             </tbody>

@@ -55,6 +55,9 @@ Gestion de Proyectos | Listado de integrantes
                         {% endif %}
                         <td style="text-align: left;">
                             <button class="btn btn-primary" onclick="abrirModalRol('{% url 'usuarios:asignar_rol' user.user.id id%}')"> Asignar Rol</button>
+                            {% if  user.user.id != proyecto.encargado.id %}
+                            <a class="eliminar" href="{% url 'proyectos:expulsar_integrante' user.user.id id%}">  Expulsar </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

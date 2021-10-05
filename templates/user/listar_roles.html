@@ -1,5 +1,6 @@
 {% extends 'proyectos/proyecto.html' %}
 {% load static %}
+{% load separate_name %}
 {% block titulo %}
 Gestion de Proyectos | Listado de Roles
 {% endblock titulo %}
@@ -52,9 +53,10 @@ Gestion de Proyectos | Listado de Roles
             </thead>
             <tbody>
               {% for roles in object_list %}
+               {% separate_name roles.rol as rol %}
                <tr>
                  <td>{{ roles.id }}</td>
-                 <td>{{ roles.rol }}</td>
+                 <td>{{ rol }}</td>
                  <td class="opciones">
                    <a class="opcion" href="{%  url 'usuarios:agregar_permisos_roles' roles.id %}">  Agregar permisos</a>
                    <a class="eliminar" href="{%  url 'usuarios:eliminar_rol' roles.id %}">  Eliminar </a>

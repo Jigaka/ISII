@@ -10,10 +10,10 @@ from django.urls import reverse_lazy, reverse
 
 
 # Create your views here.
-class CrearSprint( CreateView ):
+class CrearSprint(LoginNOTSuperUser, ValidarPermisosMixin, CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
-    #permission_required = ('view_rol', 'add_rol',
-     #                      'delete_rol', 'change_rol')
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
     template_name = 'proyectos/crear_sprint.html'
     model = Sprint
     form_class = SprintForm
@@ -35,7 +35,7 @@ class CrearSprint( CreateView ):
         return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
 
 
-class ListarSprint( ListView ):
+class ListarSprint(LoginNOTSuperUser, ListView ):
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = Sprint
     template_name = 'sprint/listar_sprint.html'
@@ -49,11 +49,11 @@ class ListarSprint( ListView ):
         #us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
-class AgregarHU_sprint(UpdateView):
+class AgregarHU_sprint(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = HistoriaUsuario
-    #permission_required = ('view_rol', 'add_rol',
-    #                      'delete_rol', 'change_rol')
+    permission_required = ('view_rol', 'add_rol',
+                          'delete_rol', 'change_rol')
     template_name = 'sprint/agregarHU.html'
     form_class = agregar_hu_form
 
@@ -89,12 +89,12 @@ class VerSprint(TemplateView):
 
 
 
-class SprintBacklog( ListView):
+class SprintBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 
     model = HistoriaUsuario
     template_name = 'sprint/ver_sb.html'
-    '''permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')'''
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
 
@@ -113,16 +113,17 @@ class TablaKanban( ListView):
         return render(request, 'sprint/Kanban.html', {'object_list': us,'sprint':sprint})
 
 
-class configurarEquipoSprint(UpdateView):
+class configurarEquipoSprint(LoginNOTSuperUser, ValidarPermisosMixin, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = Sprint
-    #permission_required = ('view_proyec', 'change_proyec')
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
     template_name = 'sprint/configurar_equipo.html'
     form_class = configurarEquipoSprintform
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
         return reverse('sprint:ver_sprint', kwargs={'pk': self.object.pk })
 
-class Cambio_de_estadoHU(UpdateView):
+class Cambio_de_estadoHU(LoginNOTSuperUser, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = HistoriaUsuario
     #permission_required = ('view_proyec', 'change_proyec')

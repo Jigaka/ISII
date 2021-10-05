@@ -117,7 +117,7 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
 
-class ExpulsarIntegrantes(ValidarPermisosMixin, CreateView):
+class ExpulsarIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     """Vista basada en clase se utiliza para expulsar un integrante del proyecto"""
 
     permission_required = ('view_rol', 'add_rol',

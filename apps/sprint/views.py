@@ -110,7 +110,7 @@ class TablaKanban( ListView):
         sprint=Sprint.objects.get(id=pk)
 
         us = sprint.sprint.filter(estado='ToDo')
-        return render(request, 'sprint/Kanban.html', {'object_list': us,'sprint':sprint})
+        return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint})
 
 
 class configurarEquipoSprint(LoginNOTSuperUser, ValidarPermisosMixin, UpdateView):

@@ -1,0 +1,51 @@
+{% extends 'sprint/sprint.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Listado de historia de usuarios
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Miembros del Equipo</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+      {%  if object_list %}
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th></th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for miembros in object_list %}
+               <tr>
+                 <td>{{ miembros.id }}</td>
+                 <td>{{ miembros.first_name }}</td>
+                 <td></td>
+               </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <img src="{% static 'images/ilustration/list_is_empty_1.png' %}" alt="Lista vacia" height="300px" class="center">
+        {%  endif %}
+    </div>
+</div>
+
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

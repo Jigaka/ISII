@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, configurarEquipoSprint, \
-     Cambio_de_estadoHU, TablaKanban
+     Cambio_de_estadoHU, TablaKanban, ListarEquipo
 from apps.proyectos.views import ConfigurarUs
 
 urlpatterns = [
@@ -13,4 +13,5 @@ urlpatterns = [
      path('configurar_us/<int:pk>', ConfigurarUs.as_view(), name='configurar_us'),
      path('cambio_estadoHU/<int:pk>', Cambio_de_estadoHU.as_view(), name='cambio_estadoHU'),
      path('kanban/<int:pk>', TablaKanban.as_view(), name='kanban'),
+     path('listar_equipo/<int:pk>', ListarEquipo.as_view(), name='listar_equipo'),
     ]

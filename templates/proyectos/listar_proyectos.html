@@ -13,7 +13,13 @@ Gestion de Proyectos | Listado de Proyectos
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Proyectos</strong>
+                <strong class="card-title">
+                    {% if title%}
+                        {{title}}
+                    {%else%}
+                        Listado de Proyectos
+                    {%endif%}
+                </strong>
             </div>
         </div>
 

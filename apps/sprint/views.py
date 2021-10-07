@@ -19,6 +19,12 @@ class CrearSprint(LoginNOTSuperUser, ValidarPermisosMixin, CreateView ):
     form_class = SprintForm
     success_url = reverse_lazy('proyectos:listar_proyectos')
 
+    def get_form_kwargs(self):
+        kwargs = super(CrearSprint,self).get_form_kwargs()
+        self.kwargs['id_sprint']=0
+        kwargs.update(self.kwargs)
+        return kwargs
+
     def form_valid(self, form):
         proyecto = get_object_or_404(Proyec, id=self.kwargs['pk'])
         form.instance.proyecto = proyecto
@@ -45,7 +51,7 @@ class ListarSprint(LoginNOTSuperUser, ListView ):
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        sprint=proyecto.proyecto_s.all()
+        sprint=proyecto.proyecto_s.all().order_by('fecha_inicio')
         #us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
@@ -71,6 +77,43 @@ class AgregarHU_sprint(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, U
         HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True)
         return redirect('proyectos:ver_pb', HU.proyecto_id)
 
+
+class EliminarSprint(LoginNOTSuperUser  ,DeleteView):
+    """ Vista basada en clase, se utiliza para eliminar un proyecto"""
+    model = Sprint
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get_success_url(self):
+        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
+
+class EditarSprint(LoginNOTSuperUser, UpdateView):
+    """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
+    model = Sprint
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    template_name = 'sprint/editar_sprint.html'
+    form_class = SprintForm
+    
+    def get_form_kwargs(self):
+        kwargs = super(EditarSprint,self).get_form_kwargs()
+        id_sprint=self.kwargs['pk']
+        id_proyecto= Sprint.objects.get(id=id_sprint).proyecto.id
+        self.kwargs['pk']=id_proyecto
+        self.kwargs['id_sprint']=id_sprint
+        kwargs.update(self.kwargs)
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto= Sprint.objects.get(id=self.object.pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
 
 
 class VerSprint(TemplateView):

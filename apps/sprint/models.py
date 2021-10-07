@@ -23,7 +23,7 @@ class Sprint(models.Model):
     @property
     def duracion_dias(self):
         if (self.fecha_inicio and self.fecha_fin):
-            duracion_dias = self.fecha_fin.day - self.fecha_inicio.day
+            duracion_dias = self.fecha_fin - self.fecha_inicio
             return duracion_dias
 
     class Meta:

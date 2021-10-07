@@ -12,7 +12,7 @@ Gestion de Proyectos | Listado de historia de usuarios
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Sprint</strong>
+                <strong class="card-title">Listado de Sprints</strong>
             </div>
         </div>
 
@@ -23,6 +23,9 @@ Gestion de Proyectos | Listado de historia de usuarios
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de fin</th>
+                    <th>Estado</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -31,8 +34,13 @@ Gestion de Proyectos | Listado de historia de usuarios
                <tr>
                  <td>{{ sprint.id }}</td>
                  <td>{{ sprint.nombre }}</td>
-                 <td class="opciones">
+                 <td>{{ sprint.fecha_inicio }}</td>
+                 <td>{{sprint.fecha_fin}}</td>
+                 <td>{{ sprint.get_estado_display }}</td>
+                 <td class="opciones" style="text-align: left;">
                         <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>
+                        <a href="{%  url 'sprint:editar_sprint' sprint.id %}">Editar Sprint</a>
+                        <a href="{%  url 'sprint:eliminar_sprint' sprint.id %}" class="eliminar">Eliminar Sprint</a>
                  </td>
 
                </tr>

@@ -174,7 +174,7 @@ class listarProyectosUsuario(LoginYSuperStaffMixin, ListView):
     def get(self, request, *args, **kwargs):
         user = User.objects.get(id=request.user.id)
         proyectos = user.equipo.all()
-        return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos})
+        return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos,'title':'Mis proyectos'})
 
 
 class CrearUS(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):

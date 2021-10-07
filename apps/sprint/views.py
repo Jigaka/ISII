@@ -91,7 +91,7 @@ class VerSprint(TemplateView):
 
 
 
-class SprintBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+class SprintBacklog(LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
 
     model = HistoriaUsuario
     template_name = 'sprint/ver_sb.html'
@@ -142,7 +142,7 @@ class ListarEquipo(LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         sprint = Sprint.objects.get(id=pk)
-        equipo = sprint.equipo.all
+        equipo = sprint.equipo.all()
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         print(id_proyecto)
         print("EQUIPO", equipo)

@@ -3,9 +3,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form
 from .models import Proyec,  Sprint, HistoriaUsuario
-from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
+from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
+     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
+
 
 
 
@@ -132,7 +134,7 @@ class VerSprint(TemplateView):
 
 
 
-class SprintBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+class SprintBacklog(LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
 
     model = HistoriaUsuario
     template_name = 'sprint/ver_sb.html'
@@ -156,7 +158,7 @@ class TablaKanban( ListView):
         return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint})
 
 
-class configurarEquipoSprint(LoginNOTSuperUser, ValidarPermisosMixin, UpdateView):
+class configurarEquipoSprint(LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
@@ -174,3 +176,17 @@ class Cambio_de_estadoHU(LoginNOTSuperUser, UpdateView):
     form_class = cambio_estadoHU_form
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
         return reverse('sprint:kanban', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+
+class ListarEquipo(LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
+    """Vista basada en clase, se utiliza para listar a los miembros del equipo del sprint"""
+    model = Sprint
+    template_name = 'sprint/listar_equipo.html'
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint = Sprint.objects.get(id=pk)
+        equipo = sprint.equipo.all()
+        id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        print(id_proyecto)
+        print("EQUIPO", equipo)
+        return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo})

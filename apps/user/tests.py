@@ -1,10 +1,5 @@
-from django.test import TestCase
-import pytest
-import factory
-from faker import Faker
 from django.test import TestCase, Client
 from apps.user.models import User, Rol
-from apps.user.forms import UserForm
 from ddf import G, F
 
 
@@ -17,15 +12,20 @@ class UserTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
-        User.objects.create(first_name='Jose', last_name='Garcete', username='big8', email="afasdfasd@gmail.com")
+        User.objects.create(first_name='Jose', last_name='Garcete', username='Jose9', email="afasdfasd@gmail.com")
 
     def test_first_name_label(self):
-        author = User.objects.get(id=1)
-        field_label = author._meta.get_field('first_name').verbose_name
+        usuario = User.objects.get(username='Jose9')
+        field_label = usuario._meta.get_field('first_name').verbose_name
         self.assertEquals(field_label, 'nombre')
 
+    def test_last_name_label(self):
+        usuario = User.objects.get(username='Jose9')
+        field_label = usuario._meta.get_field('last_name').verbose_name
+        self.assertEquals(field_label, 'apellidos')
+
     def test_email_label(self):
-        usuario= User.objects.get(id=1)
+        usuario = User.objects.get(username='Jose9')
         field_label = usuario._meta.get_field('email').verbose_name
         self.assertEquals(field_label, 'dirección de correo electrónico')
 

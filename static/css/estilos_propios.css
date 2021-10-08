@@ -62,3 +62,21 @@
     background-color: rgb(21, 72, 131);
     border-color: rgb(21, 72, 131)
 }
+
+#titulo-proyecto{
+    text-align: center;
+    margin:20px 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: cornflowerblue; 
+    color: white
+}
+
+#titulo-sprint{
+    text-align: center;
+    margin:20px 5px;
+    font-weight: bold;
+    text-transform: lowercase;
+    background-color: rgb(54, 233, 54); 
+    color: white
+}

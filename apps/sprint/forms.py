@@ -1,6 +1,6 @@
 from django import  forms
 from django.forms.widgets import Widget
-from .models import Proyec, Sprint, HistoriaUsuario
+from .models import CapacidadDiariaEnSprint, Proyec, Sprint, HistoriaUsuario
 from datetime import date
 
 
@@ -80,4 +80,13 @@ class cambio_estadoHU_form(forms.ModelForm):
         fields = ['estado']
         labels = {
             'estado': 'Seleccione estado de la Historia de Usuario'
+        }
+
+class CapacidadDiariaEnSprintForm(forms.ModelForm):
+    capacidad_diaria_horas=forms.IntegerField()
+    class Meta:
+        model=CapacidadDiariaEnSprint
+        fields=['capacidad_diaria_horas']
+        labels = {
+            'capacidad_diaria_horas': 'Capacidad diaria (horas)'
         }

@@ -155,9 +155,9 @@ class SprintBacklog(LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
-
+        proyecto=sprint.proyecto
         us = sprint.sprint.filter(sprint_backlog=True, estado='Pendiente')
-        return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint})
+        return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint,'proyecto':proyecto})
 
 class TablaKanban( ListView):
     model = HistoriaUsuario

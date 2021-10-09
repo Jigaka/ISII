@@ -140,8 +140,10 @@ class VerSprint(TemplateView):
             estoyEnEquipo=False   
 
         proyecto=sprint.proyecto
+
+        capacidadCargada=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=request.user).exists()
     
-        return render(request, 'sprint/sprint.html',{"estoyEnEquipo":estoyEnEquipo,"sprint":sprint,"proyecto":proyecto})
+        return render(request, 'sprint/sprint.html',{"estoyEnEquipo":estoyEnEquipo,"sprint":sprint,"proyecto":proyecto,"capacidadCargada":capacidadCargada})
 
 
 

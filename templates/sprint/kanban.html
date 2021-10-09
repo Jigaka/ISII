@@ -54,21 +54,36 @@ Gestion de Proyectos | Tabla Kanban
 {% endblock extra_css %}
 {% block body %}
 <h1>Tabla kanban</h1>
-
     <div id="board">
         <div id="todo" class="section">
             <h1>To Do</h1>
-            <div id="c2" class="card">
-                Cerro
-            </div>
-            <div id="c3" class="card"><em>Paraguay!</em></div>
+            {% for us in object_list %}
+                {% if us.estado == 'Todo' %}
+                    <div id={{ us.id }} class="card">
+                        {{ us.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
         <div id="doing" class="section">
             <h1>Doing</h1>
-            <div id="c1" class="card">Caaguazu</div>
+            {% for us in object_list %}
+                {% if us.estado == 'Doing' %}
+                    <div id={{ us.id }} class="card">
+                        {{ us.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
         <div id="done" class="section">
             <h1>Done</h1>
+            {% for us in object_list %}
+                {% if us.estado == 'Done' %}
+                    <div id={{ us.id }} class="card">
+                        {{ us.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 
@@ -86,9 +101,6 @@ Gestion de Proyectos | Tabla Kanban
             card.draggable = true;
         };
 
-        function loco(pito){
-            alert('loco')
-        }
 
         var board = document.getElementById('board');
 
@@ -99,7 +111,6 @@ Gestion de Proyectos | Tabla Kanban
         }
 
         board.ondragstart = function (e) {
-            console.log('dragstart');
             hideMe = e.target;
             e.dataTransfer.setData('card', e.target.id);
             e.dataTransfer.effectAllowed = 'move';
@@ -112,7 +123,6 @@ Gestion de Proyectos | Tabla Kanban
         var lastEneterd;
 
         board.ondragenter = function (e) {
-            console.log('dragenter');
             if (hideMe) {
                 hideMe.style.visibility = 'hidden';
                 hideMe = null;
@@ -179,8 +189,5 @@ Gestion de Proyectos | Tabla Kanban
             return null;
         }
 
-        function cerrarUnCard(e){
-            alert(e);
-        }
     </script>
 {% endblock extrajs %}

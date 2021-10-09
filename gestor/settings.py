@@ -115,6 +115,7 @@ ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_LOGOUT_ON_GET=True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'inicio'
+ACCOUNT_SESSION_REMEMBER = False
 SOCIALACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'

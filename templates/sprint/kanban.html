@@ -54,25 +54,38 @@ Gestion de Proyectos | Tabla Kanban
 {% endblock extra_css %}
 {% block body %}
 <h1>Tabla kanban</h1>
-
     <div id="board">
         <div id="todo" class="section">
             <h1>To Do</h1>
-            <div id="c2" class="card">
-                Cerro
-            </div>
-            <div id="c3" class="card"><em>Paraguay!</em></div>
+            {% for us in object_list %}
+                {% if us.estado == 'ToDo' %}
+                    <div id={{ us.id }} class="card">
+                        {{ us.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
         <div id="doing" class="section">
             <h1>Doing</h1>
-            <div id="c1" class="card">Caaguazu</div>
+            {% for us in object_list %}
+                {% if us.estado == 'Doing' %}
+                    <div id={{ us.id }} class="card">
+                        {{ us.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
         <div id="done" class="section">
             <h1>Done</h1>
+            {% for us in object_list %}
+                {% if us.estado == 'Done' %}
+                    <div id={{ us.id }} class="card">
+                        {{ us.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
-
-
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

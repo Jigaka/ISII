@@ -11,7 +11,7 @@ class LoginYSuperStaffMixin(object):
         """ Función que verifica que el usuario esté autenticado y valida si puede ingresar al sitio de administracion"""
         if request.user.is_authenticated:
                 return super().dispatch(request, *args, **kwargs)
-        messages.error(request, 'No estas autenticado en el sistema.')
+        messages.error(request, 'No estas logueado en el sistema.')
         return redirect('index')
 
 class LoginYSuperUser(object):
@@ -38,7 +38,7 @@ class ValidarPermisosMixin(object):
     permission_required = ''
     url_redirect = None
 
-    print("############################### MIXINS ###################3")
+    print("############################### MIXINS 1 ###################3")
 
     def get_perms(self):
         """ Función que retorna una tupla de los permisos requeridos"""
@@ -156,6 +156,9 @@ class ValidarPermisosMixinPermisos(object):
             print("rolProyecto2",rolProyecto)
             print("IDProyecto2",id_proyecto)
             rol = request.user.rol.filter(proyecto_id=id_proyecto).first()
+            if rol == None: # Si no tiene rol en ese proyecto se rechaza la acción
+                messages.error(request, 'No tienes rol en este proyecto.')
+                return redirect(self.get_url_redirect())
             print("ROL USUARIOOO QUE MODIFICA", rol)
             grupo =  Group.objects.filter(name=rol.rol).first()
             perms = self.get_perms()
@@ -213,6 +216,9 @@ class ValidarPermisosMixinHistoriaUsuario(object):
             id_proyecto = HistoriaUsuario.objects.get(id=kwargs['pk']).proyecto.id #id del proyecto se obtiene por us
             rol = request.user.rol.filter(proyecto_id=id_proyecto).first()
             print("ROL USUARIOOO QUE MODIFICA", rol)
+            if rol == None: # Si no tiene rol en ese proyecto se rechaza la acción
+                messages.error(request, 'No tienes rol en este proyecto.')
+                return redirect(self.get_url_redirect())
             grupo =  Group.objects.filter(name=rol.rol).first()
             perms = self.get_perms()
             print(perms)
@@ -262,6 +268,9 @@ class ValidarPermisosMixinSprint(object):
             id_proyecto = Sprint.objects.get(id=kwargs['pk']).proyecto.id
             print(id_proyecto)
             rol = request.user.rol.filter(proyecto_id=id_proyecto).first()
+            if rol == None: # Si no tiene rol en ese proyecto se rechaza la acción
+                messages.error(request, 'No tienes rol en este proyecto.')
+                return redirect(self.get_url_redirect())
             grupo =  Group.objects.filter(name=rol.rol).first()
             perms = self.get_perms()
             print(perms)
@@ -277,3 +286,67 @@ class ValidarPermisosMixinSprint(object):
             return super().dispatch(request, *args, **kwargs)
             messages.error(request, 'No tienes permisos para realizar esta acción.')
             return redirect(self.get_url_redirect())
+
+class ValidarQuePertenceAlProyecto(object):
+    """Esta clase se llama para acciones especiales"""
+    permission_required = ''
+    url_redirect = None
+    print("############################### MIXINS 5 ###################3")
+
+    def get_url_redirect(self):
+        """ Función que retorna a la ruta que se indicó en URL_REDIRECT, si no especificó la ruta retorna a INICIO"""
+        if self.url_redirect is None:
+            return reverse_lazy('inicio')
+        return self.url_redirect
+
+    def dispatch(self, request, *args, **kwargs):
+        """ Función que verifica si tiene los permisos, si los tiene continua la ejecución,
+        si no los tiene redirecciona a URL_REDIRECT llamando a la Función get_url_redirect"""
+        if request.user.is_superuser: #Si es super user ignora los permisos requeridos, quitar al if para restringir por roles y no exista un super user
+            return super().dispatch(request, *args, **kwargs)
+
+        tiene_grupo = Group.objects.filter(user=request.user.id).first() # se trae los grupos del usuario, si no tiene es None
+
+        if tiene_grupo == None: # se verifica que tenga un rol asociado
+            messages.error(request, 'No tienes ningun rol asociado.')
+            return redirect(self.get_url_redirect())
+        else:
+            rol = request.user.rol.filter(proyecto_id=kwargs['pk']).first()
+            print("ROL USUARIOOO", rol)
+            if rol == None: # Si no tiene rol en ese proyecto se rechaza la acción
+                messages.error(request, 'No tienes rol en este proyecto.')
+                return redirect(self.get_url_redirect())
+            return super().dispatch(request, *args, **kwargs)
+
+class ValidarQuePertenceAlProyectoSprint(object):
+    """Esta clase se llama para acciones especiales"""
+    permission_required = ''
+    url_redirect = None
+    print("############################### MIXINS 5 ###################3")
+
+    def get_url_redirect(self):
+        """ Función que retorna a la ruta que se indicó en URL_REDIRECT, si no especificó la ruta retorna a INICIO"""
+        if self.url_redirect is None:
+            return reverse_lazy('inicio')
+        return self.url_redirect
+
+    def dispatch(self, request, *args, **kwargs):
+        """ Función que verifica si tiene los permisos, si los tiene continua la ejecución,
+        si no los tiene redirecciona a URL_REDIRECT llamando a la Función get_url_redirect"""
+        if request.user.is_superuser: #Si es super user ignora los permisos requeridos, quitar al if para restringir por roles y no exista un super user
+            return super().dispatch(request, *args, **kwargs)
+
+        tiene_grupo = Group.objects.filter(user=request.user.id).first() # se trae los grupos del usuario, si no tiene es None
+
+        if tiene_grupo == None: # se verifica que tenga un rol asociado
+            messages.error(request, 'No tienes ningun rol asociado.')
+            return redirect(self.get_url_redirect())
+        else:
+            id_proyecto = Sprint.objects.get(id=kwargs['pk']).proyecto.id
+            print(id_proyecto)
+            rol = request.user.rol.filter(proyecto_id=id_proyecto).first()
+            print("ROL USUARIOOO", rol)
+            if rol == None: # Si no tiene rol en ese proyecto se rechaza la acción
+                messages.error(request, 'No tienes rol en este proyecto.')
+                return redirect(self.get_url_redirect())
+            return super().dispatch(request, *args, **kwargs)

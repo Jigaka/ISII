@@ -58,7 +58,9 @@ Gestion de Proyectos | Tabla Kanban
         <div id="todo" class="section">
             <h1>To Do</h1>
             {% for us in object_list %}
+
                 {% if us.estado == 'ToDo' %}
+
                     <div id={{ us.id }} class="card">
                         {{ us.nombre }}
                     </div>
@@ -99,9 +101,6 @@ Gestion de Proyectos | Tabla Kanban
             card.draggable = true;
         };
 
-        function loco(pito){
-            alert('loco')
-        }
 
         var board = document.getElementById('board');
 
@@ -112,7 +111,6 @@ Gestion de Proyectos | Tabla Kanban
         }
 
         board.ondragstart = function (e) {
-            console.log('dragstart');
             hideMe = e.target;
             e.dataTransfer.setData('card', e.target.id);
             e.dataTransfer.effectAllowed = 'move';
@@ -125,7 +123,6 @@ Gestion de Proyectos | Tabla Kanban
         var lastEneterd;
 
         board.ondragenter = function (e) {
-            console.log('dragenter');
             if (hideMe) {
                 hideMe.style.visibility = 'hidden';
                 hideMe = null;
@@ -192,8 +189,5 @@ Gestion de Proyectos | Tabla Kanban
             return null;
         }
 
-        function cerrarUnCard(e){
-            alert(e);
-        }
     </script>
 {% endblock extrajs %}

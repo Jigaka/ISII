@@ -154,7 +154,8 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
 
-        us = sprint.sprint.filter()
+        us = sprint.sprint.all()
+
         return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint})
 
 

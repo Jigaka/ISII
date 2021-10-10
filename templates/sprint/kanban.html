@@ -58,7 +58,9 @@ Gestion de Proyectos | Tabla Kanban
         <div id="todo" class="section">
             <h1>To Do</h1>
             {% for us in object_list %}
-                {% if us.estado == 'Todo' %}
+
+                {% if us.estado == 'ToDo' %}
+
                     <div id={{ us.id }} class="card">
                         {{ us.nombre }}
                     </div>
@@ -86,8 +88,6 @@ Gestion de Proyectos | Tabla Kanban
             {% endfor %}
         </div>
     </div>
-
-
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

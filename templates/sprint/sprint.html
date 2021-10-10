@@ -65,12 +65,12 @@
                             </ul>
                     </li>
                     {%if estoyEnEquipo%}
-                    <li> 
+                    <li>
                         {%if capacidadCargada%}
                         <p>
                             Ya has cargado tu capacidad diaria para este Sprint
                         </p>
-                        {%else%}                      
+                        {%else%}
                         <a href="{%  url 'sprint:asignar_capacidad' id%}" ><i class="menu-icon fa fa-users"></i>Asignar mi capacidad diaria</a>
                         {%endif%}
                     </li>

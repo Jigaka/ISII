@@ -129,7 +129,7 @@ class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Templ
             funcion para renderizar el menu del sprint
         """
         pk=self.kwargs['pk']
-        
+
         sprint = Sprint.objects.get(id=pk)
         users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
         if request.user.pk in users:
@@ -137,12 +137,12 @@ class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Templ
             estoyEnEquipo=True
         else:
             #Estoy fuera del equipo de trabajo#
-            estoyEnEquipo=False   
+            estoyEnEquipo=False
 
         proyecto=sprint.proyecto
 
         capacidadCargada=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=request.user).exists()
-    
+
         return render(request, 'sprint/sprint.html',{"estoyEnEquipo":estoyEnEquipo,"sprint":sprint,"proyecto":proyecto,"capacidadCargada":capacidadCargada})
 
 
@@ -179,6 +179,16 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
                            'delete_rol', 'change_rol')
     template_name = 'sprint/configurar_equipo.html'
     form_class = configurarEquipoSprintform
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto= Sprint.objects.get(id=self.object.pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
         return reverse('sprint:ver_sprint', kwargs={'pk': self.object.pk })
 
@@ -197,13 +207,23 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
     template_name = 'sprint/listar_equipo.html'
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto= Sprint.objects.get(id=self.object.pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get(self, request, pk, *args, **kwargs):
         sprint = Sprint.objects.get(id=pk)
         equipo = sprint.equipo.all()
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
         print(id_proyecto)
         print("EQUIPO", equipo)
-        return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo})
+        return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto})
 
 class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
@@ -231,6 +251,6 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         sprint = Sprint.objects.get(id=pk)
         context['sprint']=sprint
         context['proyecto'] = sprint.proyecto
-        return context  
+        return context
     def get_success_url(self, **kwargs):
         return reverse('sprint:ver_sprint', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })

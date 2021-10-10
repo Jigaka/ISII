@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
     <link rel="stylesheet" href="{% static 'css/cs-skin-elastic.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
     {% block extra_css %}
     {% endblock extra_css %}
 </head>
@@ -33,7 +34,7 @@
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
             <div id="main-menu" class="main-menu">
-                <div style="text-align: center;margin:20px 5px;font-weight: bold;text-transform: uppercase;background-color: cornflowerblue; color: white">
+                <div id="titulo-proyecto">
                     {{proyecto.nombre}}
                 </div>
                 <ul class="nav navbar-nav">

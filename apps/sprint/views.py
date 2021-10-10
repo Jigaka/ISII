@@ -1,8 +1,8 @@
 from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form
-from .models import Proyec,  Sprint, HistoriaUsuario
+from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form
+from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
@@ -128,9 +128,22 @@ class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Templ
         """
             funcion para renderizar el menu del sprint
         """
+        pk=self.kwargs['pk']
+        
+        sprint = Sprint.objects.get(id=pk)
+        users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
+        if request.user.pk in users:
+            #Estoy dentro del equipo de trabajo#
+            estoyEnEquipo=True
+        else:
+            #Estoy fuera del equipo de trabajo#
+            estoyEnEquipo=False   
 
-        # sprint = Sprint.objects.get(id=pk)
-        return render(request, 'sprint/sprint.html')
+        proyecto=sprint.proyecto
+
+        capacidadCargada=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=request.user).exists()
+    
+        return render(request, 'sprint/sprint.html',{"estoyEnEquipo":estoyEnEquipo,"sprint":sprint,"proyecto":proyecto,"capacidadCargada":capacidadCargada})
 
 
 
@@ -142,9 +155,9 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
-
+        proyecto=sprint.proyecto
         us = sprint.sprint.filter(sprint_backlog=True, estado='Pendiente')
-        return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint})
+        return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint,'proyecto':proyecto})
 
 class TablaKanban(LoginYSuperStaffMixin, ListView):
     model = HistoriaUsuario
@@ -191,3 +204,33 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         print(id_proyecto)
         print("EQUIPO", equipo)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo})
+
+class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    template_name = 'sprint/asignar_capacidad.html'
+    model = CapacidadDiariaEnSprint
+    form_class = CapacidadDiariaEnSprintForm
+    success_url = reverse_lazy('inicio.html')
+
+    def form_valid(self, form):
+        id_sprint=self.kwargs['pk']
+        id_user= self.request.user.pk
+        usuario = get_object_or_404(User, id=id_user)
+        sprint = get_object_or_404(Sprint, id=id_sprint)
+        form.instance.usuario = usuario
+        form.instance.sprint = sprint
+        return super(AsignarCapacidadDiaria, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        sprint = Sprint.objects.get(id=pk)
+        context['sprint']=sprint
+        context['proyecto'] = sprint.proyecto
+        return context  
+    def get_success_url(self, **kwargs):
+        return reverse('sprint:ver_sprint', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })

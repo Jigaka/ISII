@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
     <link rel="stylesheet" href="{% static 'css/cs-skin-elastic.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
     {% block extra_css %}
     {% endblock extra_css %}
 </head>
@@ -35,13 +36,19 @@
             <div id="main-menu" class="main-menu">
                 <div style="text-align: center;margin:20px 5px;font-weight: bold;text-transform: uppercase;">
                 </div>
+                <div id="titulo-proyecto">
+                    {{proyecto.nombre}}
+                </div>
+                <div id="titulo-sprint">
+                    {{sprint.nombre}}
+                </div>
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
+                        <a href="{% url 'proyectos:ver_proyecto' proyecto.id%}"><i class="menu-icon fa fa-laptop"></i>Inicio (Proyecto)</a>
                     </li>
                     {% get_id request.path as id %}
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="menu-icon fa fa-users" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-users"></i> Equipo</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-users"></i> Equipo de trabajo</a>
                             <ul class="sub-menu children dropdown-menu">
                                 <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:configurar_equipo' id%}">Configurar Equipo</a></li>
                                 <li><i class="fa fa-user"></i> <a href="{%  url 'sprint:listar_equipo' id%}"> Ver Equipo</a></li>
@@ -57,9 +64,17 @@
                                 <li><i class="fas fa-sort-numeric-up-alt"></i> <a href="{%  url 'proyectos:listar-us-a-estimar' id%}">  Estimar Historia de Usuario</a></li>
                             </ul>
                     </li>
-                    <li>
-                        <a href='#' ><i class="menu-icon fa fa-users"></i>Capacidad del equipo</a>
+                    {%if estoyEnEquipo%}
+                    <li> 
+                        {%if capacidadCargada%}
+                        <p>
+                            Ya has cargado tu capacidad diaria para este Sprint
+                        </p>
+                        {%else%}                      
+                        <a href="{%  url 'sprint:asignar_capacidad' id%}" ><i class="menu-icon fa fa-users"></i>Asignar mi capacidad diaria</a>
+                        {%endif%}
                     </li>
+                    {%endif%}
 {#                    <li class="menu-item-has-children dropdown">#}
 {#                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>#}
 {#                        <ul class="sub-menu children dropdown-menu">#}

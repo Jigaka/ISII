@@ -109,3 +109,10 @@ def calcular_estimacion(sender, instance, **kwargs):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
+
+class CapacidadDiariaEnSprint(models.Model):
+    usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")
+    sprint= models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=False, null=False, related_name="el_sprint")
+    capacidad_diaria_horas=models.PositiveIntegerField(null=False, default=8)
+
+    models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')

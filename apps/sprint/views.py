@@ -77,8 +77,19 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
     template_name = 'sprint/agregarHU.html'
     form_class = agregar_hu_form
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto = HistoriaUsuario.objects.get(id=pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get_success_url(self):
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id})
+
+
     def post(self, request, *args, **kwargs):
         """ Funcion para crear un rol con los datos devueltos por el form
 
@@ -219,6 +230,16 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
     #permission_required = ('view_proyec', 'change_proyec')
     template_name = 'sprint/cambio_estado.html'
     form_class = cambio_estadoHU_form
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_proyecto = Sprint.objects.get(id=self.object.pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
         return reverse('sprint:kanban', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
 

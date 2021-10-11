@@ -218,6 +218,16 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get_success_url(self):
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
@@ -279,11 +289,17 @@ class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermi
     model = HistoriaUsuario
     template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
+
+
+
+
     def get(self, request, pk, *args, **kwargs):
         sprint =Sprint.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
         us = sprint.sprint.filter(asignacion=user, sprint_backlog=True, estimacion=0)
-        return render(request, 'sprint/us-a-estimar.html', {'object_list': us})
+        id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
+        return render(request, 'sprint/us-a-estimar.html', {'object_list': us, 'proyecto': proyecto})
 
 
 class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
@@ -292,5 +308,16 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
     permission_required = ('view_proyec', 'change_proyec')
     template_name = 'sprint/estimar_us.html'
     form_class = estimar_userform
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
+
     def get_success_url(self):
         return reverse('sprint:listar_us_a_estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

@@ -198,7 +198,8 @@ class CrearUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, Cr
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         prioridad=request.POST['prioridad']
-        us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto)
+        user = User.objects.get(id=request.user.id)
+        us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto, product_owner=user)
         us.save()
         return redirect('proyectos:listar_us', id)
 
@@ -225,7 +226,7 @@ class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHis
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
-    template_name = 'proyectos/crear_US.html'
+    template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
@@ -238,7 +239,7 @@ class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, L
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
+        us = proyecto.proyecto.filter(aprobado_PB=False, sprint_backlog=False).order_by('-prioridad_numerica','id')
         return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
 
 
@@ -274,15 +275,14 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
 
 
 class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
-
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
     template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
     def get(self, request, pk, *args, **kwargs):
-        sprint=Sprint.objects.get(id=pk)
+        sprint =Sprint.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
-        us = sprint.sprint.filter(asignacion=user, sprint_backlog=True,estimacion=0 )
+        us = sprint.sprint.filter(asignacion=user, sprint_backlog=True, estimacion=0)
         return render(request, 'sprint/us-a-estimar.html', {'object_list': us})
 
 
@@ -293,4 +293,4 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
     template_name = 'sprint/estimar_us.html'
     form_class = estimar_userform
     def get_success_url(self):
-        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        return reverse('sprint:listar_us_a_estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

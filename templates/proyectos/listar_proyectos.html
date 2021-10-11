@@ -48,7 +48,7 @@ Gestion de Proyectos | Listado de Proyectos
                             {% if  request.user.id == proyec.encargado.id %}
                                 <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a>
                             {% endif %}
-                            {% if  request.user.is_superuser == us.product_owner.id %}
+                            {% if  request.user.is_superuser %}
                                 <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
                             {% endif %}
                             {% if request.user in proyec.equipo.all%}

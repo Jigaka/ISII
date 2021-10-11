@@ -23,8 +23,6 @@ urlpatterns = [
     path('editar_us/<int:pk>', EditarUs.as_view(), name='editar_us'),
     path('eliminar_us/<int:pk>',EliminarUS.as_view(), name='eliminar_us'),
     path('aprobar_us/<int:pk>',aprobarUS.as_view(), name='aprobar_us'),
-    path('listar_us_a_estimar_us/<int:pk>',Listar_us_a_estimar.as_view(), name='listar-us-a-estimar'),
-    path('estimar_us/<int:pk>',estimarUS.as_view(), name='estimar_us'),
     path('ver_PB/<int:pk>', ProductBacklog.as_view(), name='ver_pb'),
     path('expulsar_integrante/<int:pk>/<int:pl>',ExpulsarIntegrantes.as_view(), name='expulsar_integrante'),
 ]

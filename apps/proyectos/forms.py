@@ -2,7 +2,7 @@ from django import  forms
 from django.forms.widgets import Widget
 from .models import Proyec
 from apps.user.models import User
-from apps.sprint.models import HistoriaUsuario
+from apps.sprint.models import HistoriaUsuario, Sprint
 
 from datetime import date
 '''
@@ -52,9 +52,9 @@ class configurarUSform(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super(configurarUSform, self).__init__(*args, **kwargs)
-        HU = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).proyecto_id
-        print(HU)
-        self.fields['asignacion'].queryset = Proyec.objects.get(id=HU).equipo
+        sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
+        #print(HU)
+        self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
 
 class estimar_userform(forms.ModelForm):
     class Meta:
@@ -63,10 +63,12 @@ class estimar_userform(forms.ModelForm):
         labels = {
             'estimacion_user': 'estimacion de tiempo para la historia de usuario',
         }
+
+
 class aprobar_usform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
         fields = ['aprobado_PB']
         labels = {
-            'aprobado_PB': 'Aprobar Historia de Usuario'
+            'aprobado_PB': 'Aprobar Historia de Usuario '
         }

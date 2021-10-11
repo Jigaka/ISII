@@ -57,8 +57,9 @@ class HistoriaUsuario(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False, unique=True)
     asignacion = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True, related_name="asignacion")
+    product_owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="PO")
     descripcion = models.TextField(blank=False, null=False)
-    estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default=1)
+    estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Pendiente')
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
     estimacion = models.PositiveIntegerField(editable=True, default=0)
     fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
@@ -109,6 +110,15 @@ def calcular_estimacion(sender, instance, **kwargs):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
+
+'''
+def devolver_a_PB(sender, instance, **kwargs):
+    if (instance.estado=='Finalizado'):
+        hus = instance.sprint.all()
+        for hu in hus:
+            if hu.estado != 'QA':
+                HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False,aprobado_PB=True, prioridad='Alta', estado='Pendiente')
+post_save.connect(devolver_a_PB, sender=Sprint)'''
 
 class CapacidadDiariaEnSprint(models.Model):
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")

@@ -8,7 +8,7 @@ from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
      LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
 
-
+from datetime import date
 
 
 # Create your views here.
@@ -47,13 +47,25 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = Sprint
     template_name = 'sprint/listar_sprint.html'
-    #permission_required = ('view_historiausuario', 'delete_historiausuario')
+    #permission_required = ('view_proyec', 'change_proyec')
 
 
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
         sprint=proyecto.proyecto_s.all().order_by('fecha_inicio')
+        for s in sprint:
+            if (s.estado=='Pendiente'):
+                if date.today() >= s.fecha_inicio and date.today() <= s.fecha_fin:
+                    Sprint.objects.filter(id=s.id).update(estado='Iniciado')
+            if (s.estado=='Iniciado' or s.estado=='Pendiente'):
+                if date.today() > s.fecha_fin:
+                    Sprint.objects.filter(id=s.id).update(estado='Finalizado')
+                    hus = Sprint.objects.get(id=s.id).sprint.all()
+                    for hu in hus:
+                        if hu.estado != 'QA':
+                            HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
+                                                                            prioridad='Alta', estado='Pendiente', estimacion_user=0,estimacion_scrum=0, estimacion=0 )
         #us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
@@ -76,11 +88,11 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         id = request.path.split('/')[-1]
         HU = HistoriaUsuario.objects.get(id=id)
         sprint = request.POST['sprint']
-        HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True)
+        HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True, aprobado_PB=False, estado='Pendiente')
         return redirect('proyectos:ver_pb', HU.proyecto_id)
 
 
-class EliminarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSuperUser  ,DeleteView):
+class EliminarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSuperUser, DeleteView):
     """ Vista basada en clase, se utiliza para eliminar un proyecto"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
@@ -99,7 +111,7 @@ class EditarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSu
     def get_form_kwargs(self):
         kwargs = super(EditarSprint,self).get_form_kwargs()
         id_sprint=self.kwargs['pk']
-        id_proyecto= Sprint.objects.get(id=id_sprint).proyecto.id
+        id_proyecto = Sprint.objects.get(id=id_sprint).proyecto.id
         self.kwargs['pk']=id_proyecto
         self.kwargs['id_sprint']=id_sprint
         kwargs.update(self.kwargs)
@@ -122,7 +134,7 @@ class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Templ
     """
         Vista basada en clase para mostrar el menu de un sprint
     """
-
+    permission_required = ('view_proyec', 'change_proyec')
 
     def get(self, request, *args, **kwargs):
         """
@@ -156,7 +168,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-        us = sprint.sprint.filter(sprint_backlog=True, estado='Pendiente')
+        us = sprint.sprint.filter(sprint_backlog=True,  estado='Pendiente')
         return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint,'proyecto':proyecto})
 
 class TablaKanban(LoginYSuperStaffMixin, ListView):
@@ -190,7 +202,7 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
         return context
 
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
-        return reverse('sprint:ver_sprint', kwargs={'pk': self.object.pk })
+        return reverse('sprint:ver_sprint', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
 
 class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""

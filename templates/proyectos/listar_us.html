@@ -37,9 +37,13 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ us.prioridad }}</td>
 
                  <td class="opciones">
+                     {% if  request.user.id == us.proyecto.encargado_id %}
                         <a href="{%  url 'proyectos:aprobar_us' us.id%}" class="aprobar">Aprobar</a>
+                     {% endif %}
+                 {% if  request.user.id == us.product_owner_id %}
                         <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a>
                         <a href="{%  url 'proyectos:eliminar_us' us.id %}" class="eliminar"> Eliminar</a>
+                  {% endif %}
                  </td>
                </tr>
              {% endfor %}

@@ -1,5 +1,5 @@
 from typing import List
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User
@@ -176,12 +176,21 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
     template_name = 'sprint/ver_sb.html'
     '''permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')'''
+
+    def post(self, request, *args, **kwargs):
+        id_uh = request.POST['id']
+        estado = request.POST['estado']
+        HistoriaUsuario.objects.filter(id=id_uh).update(estado=estado)
+        return JsonResponse({'estado':'ok'})
+
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
-
+        id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
         us = sprint.sprint.all()
+        return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint, 'proyecto':proyecto})
 
-        return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint})
+
 
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):

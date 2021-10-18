@@ -1,18 +1,20 @@
 {% extends 'proyectos/proyecto.html' %}
 {% block titulo %}
-  Gestion de Proyectos | Crear US
+  Gestion de Proyectos | Editar US
 {% endblock titulo %}
 {% block body %}
 <form method="POST">
   {% csrf_token %}
   <div class="card">
     <div class="card-header">
-        <strong>Crear Historia de Usuario</strong>
+        <strong>Editar la Historia de Usuario #{{ form.instance.id }}</strong>
     </div>
     <div class="card-body card-block">
         {{ form.as_p }}
     </div>
   </div>
   <button type="submit" class="btn btn-success">Crear</button>
+     <a class="btn btn-primary" href="{%  url 'proyectos:listar_us'  form.instance.proyecto_id %}" role="button">Cancelar</a>
+
 </form>
 {% endblock body %}

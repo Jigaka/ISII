@@ -35,3 +35,48 @@
 .aprobar{
     color: green;
 }
+.fondo-claro{
+    background-color: #e8e9ef;
+}
+
+#tabla-crear-proyecto, #tabla-crear-proyecto textarea, input[type=text]{
+    width:100%;
+}
+#tabla-crear-proyecto tr td{
+    text-align: left;
+}
+#tabla-crear-proyecto textarea, input[type=text], select{
+    border-radius: 5px;
+}
+#guardar{
+    color:white;
+    background-color: rgb(34, 93, 161);
+    /*border-color: rgb(34, 93, 161);
+    border-radius: 5px;
+    padding: 5px 10px;*/
+    margin:0 20px 10px 20px;
+    float:right;
+}
+#guardar:hover{
+    cursor:pointer;
+    background-color: rgb(21, 72, 131);
+    border-color: rgb(21, 72, 131)
+}
+
+#titulo-proyecto{
+    text-align: center;
+    margin:20px 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: cornflowerblue; 
+    color: white
+}
+
+#titulo-sprint{
+    text-align: center;
+    margin:20px 5px;
+    font-weight: bold;
+    text-transform: lowercase;
+    background-color: rgb(54, 233, 54); 
+    color: white
+}

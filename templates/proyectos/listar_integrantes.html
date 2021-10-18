@@ -1,5 +1,6 @@
 {% extends 'proyectos/proyecto.html' %}
 {% load static %}
+{% load separate_name %}
 {% block titulo %}
 Gestion de Proyectos | Listado de integrantes
 {% endblock titulo %}
@@ -46,10 +47,11 @@ Gestion de Proyectos | Listado de integrantes
                 </thead>
                 <tbody>
                 {% for user in users %}
+                    {% separate_name user.rol.rol as rol_nombre %}
                     <tr>
                         <td>{{ user.user.username }}</td>
                         {% if user.rol.rol%}
-                            <td>{{ user.rol.rol }}</td>
+                            <td>{{ rol_nombre }}</td>
                         {% else %}
                             <td>Sin rol</td>
                         {% endif %}

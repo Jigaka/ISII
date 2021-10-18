@@ -1,0 +1,16 @@
+{% extends 'inicio.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Confirmación de Eliminación
+{% endblock titulo %}
+
+{% block body %}
+<form method="post">
+  {% csrf_token %}
+  <p style="color:black"><strong>¿Desea eliminar el sprint "{{ sprint.nombre  }}" del proyecto "{{object.proyecto.nombre}}"?<strong></p>
+  <button type="submit" class="btn btn-danger">Eliminar</button>
+  <a class="btn btn-primary" href="{%  url 'sprint:listar_sprint' object.proyecto.id%}" role="button">Cancelar</a>
+    
+
+</form>
+
+{% endblock body %}

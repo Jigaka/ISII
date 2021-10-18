@@ -1,51 +1,45 @@
 {% extends 'sprint/sprint.html' %}
 {% load static %}
 {% block titulo %}
-Gestion de Proyectos | Historias de Usuarios a Estimar
+Gestion de Proyectos | Listado de historia de usuarios
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
-    <style>
-         #danger:hover{
-            color:red;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
 {% endblock extra_css %}
 {% block body %}
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Historias de Usuarios a Estimar</strong>
+                <strong class="card-title">Miembros del Equipo</strong>
             </div>
         </div>
 
     </div>
     <div class="table-stats order-table ov-h">
+      {%  if object_list %}
         <table id="tabla_usuarios" class="table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Prioridad</th>
-                    <th style="text-align: left;">Opciones</th>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th></th>
                 </tr>
             </thead>
             <tbody>
-              {% for us in object_list %}
+              {% for miembros in object_list %}
                <tr>
-                 <td>{{ us.id }}</td>
-                 <td>{{ us.nombre }}</td>
-                 <td>{{ us.descripcion }}</td>
-                 <td>{{ us.prioridad }}</td>
-                 <td style="text-align: left;">
-                        <a href="{%  url 'sprint:estimar_us' us.id %}"> Estimar</a><br>
-                 </td>
+                 <td>{{ miembros.id }}</td>
+                 <td>{{ miembros.first_name }}</td>
+                 <td></td>
                </tr>
              {% endfor %}
             </tbody>
         </table>
+        {% else %}
+            <img src="{% static 'images/ilustration/list_is_empty_1.png' %}" alt="Lista vacia" height="300px" class="center">
+        {%  endif %}
     </div>
 </div>
 

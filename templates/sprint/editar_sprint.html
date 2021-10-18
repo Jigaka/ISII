@@ -1,0 +1,49 @@
+{% extends 'proyectos/proyecto.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Crear Sprint
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
+
+{% endblock extra_css %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Modificar Sprint</strong>
+            </div>
+        </div>
+    </div>
+    <div class="table-stats order-table ov-h fondo-claro">
+        <form method="POST">
+            {%  csrf_token %}
+                <table id="tabla-crear-proyecto">
+                {{form.as_table }}
+                </table>
+                    <button type="submit" class="btn" id="guardar">Guardar cambios</button>
+        </form>
+        <a class="btn btn-danger" style="float: right;" href="{%  url 'sprint:listar_sprint' proyecto.id %}">Cancelar</a>
+    </div>
+</div>
+<div class="modal fade" id="creacion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="edicion" role="dialog">
+
+</div>
+
+<div class="modal fade" id="eliminacion" role="dialog">
+
+</div>
+{% endblock body %}
+
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

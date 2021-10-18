@@ -28,7 +28,7 @@ class CrearProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
 
 
 
-class ListarProyectos(LoginYSuperUser, ListView):
+class ListarProyectos(LoginYSuperStaffMixin, LoginYSuperUser, ListView):
     """Vista basada en clase para mostrar todos los proyectos para el admin"""
 
 
@@ -74,7 +74,7 @@ class EliminarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         return redirect('proyectos:listar_proyectos')
 
 
-class Proyecto( ValidarPermisosMixin,TemplateView):
+class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
     # permission_required = ('user.view_user', 'user.add_user',
     #                        'user.delete_user', 'user.change_user')
     def get(self, request, pk, *args, **kwargs):
@@ -117,7 +117,7 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
 
-class ExpulsarIntegrantes(ValidarPermisosMixin, CreateView):
+class ExpulsarIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     """Vista basada en clase se utiliza para expulsar un integrante del proyecto"""
 
     permission_required = ('view_rol', 'add_rol',
@@ -174,10 +174,10 @@ class listarProyectosUsuario(LoginYSuperStaffMixin, ListView):
     def get(self, request, *args, **kwargs):
         user = User.objects.get(id=request.user.id)
         proyectos = user.equipo.all()
-        return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos})
+        return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos,'title':'Mis proyectos'})
 
 
-class CrearUS(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
+class CrearUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
 
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     permission_required = ('view_historiausuario', 'add_historiausuario',
@@ -198,7 +198,8 @@ class CrearUS(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         prioridad=request.POST['prioridad']
-        us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto)
+        user = User.objects.get(id=request.user.id)
+        us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto, product_owner=user)
         us.save()
         return redirect('proyectos:listar_us', id)
 
@@ -210,26 +211,36 @@ class CrearUS(LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
         context['proyecto'] = Proyec.objects.get(id=pk)
         return context
 
-class ConfigurarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
+class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get_success_url(self):
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
-class EditarUs(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
+class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
-    template_name = 'proyectos/crear_US.html'
+    template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
-class ListarUS(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = HistoriaUsuario
@@ -238,11 +249,11 @@ class ListarUS(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
+        us = proyecto.proyecto.filter(aprobado_PB=False, sprint_backlog=False).order_by('-prioridad_numerica','id')
         return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
 
 
-class EliminarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,DeleteView):
+class EliminarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,DeleteView):
     """ Vista basada en clase, se utiliza para eliminar un proyecto"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
@@ -250,7 +261,7 @@ class EliminarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,DeleteVi
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
-class aprobarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
     """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
@@ -261,7 +272,7 @@ class aprobarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateVie
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 
-class ProductBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 
     model = HistoriaUsuario
     template_name = 'proyectos/ver_PB.html'
@@ -273,24 +284,40 @@ class ProductBacklog(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 
-class Listar_us_a_estimar(LoginNOTSuperUser, ValidarPermisosMixin, ListView):
-
+class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
     template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
+
+
+
+
     def get(self, request, pk, *args, **kwargs):
-        sprint=Sprint.objects.get(id=pk)
+        sprint =Sprint.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
-        us = sprint.sprint.filter(asignacion=user, sprint_backlog=True,estimacion=0 )
-        return render(request, 'sprint/us-a-estimar.html', {'object_list': us})
+        us = sprint.sprint.filter(asignacion=user, sprint_backlog=True, estimacion=0)
+        id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
+        return render(request, 'sprint/us-a-estimar.html', {'object_list': us, 'proyecto': proyecto})
 
 
-class estimarUS(LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
+class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = HistoriaUsuario
     permission_required = ('view_proyec', 'change_proyec')
     template_name = 'sprint/estimar_us.html'
     form_class = estimar_userform
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
+
     def get_success_url(self):
-        return reverse('proyectos:listar-us-a-estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        return reverse('sprint:listar_us_a_estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

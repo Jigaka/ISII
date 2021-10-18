@@ -13,7 +13,13 @@ Gestion de Proyectos | Listado de Proyectos
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
-                <strong class="card-title">Listado de Proyectos</strong>
+                <strong class="card-title">
+                    {% if title%}
+                        {{title}}
+                    {%else%}
+                        Listado de Proyectos
+                    {%endif%}
+                </strong>
             </div>
         </div>
 
@@ -41,12 +47,11 @@ Gestion de Proyectos | Listado de Proyectos
                         <td style="text-align: left;" class="opciones">
                             {% if  request.user.id == proyec.encargado.id %}
                                 <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a>
-                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
                             {% endif %}
                             {% if  request.user.is_superuser %}
                                 <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
                             {% endif %}
-                            {% if request.user.id != proyec.encargado.id and not request.user.is_superuser%}
+                            {% if request.user in proyec.equipo.all%}
                                 <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
                             {% endif %}
                         </td>

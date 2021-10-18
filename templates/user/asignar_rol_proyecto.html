@@ -1,3 +1,4 @@
+{% load separate_name %}
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -14,7 +15,8 @@
                 <select name="rol_id">
                     <option value="">Sin rol</option>
                     {% for rol in roles %}
-                        <option value={{ rol.rol.id }}>{{ rol.rol }}</option>
+                        {% separate_name rol.rol as rol_nombre %}
+                        <option value={{ rol.rol.id }}>{{ rol_nombre }}</option>
                     {% endfor %}
                 </select>
                 <input type="hidden" name="proyecto_id" value={{proyecto_id}}>

@@ -222,7 +222,7 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
         return context
 
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
-        return reverse('sprint:ver_sprint', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        return reverse('sprint:ver_sprint', kwargs={'pk': self.object.pk})
 
 class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""

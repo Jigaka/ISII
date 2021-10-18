@@ -236,7 +236,9 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
-        id_proyecto = Sprint.objects.get(id=self.object.pk).proyecto.id
+        print(pk)
+        print(self.object.pk)
+        id_proyecto =  HistoriaUsuario.objects.get(id=pk).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
 

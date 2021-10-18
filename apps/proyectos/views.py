@@ -5,7 +5,7 @@ from django.contrib.auth.models import Permission, Group
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint
-from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
+from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.models import User, Rol
@@ -224,7 +224,10 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
-        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        print(pk)
+        print(self.object.pk)
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id
+        print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
 
@@ -284,7 +287,7 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 
-class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
     template_name = 'sprint/us-a-estimar.html'
@@ -314,7 +317,10 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
-        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        print(pk)
+        print(self.object.pk)
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id
+        print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
 

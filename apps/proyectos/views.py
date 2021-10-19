@@ -2,7 +2,7 @@ from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import Permission, Group
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, rechazar_usform
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
@@ -241,6 +241,11 @@ class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHis
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
+
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        return super(EditarUs, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
@@ -271,9 +276,23 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/aprobar_us.html'
     form_class = aprobar_usform
+
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        return super(aprobarUS, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
+class rechazarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+    """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'proyectos/rechazar_us.html'
+    form_class = rechazar_usform
+    def get_success_url(self):
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 

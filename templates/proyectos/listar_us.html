@@ -8,14 +8,23 @@ Gestion de Proyectos | Listado de historia de usuarios
     <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}">
 {% endblock extra_css %}
 {% block body %}
+
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col-md-8">
                 <strong class="card-title">Listado de Historias de Usuario</strong>
             </div>
+            <div class="col-md-4">
+                
+                <button type="button" style="float:right" class="btn boton-crear-us">
+                    <a href="{%  url 'proyectos:crear_us'  id%}">
+                        <i class="fas fa-plus"></i>
+                        Crear Historia de Usuario
+                    </a>
+                </button>
+            </div>
         </div>
-
     </div>
     <div class="table-stats order-table ov-h">
         <table id="tabla_usuarios" class="table">
@@ -23,8 +32,10 @@ Gestion de Proyectos | Listado de historia de usuarios
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Descripcion</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
                     <th>Prioridad</th>
+                    <th>Creado por</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -34,11 +45,19 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ us.id }}</td>
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
+                 <td>
+                    {%if us.rechazado_PB%}
+                        <span style="color:red;">¡Rechazado!</span>
+                    {%else%} 
+                        En espera        
+                    {%endif%}    
+                 </td>
                  <td>{{ us.prioridad }}</td>
-
+                 <td>{{us.product_owner}}</td>
                  <td class="opciones">
                      {% if  request.user.id == us.proyecto.encargado_id %}
                         <a href="{%  url 'proyectos:aprobar_us' us.id%}" class="aprobar">Aprobar</a>
+                        <a href="{%  url 'proyectos:rechazar_us' us.id%}" class="eliminar">Rechazar</a>
                      {% endif %}
                  {% if  request.user.id == us.product_owner_id %}
                         <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a>

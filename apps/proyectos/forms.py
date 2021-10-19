@@ -72,3 +72,11 @@ class aprobar_usform(forms.ModelForm):
         labels = {
             'aprobado_PB': 'Aprobar Historia de Usuario '
         }
+
+class rechazar_usform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['rechazado_PB']
+        labels = {
+            'rechazado_PB': 'Rechazar Historia de Usuario '
+        }

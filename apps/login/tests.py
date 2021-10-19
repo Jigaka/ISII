@@ -29,11 +29,7 @@ class noLoginTestCase(APITestCase):
         '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
         response = self.client.get('/inicio/')
         self.assertEqual(response.status_code, 302)
-    def test_21(self):
-        '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
-        self.client.force_login(user=self.user)
-        response = self.client.get('/inicio/')
-        self.assertEqual(response.status_code, 200)
+
 
     def test_3(self):
         '''se comprueba que al no tener acceso al inicio se redirija a login'''
@@ -44,9 +40,7 @@ class noLoginTestCase(APITestCase):
         response = self.client.get(reverse('check_user'))
         self.assertEqual(response.status_code, 200)'''
 
-
     def test_sin_login_proyectos(self):
-
         '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
         response = self.client.get('/proyectos/listar_proyectos/')
         self.assertEqual(response.status_code, 302)
@@ -84,9 +78,9 @@ class noLoginTestCase(APITestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/proyectos/aprobar_us/1')
         self.assertEqual(response.status_code, 302)
-        response = self.client.get('/proyectos/listar_us_a_estimar_us/1')
+        response = self.client.get('/sprint/listar_us_a_estimar_us/1')
         self.assertEqual(response.status_code, 302)
-        response = self.client.get('/proyectos/estimar_us/1')
+        response = self.client.get('/sprint/estimar_us/1')
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/proyectos/ver_PB/1')
         self.assertEqual(response.status_code, 302)

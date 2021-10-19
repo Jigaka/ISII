@@ -72,6 +72,7 @@ class HistoriaUsuario(models.Model):
     prioridad_numerica = models.IntegerField(null=False, default=1)
     proyecto = models.ForeignKey(Proyec, on_delete=models.CASCADE, blank=True, null=True, related_name="proyecto")
     aprobado_PB = models.BooleanField(default=False)
+    rechazado_PB = models.BooleanField(default=False)
     sprint_backlog = models.BooleanField(default=False)
     estimacion_user = models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)

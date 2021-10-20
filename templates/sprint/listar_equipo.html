@@ -14,8 +14,17 @@ Gestion de Proyectos | Listado de historia de usuarios
             <div class="col-md-8">
                 <strong class="card-title">Miembros del Equipo</strong>
             </div>
+            {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+            <div class="col-md-4">
+                <button type="button" style="float:right" class="btn boton-crear-us">
+                    <a href="{%  url 'sprint:configurar_equipo' id%}">
+                        <i class="fa fa-user"></i>
+                        Añadir miembro(s)
+                    </a>
+                </button>
+            </div>
+            {%endifequal%}
         </div>
-
     </div>
     <div class="table-stats order-table ov-h">
       {%  if object_list %}

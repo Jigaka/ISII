@@ -237,8 +237,10 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
 class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = HistoriaUsuario
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    permission_required = ('view_historiausuario', 'add_historiausuario',
+                            'delete_historiausuario', 'change_historiausuario')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
 
@@ -341,8 +343,10 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        id_sprint=HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['sprint']= Sprint.objects.get(id=id_sprint)
         return context
 
 
     def get_success_url(self):
-        return reverse('sprint:listar_us_a_estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

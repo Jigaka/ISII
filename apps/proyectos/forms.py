@@ -47,7 +47,7 @@ class configurarUSform(forms.ModelForm):
         model = HistoriaUsuario
         fields = ['estimacion_scrum','asignacion']
         labels = {
-            'estimacion_scrum': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_scrum': 'Tiempo requerido (en horas)',
             'asignacion':'Asignar Historia de Usuario'
         }
     def __init__(self, *args, **kwargs):
@@ -61,7 +61,7 @@ class estimar_userform(forms.ModelForm):
         model = HistoriaUsuario
         fields = ['estimacion_user']
         labels = {
-            'estimacion_user': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_user': 'Tiempo requerido (en horas)',
         }
 
 

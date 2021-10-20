@@ -154,19 +154,9 @@ class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Templ
         pk=self.kwargs['pk']
 
         sprint = Sprint.objects.get(id=pk)
-        users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
-        if request.user.pk in users:
-            #Estoy dentro del equipo de trabajo#
-            estoyEnEquipo=True
-        else:
-            #Estoy fuera del equipo de trabajo#
-            estoyEnEquipo=False
-
         proyecto=sprint.proyecto
 
-        capacidadCargada=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=request.user).exists()
-
-        return render(request, 'sprint/sprint.html',{"estoyEnEquipo":estoyEnEquipo,"sprint":sprint,"proyecto":proyecto,"capacidadCargada":capacidadCargada})
+        return render(request, 'sprint/sprint.html',{"sprint":sprint,"proyecto":proyecto})
 
 
 
@@ -174,8 +164,8 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
 
     model = HistoriaUsuario
     template_name = 'sprint/ver_sb.html'
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
@@ -293,8 +283,20 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         # Add in a QuerySet of all the books
         pk=self.kwargs['pk']
         sprint = Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+
+        users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
+        if self.request.user.pk in users:
+            #Estoy dentro del equipo de trabajo#
+            estoyEnEquipo=True
+        else:
+            #Estoy fuera del equipo de trabajo#
+            estoyEnEquipo=False
+
         context['sprint']=sprint
-        context['proyecto'] = sprint.proyecto
+        context['proyecto'] = proyecto
+        context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=self.request.user).exists()
+        context['estoyEnEquipo']=estoyEnEquipo
         return context
     def get_success_url(self, **kwargs):
         return reverse('sprint:ver_sprint', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })

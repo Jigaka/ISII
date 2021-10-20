@@ -44,15 +44,25 @@ Gestion de Proyectos | Crear Sprint
             </div>
         </div>
     </div>
-    <div class="table-stats order-table ov-h">
+    <div class="card-body card-block">
+    {%if estoyEnEquipo%}    
+        {%if capacidadCargada%}
+        <p>Ya has cargado tu capacidad diaria para este Sprint.</p>   
+        <a class="btn btn-primary" href="{%  url 'sprint:ver_sprint' sprint.id %}" role="button">Volver</a> 
+        {%else%}
         <form method="POST">
             {%  csrf_token %}
-                <table id="tabla-crear-proyecto">
-                {{form.as_table }}
-                </table>
-                    <button type="submit" id="guardar">Cargar</button>
+            {{form.as_p }}
+            <button type="submit" id="guardar">Cargar</button>
         </form>
-    </div>
+        {%endif%}
+    {%else%}
+    <p>No estás en el equipo de trabajo para este Sprint.</p>  
+    <a class="btn btn-primary" href="{%  url 'sprint:ver_sprint' sprint.id %}" role="button">Volver</a> 
+    {%endif%}   
+    </div> 
+        
+    
 </div>
 <div class="modal fade" id="creacion" role="dialog">
 

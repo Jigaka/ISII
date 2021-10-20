@@ -65,7 +65,7 @@
 
 #titulo-proyecto{
     text-align: center;
-    margin:20px 5px;
+    padding:20px 10px;
     font-weight: bold;
     text-transform: uppercase;
     background-color: cornflowerblue; 
@@ -74,11 +74,12 @@
 
 #titulo-sprint{
     text-align: center;
-    margin:20px 5px;
+    padding: 10px 10px;
     font-weight: bold;
     text-transform: lowercase;
-    background-color: rgb(163, 163, 163); 
-    color: white
+    background-color: rgb(121, 120, 120); 
+    color: white;
+    font-weight:lighter;
 }
 
 .boton-crear-us a{

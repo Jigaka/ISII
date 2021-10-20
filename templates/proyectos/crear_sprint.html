@@ -6,27 +6,15 @@ Gestion de Proyectos | Crear Sprint
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
     <style>
-        .table-stats{
-            background-color: #e8e9ef;
-        }
-        #tabla-crear-proyecto, #tabla-crear-proyecto textarea, input[type=text]{
-            width:100%;
-        }
-        #tabla-crear-proyecto tr td{
-            text-align: left;
-        }
-        #tabla-crear-proyecto textarea, input[type=text], select{
-            border-radius: 5px;
-        }
         #guardar{
             color:white;
             background-color: rgb(34, 93, 161);
             border-color: rgb(34, 93, 161);
             border-radius: 5px;
             padding: 5px 10px;
-            margin:0 20px 10px 20px;
-            float:right;
-        }
+            margin-left:auto;
+            width:max-content;
+        } 
         #guardar:hover{
             cursor:pointer;
             background-color: rgb(21, 72, 131);
@@ -36,24 +24,19 @@ Gestion de Proyectos | Crear Sprint
 {% endblock extra_css %}
 
 {% block body %}
-<div class="card">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-8">
-                <strong class="card-title">Crear Sprint</strong>
-            </div>
+<form method="POST">
+    {% csrf_token %}
+    <div class="card">
+        <div class="card-header">
+            <strong>Crear Sprint</strong>
         </div>
+        <div class="card-body card-block">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" id="guardar">Crear Sprint</button>
     </div>
-    <div class="table-stats order-table ov-h">
-        <form method="POST">
-            {%  csrf_token %}
-                <table id="tabla-crear-proyecto">
-                {{form.as_table }}
-                </table>
-                    <button type="submit" id="guardar">Crear</button>
-        </form>
-    </div>
-</div>
+  </form>
+
 <div class="modal fade" id="creacion" role="dialog">
 
 </div>

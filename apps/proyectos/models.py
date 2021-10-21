@@ -77,20 +77,15 @@ class RolProyecto(models.Model):
         return self.nombre
 
 
-def definir_estadoanterior(sender, instance, **kwargs):
-    x = Proyec.objects.filter(id=instance.id).update(estado_anterior=instance.estado)
 
-
-def agregar_fecha_inicio(sender, instance, **kwargs):
+def agregar_fecha(sender, instance, **kwargs):
     if instance.estado != instance.estado_anterior:
         if instance.estado == 'Iniciado':
-            x = Proyec.objects.filter(id=instance.id).update(fecha_inicio=instance.fecha)
+            Proyec.objects.filter(id=instance.id).update(fecha_inicio=instance.fecha,estado_anterior=instance.estado)
         elif instance.estado == 'Cancelado':
-            x = Proyec.objects.filter(id=instance.id).update(fecha_cancelado=instance.fecha)
+            Proyec.objects.filter(id=instance.id).update(fecha_cancelado=instance.fecha, estado_anterior=instance.estado)
         elif instance.estado == 'Concluido':
-            x = Proyec.objects.filter(id=instance.id).update(fecha_concluido=instance.fecha)
-
-        
+            Proyec.objects.filter(id=instance.id).update(fecha_concluido=instance.fecha, estado_anterior=instance.estado)
         
 def agregar_encargado(sender, instance, **Kwargs):
     """ Funcion para agregar el encargado al equipo de trabajo cuando se crea un nuevo proyecto
@@ -129,7 +124,5 @@ def agregar_encargado(sender, instance, **Kwargs):
         grupo.permissions.add(permiso1, permiso2, permiso3, permiso4, permiso5, permiso6, permiso7)
         user.groups.add(grupo)
 
-
-pre_save.connect(definir_estadoanterior, sender=Proyec)
-post_save.connect(agregar_fecha_inicio, sender=Proyec)
+post_save.connect(agregar_fecha, sender=Proyec)
 post_save.connect(agregar_encargado, sender=Proyec)

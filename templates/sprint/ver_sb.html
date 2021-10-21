@@ -50,6 +50,7 @@ Gestion de Proyectos | Sprint Backlog
                        {% if us.estimacion != 0%}
                         <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a><br>
                         {% endif %}
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                </tr>
              {% endfor %}
             </tbody>

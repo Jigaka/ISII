@@ -58,7 +58,9 @@ class agregar_hu_form(forms.ModelForm):
     def __init__(self,*args, **kwargs):
         super(agregar_hu_form, self).__init__(*args, **kwargs)
         HU=HistoriaUsuario.objects.get(nombre=kwargs.get('instance'))
-        self.fields['sprint'].queryset = Sprint.objects.filter(proyecto_id=HU.proyecto.id, estado='Pendiente')
+        # se quita estado pendiente por el momento
+        # Todo volver a poner estado pendiente
+        self.fields['sprint'].queryset = Sprint.objects.filter(proyecto_id=HU.proyecto.id)
 
 
 class configurarEquipoSprintform(forms.ModelForm):

@@ -1,6 +1,10 @@
 .env.prod.json
 
 
+docs/apps
+docs/gestor
+docs/index.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

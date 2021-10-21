@@ -1,6 +1,7 @@
 {% extends 'sprint/sprint.html' %}
 {% load static %}
 {% block titulo %}
+{% load update_estado %}
 Gestion de Proyectos | Tabla Kanban
 {% endblock titulo %}
 {% block extra_css %}
@@ -55,7 +56,7 @@ Gestion de Proyectos | Tabla Kanban
 {% block body %}
 <h1>Tabla kanban</h1>
     <div id="board">
-        <div id="todo" class="section">
+        <div id="ToDo" class="section">
             <h1>To Do</h1>
             {% for us in object_list %}
 
@@ -67,7 +68,7 @@ Gestion de Proyectos | Tabla Kanban
                 {% endif %}
             {% endfor %}
         </div>
-        <div id="doing" class="section">
+        <div id="Doing" class="section">
             <h1>Doing</h1>
             {% for us in object_list %}
                 {% if us.estado == 'Doing' %}
@@ -77,7 +78,7 @@ Gestion de Proyectos | Tabla Kanban
                 {% endif %}
             {% endfor %}
         </div>
-        <div id="done" class="section">
+        <div id="Done" class="section">
             <h1>Done</h1>
             {% for us in object_list %}
                 {% if us.estado == 'Done' %}
@@ -160,14 +161,48 @@ Gestion de Proyectos | Tabla Kanban
             lastEntered = null; // No need to keep this around.
         };
 
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         board.ondrop = function (e) {
             var section = closestWithClass(e.target, 'section');
             var id = e.dataTransfer.getData('card');
             if (id) {
+
                 var card = document.getElementById(id);
                 // Might be a card from another window.
                 if (card) {
                     if (section !== card.parentNode) {
+                        const data = new FormData();
+                        data.append('id',card.id);
+                        data.append('estado', section.id)
+                        data.append('fecha_prueba', 'hoy')
+                        fetch('/sprint/kanban/1',{
+                            method: 'POST',
+                            body:data,
+                            headers: {
+                                "X-CSRFToken": getCookie('csrftoken'),
+                                "X-Requested-With": "XMLHttpRequest",
+                            }
+                          }).then(
+                            function (response){
+                                console.log(response)
+                            }
+                        )
+
                         section.appendChild(card);
                     }
                 } else {

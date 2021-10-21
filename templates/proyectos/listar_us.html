@@ -44,6 +44,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                         <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a>
                         <a href="{%  url 'proyectos:eliminar_us' us.id %}" class="eliminar"> Eliminar</a>
                   {% endif %}
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a>
                  </td>
                </tr>
              {% endfor %}

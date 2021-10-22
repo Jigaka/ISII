@@ -18,6 +18,8 @@ class Sprint(models.Model):
     fecha_fin = models.DateField()
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Pendiente')  # pendiente,iniciado,finalizado
     equipo = models.ManyToManyField(User, related_name="equipo_s")
+    capacidad_equipo = models.PositiveIntegerField(editable=True, default=0)
+    capacidad_de_equipo_sprint = models.PositiveIntegerField(editable=True, default=0)
     # capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días), , limit_choices_to={'aprobado_PB':True, 'sprint_backlog':False}
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
     @property
@@ -127,3 +129,22 @@ class CapacidadDiariaEnSprint(models.Model):
     capacidad_diaria_horas=models.PositiveIntegerField(null=False, default=8)
 
     models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
+
+def capacidad_equipo_por_sprint(sender, instance, **kwargs):
+    #Se calcula la suma de todas las horas de trabajo de los desarrolladores
+    sprint = instance.sprint
+    print("MODELSS", sprint.id)
+    capacidad_diaria = instance.capacidad_diaria_horas
+    print(Sprint.objects.filter(id=sprint.id).first().capacidad_equipo)
+    capacidad_suma = Sprint.objects.filter(id=sprint.id).first().capacidad_equipo + capacidad_diaria
+    Sprint.objects.filter(id=sprint.id).update(capacidad_equipo=capacidad_suma)
+    print("ESTOY EN MODELS ",capacidad_suma)
+    duracion_dias = sprint.fecha_fin - sprint.fecha_inicio
+    dias = duracion_dias.days
+    calculo_de_la_capacidad = duracion_dias.days*capacidad_suma
+    print("Duracion ",duracion_dias)
+    print("calculo ",calculo_de_la_capacidad)
+    Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
+
+
+post_save.connect(capacidad_equipo_por_sprint, sender=CapacidadDiariaEnSprint)

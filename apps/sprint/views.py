@@ -105,7 +105,7 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         id = request.path.split('/')[-1]
         HU = HistoriaUsuario.objects.get(id=id)
         sprint = request.POST['sprint']
-        HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True, estado='Pendiente')
+        HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True, estado='ToDo')
         Historial_HU.objects.create(
             descripcion='Se agrega la Historia de Usuario: ' + HistoriaUsuario.objects.get(
                 id=id).nombre+ ' al Sprint: '+ HistoriaUsuario.objects.get(
@@ -180,7 +180,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-        us = sprint.sprint.filter(sprint_backlog=True,  estado='Pendiente')
+        us = sprint.sprint.filter(sprint_backlog=True)
         return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint,'proyecto':proyecto})
 
 class TablaKanban(LoginYSuperStaffMixin, ListView):

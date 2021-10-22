@@ -390,10 +390,9 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
 
 
     def get_success_url(self):
-
         id_hu = self.object.pk
         Historial_HU.objects.create(
             descripcion=' Estmacion del usuario ' + HistoriaUsuario.objects.get(
                 id=id_hu).asignacion.getNombreUsuario()+' :' +HistoriaUsuario.objects.get(
                 id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
-        return reverse('sprint:listar_us_a_estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

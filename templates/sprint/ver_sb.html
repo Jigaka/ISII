@@ -29,10 +29,16 @@ Gestion de Proyectos | Sprint Backlog
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Prioridad</th>
+                    <th>Desarrollador</th>
                     <th>Planning Poker</th>
                     <th>Estado</th>
-                     <th>Desarrollador</th>
+
+                     
+
+                    {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+
                     <th style="text-align: left;">Opciones</th>
+                    {%endifequal%}
                 </tr>
             </thead>
             <tbody>
@@ -42,21 +48,34 @@ Gestion de Proyectos | Sprint Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                 <td>{{ us.estimacion }}</td>
-                  <td>{{ us.estado }}</td>
-                  <td>{{ us.asignacion }}</td>
-
-                   <td style="text-align: left;">
-                        {% if us.estimacion == 0%}
-                        <a href="{%  url 'sprint:configurar_us' us.id %}">Configurar</a><br>
+                 <td>{{ us.asignacion }}</td>
+                 <td>{{ us.estimacion }}
+                     <div>
+                        {% ifequal request.user.username|stringformat:"s" us.asignacion|stringformat:"s" %}
+                       
+                            {% if us.estimacion == 0%}
+                            <a href="{%  url 'sprint:estimar_us' us.id %}">Estimar</a>
+                            {% endif %}
+                       
+                        {%endifequal%}
+                     </div>
+                 </td>
+                 <td>{{ us.estado }}</td>
+                 {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+                 <td style="text-align: left;">
+                     {% if us.estimacion == 0%}
+                        <a href="{%  url 'sprint:configurar_us' us.id %}">Asignar</a><br>
                         {% endif %}
                         {% if us.estimacion != 0%}
-                        <a href="{%  url 'sprint:reasignar_us' us.id %}">Configurar</a><br>
+                        <a href="{%  url 'sprint:reasignar_us' us.id %}">Asignar</a><br>
                         {% endif %}
-                       {% if us.estimacion != 0%}
-                        <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a><br>
-                        {% endif %}
-                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                    {% if us.estimacion != 0%}
+                    <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a>
+                    {% endif %}
+                   <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                  </td>
+                  {%endifequal%}   
+
                </tr>
              {% endfor %}
             </tbody>

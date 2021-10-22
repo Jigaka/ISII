@@ -26,6 +26,16 @@ INSTALLED_APPS = [
     'apps.sprint',
 ]
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '645780022072-peiububapchsiugbohhb0ahfoht5q63r.apps.googleusercontent.com',
+            'secret': '5AtYhyBqY3HkuKrisBhEpR_I',
+            'key': ''
+        }
+    }
+}
+
 SITE_ID = 1
 
 MIDDLEWARE = [

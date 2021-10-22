@@ -1,0 +1,38 @@
+{% extends 'proyectos/proyecto.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Edicion de proyecto
+{% endblock titulo %}
+{% block body %}
+<form method="POST">
+  {% csrf_token %}
+  {% if error %}
+    <h2>{{ error }}</h2>
+  {% else %}
+    <div class="card">
+    <div class="card-header">
+
+          <strong> Historia de Usuario  # {{ form.instance.id }}</strong><br>
+
+      </div>
+        <div class="card-header">
+
+          <strong>Nombre : {{ form.instance.nombre }}</strong><br>
+            <strong>Descripcion : {{ form.instance.descripcion }}</strong><br>
+            <strong>Prioridad : {{ form.instance.prioridad }}</strong><br>
+      </div>
+
+      <div class="card-body card-block">
+        <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
+          <div class="row form-group">
+              <div class="col col-md-3">{{ form.rechazado_PB.label}}</div>
+              <div class="col-12 col-md-9">{{ form.rechazado_PB}}</div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Aplicar</button>
+                <a class="btn btn-primary" href="{%  url 'proyectos:listar_us'  form.instance.proyecto_id %}" role="button">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+</form>
+{% endblock body %}

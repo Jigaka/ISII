@@ -2,7 +2,7 @@ from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import Permission, Group
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
@@ -277,10 +277,17 @@ class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
 class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = HistoriaUsuario
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    permission_required = ('view_historiausuario', 'add_historiausuario',
+                            'delete_historiausuario', 'change_historiausuario')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
+
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        return super(EditarUs, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
@@ -311,6 +318,11 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/aprobar_us.html'
     form_class = aprobar_usform
+
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        return super(aprobarUS, self).form_valid(form)
+
     def get_success_url(self):
         id_hu = self.object.pk
         Historial_HU.objects.create(
@@ -318,6 +330,15 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                 id=id_hu).nombre+' es aprobada por el Scum Master y pasa al Product Backlog ', hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
+class rechazarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+    """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'proyectos/rechazar_us.html'
+    form_class = rechazar_usform
+    def get_success_url(self):
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 
@@ -363,10 +384,13 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        id_sprint=HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['sprint']= Sprint.objects.get(id=id_sprint)
         return context
 
 
     def get_success_url(self):
+
         id_hu = self.object.pk
         Historial_HU.objects.create(
             descripcion=' Estmacion del usuario ' + HistoriaUsuario.objects.get(

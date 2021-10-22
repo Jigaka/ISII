@@ -21,6 +21,8 @@ class Sprint(models.Model):
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Pendiente')  # pendiente,iniciado,finalizado
     equipo = models.ManyToManyField(User, related_name="equipo_s")
     fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True, blank=True, null=True)
+    capacidad_equipo = models.PositiveIntegerField(editable=True, default=0)
+    capacidad_de_equipo_sprint = models.PositiveIntegerField(editable=True, default=0)
 
     # capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días), , limit_choices_to={'aprobado_PB':True, 'sprint_backlog':False}
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
@@ -76,6 +78,7 @@ class HistoriaUsuario(models.Model):
     prioridad_numerica = models.IntegerField(null=False, default=1)
     proyecto = models.ForeignKey(Proyec, on_delete=models.CASCADE, blank=True, null=True, related_name="proyecto")
     aprobado_PB = models.BooleanField(default=False)
+    rechazado_PB = models.BooleanField(default=False)
     sprint_backlog = models.BooleanField(default=False)
     estimacion_user = models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
@@ -134,10 +137,26 @@ class CapacidadDiariaEnSprint(models.Model):
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")
     sprint= models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=False, null=False, related_name="el_sprint")
     capacidad_diaria_horas=models.PositiveIntegerField(null=False, default=8)
+    models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
 
-    models.UniqueConstraint(fields=['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
+def capacidad_equipo_por_sprint(sender, instance, **kwargs):
+    #Se calcula la suma de todas las horas de trabajo de los desarrolladores
+    sprint = instance.sprint
+    print("MODELSS", sprint.id)
+    capacidad_diaria = instance.capacidad_diaria_horas
+    print(Sprint.objects.filter(id=sprint.id).first().capacidad_equipo)
+    capacidad_suma = Sprint.objects.filter(id=sprint.id).first().capacidad_equipo + capacidad_diaria
+    Sprint.objects.filter(id=sprint.id).update(capacidad_equipo=capacidad_suma)
+    print("ESTOY EN MODELS ",capacidad_suma)
+    duracion_dias = sprint.fecha_fin - sprint.fecha_inicio
+    dias = duracion_dias.days
+    calculo_de_la_capacidad = duracion_dias.days*capacidad_suma
+    print("Duracion ",duracion_dias)
+    print("calculo ",calculo_de_la_capacidad)
+    Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
 
 
+post_save.connect(capacidad_equipo_por_sprint, sender=CapacidadDiariaEnSprint)
 
 class Historial_HU(models.Model):
     id = models.AutoField(primary_key=True)

@@ -47,7 +47,7 @@ class configurarUSform(forms.ModelForm):
         model = HistoriaUsuario
         fields = ['estimacion_scrum','asignacion']
         labels = {
-            'estimacion_scrum': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_scrum': 'Tiempo requerido (en horas)',
             'asignacion':'Asignar Historia de Usuario'
         }
 
@@ -78,7 +78,7 @@ class estimar_userform(forms.ModelForm):
         model = HistoriaUsuario
         fields = ['estimacion_user']
         labels = {
-            'estimacion_user': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_user': 'Tiempo requerido (en horas)',
         }
 
 
@@ -88,4 +88,12 @@ class aprobar_usform(forms.ModelForm):
         fields = ['aprobado_PB']
         labels = {
             'aprobado_PB': 'Aprobar Historia de Usuario '
+        }
+
+class rechazar_usform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['rechazado_PB']
+        labels = {
+            'rechazado_PB': 'Rechazar Historia de Usuario '
         }

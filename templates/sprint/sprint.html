@@ -34,54 +34,39 @@
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
             <div id="main-menu" class="main-menu">
-                <div style="text-align: center;margin:20px 5px;font-weight: bold;text-transform: uppercase;">
-                </div>
-                <div id="titulo-proyecto">
-                    {{proyecto.nombre}}
-                </div>
-                <div id="titulo-sprint">
-                    {{sprint.nombre}}
-                </div>
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="{% url 'proyectos:ver_proyecto' proyecto.id%}"><i class="menu-icon fa fa-laptop"></i>Inicio (Proyecto)</a>
+                    <li id="titulo-proyecto">
+                        {{proyecto.nombre}}
                     </li>
+                    <li id="titulo-sprint">
+                        {{sprint.nombre}}
+                        <div style="font-size: small;">({{sprint.estado}})</div>
+                    </li>
+                    <li>
+                        <a href="{% url 'proyectos:ver_proyecto' proyecto.id%}">
+                            <i class="menu-icon fas fa-project-diagram"></i>Ir a Proyecto</a>
+                    </li>
+                    
                     {% get_id request.path as id %}
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-users"></i> Equipo de trabajo</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:configurar_equipo' id%}">Configurar Equipo</a></li>
-                                <li><i class="fa fa-user"></i> <a href="{%  url 'sprint:listar_equipo' id%}"> Ver Equipo</a></li>
-                            </ul>
-                    </li>
                     <li>
-                        <a href='{% url 'sprint:kanban' id%}' ><i class="menu-icon fa fa-users"></i>Tablero Kanban</a>
+                        <a href='{% url 'sprint:kanban' id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Sprint Backlog</a>
-                            <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:ver_sb' id%}">Ver Sprint Backlog</a></li>
-                                <li><i class="fas fa-sort-numeric-up-alt"></i> <a href="{%  url 'sprint:listar_us_a_estimar' id%}">  Estimar Historia de Usuario</a></li>
-                            </ul>
-                    </li>
-                    {%if estoyEnEquipo%}
+                    {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                     <li>
-                        {%if capacidadCargada%}
-                        <p>
-                            Ya has cargado tu capacidad diaria para este Sprint
-                        </p>
-                        {%else%}
-                        <a href="{%  url 'sprint:asignar_capacidad' id%}" ><i class="menu-icon fa fa-users"></i>Asignar mi capacidad diaria</a>
-                        {%endif%}
+                        <a href="{%  url 'sprint:listar_equipo' id%}" ><i class="menu-icon fa fa-users"></i>Equipo de Trabajo</a>
                     </li>
-                    {%endif%}
-{#                    <li class="menu-item-has-children dropdown">#}
-{#                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>#}
-{#                        <ul class="sub-menu children dropdown-menu">#}
-{#                            <li><i class="fa fa-plus"></i> <a href="#">  Crear Rol</a></li>#}
-{#                            <li><i class="fa fa-bars"></i> <a href="#">  Listar Roles</a></li>#}
-{#                        </ul>#}
-{#                     </li>#}
+                    {%endifequal%}
+
+                    {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}                    
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon"></i> Sprint Planning</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:ver_sb' id%}">Sprint Backlog</a></li>
+                            
+                            <li><i class="fa fa-user"></i> <a href="{%  url 'sprint:asignar_capacidad' id%}">Asignar capacidad diaria</a></li>
+                        </ul>
+                    </li>
+                    {%endifequal%}
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -122,7 +107,17 @@
                     <div class="col-lg-12">
                       {% block body %}
                         <div class="col-md-12 prueba">
-                            Hola {{ request.user.username }} esto es un sprint
+                            <!--Hola {{ request.user.username }} esto es un sprint-->
+                            Sprint en estado {{sprint.estado}}.
+                            {% ifequal sprint.estado|stringformat:"s" "Iniciado" %}
+                                Estaría bueno mostrar acá el tablero Kanban
+                            {%else%}
+                                {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+                                Aquí se mostrará el tablero Kanban cuando el Sprint haya iniciado.
+                                {%else%}
+                                Sprint finalizado.
+                                {%endifequal%}
+                            {%endifequal%}
                         </div>
                       {% endblock body %}
                 </div>

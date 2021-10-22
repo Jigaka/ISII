@@ -263,11 +263,13 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
     def get(self, request, pk, *args, **kwargs):
         sprint = Sprint.objects.get(id=pk)
         equipo = sprint.equipo.all()
+        capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all()
+        print(CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all())
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
         print(id_proyecto)
         print("EQUIPO", equipo)
-        return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto})
+        return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
 class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""

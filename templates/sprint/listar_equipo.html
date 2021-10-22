@@ -14,6 +14,7 @@ Gestion de Proyectos | Listado de historia de usuarios
             <div class="col-md-8">
                 <strong class="card-title">Miembros del Equipo</strong>
             </div>
+
         </div>
 
     </div>
@@ -24,14 +25,25 @@ Gestion de Proyectos | Listado de historia de usuarios
                 <tr>
                   <th>#</th>
                   <th>Nombre</th>
+                  <th>Capacidad diaria</th>
                   <th></th>
                 </tr>
             </thead>
             <tbody>
-              {% for miembros in object_list %}
+
+              {% for miembros in object_list  %}
                <tr>
                  <td>{{ miembros.id }}</td>
                  <td>{{ miembros.first_name }}</td>
+                {%  if capacidad.exists %}
+                   {% for c in capacidad  %}
+                    {%  if c.usuario_id == miembros.id %}
+                      <td>{{ c.capacidad_diaria_horas }} horas</td>
+                    {%  endif %}
+                   {% endfor %}
+                {% else %}
+                  <td>Sin registros</td>
+                {%  endif %}
                  <td></td>
                </tr>
              {% endfor %}
@@ -42,7 +54,13 @@ Gestion de Proyectos | Listado de historia de usuarios
         {%  endif %}
     </div>
 </div>
+<div class="col-md-4">
+  {% if sprint %}
+    <h6>Capacidad del Equipo: {{ sprint.capacidad_de_equipo_sprint }} horas</h6>
+    <h6>Duracion del sprint: {{ sprint.duracion_dias }} </h6>
+  {%  endif %}
 
+</div>
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

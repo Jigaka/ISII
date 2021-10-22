@@ -181,6 +181,7 @@ Gestion de Proyectos | Tabla Kanban
             var section = closestWithClass(e.target, 'section');
             var id = e.dataTransfer.getData('card');
             if (id) {
+
                 var card = document.getElementById(id);
                 // Might be a card from another window.
                 if (card) {
@@ -188,7 +189,7 @@ Gestion de Proyectos | Tabla Kanban
                         const data = new FormData();
                         data.append('id',card.id);
                         data.append('estado', section.id)
-
+                        data.append('fecha_prueba', 'hoy')
                         fetch('/sprint/kanban/1',{
                             method: 'POST',
                             body:data,

@@ -31,6 +31,7 @@ Gestion de Proyectos | Sprint Backlog
                     <th>Prioridad</th>
                     <th>Planning Poker</th>
                     <th>Estado</th>
+                     <th>Desarrollador</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -43,9 +44,14 @@ Gestion de Proyectos | Sprint Backlog
                  <td>{{ us.prioridad }}</td>
                  <td>{{ us.estimacion }}</td>
                   <td>{{ us.estado }}</td>
+                  <td>{{ us.asignacion }}</td>
+
                    <td style="text-align: left;">
                         {% if us.estimacion == 0%}
                         <a href="{%  url 'sprint:configurar_us' us.id %}">Configurar</a><br>
+                        {% endif %}
+                        {% if us.estimacion != 0%}
+                        <a href="{%  url 'sprint:reasignar_us' us.id %}">Configurar</a><br>
                         {% endif %}
                        {% if us.estimacion != 0%}
                         <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a><br>

@@ -50,11 +50,28 @@ class configurarUSform(forms.ModelForm):
             'estimacion_scrum': 'estimacion de tiempo para la historia de usuario',
             'asignacion':'Asignar Historia de Usuario'
         }
+
     def __init__(self, *args, **kwargs):
         super(configurarUSform, self).__init__(*args, **kwargs)
         sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
         #print(HU)
         self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
+
+
+class reasinarUSform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['asignacion']
+        labels = {
+            'asignacion': 'Asignar Historia de Usuario'
+        }
+    def __init__(self, *args, **kwargs):
+        super(reasinarUSform, self).__init__(*args, **kwargs)
+        sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
+        # print(HU)
+        self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
+
+
 
 class estimar_userform(forms.ModelForm):
     class Meta:

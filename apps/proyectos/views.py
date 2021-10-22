@@ -2,7 +2,7 @@ from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import Permission, Group
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
@@ -221,6 +221,7 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
 
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -241,6 +242,37 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
             descripcion=' Estmacion del Scum Master: ' + HistoriaUsuario.objects.get(
                 id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
+
+
+
+
+class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'sprint/reasingar_us.html'
+    form_class = reasinarUSform
+
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        print(id_proyecto)
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
+    def get_success_url(self):
+        id_hu = self.object.pk
+        Historial_HU.objects.create(
+            descripcion='Reasignacion de la Historia de Usuario a: ' + HistoriaUsuario.objects.get(
+                id=id_hu).asignacion.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
+
 
 class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""

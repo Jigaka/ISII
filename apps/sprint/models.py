@@ -1,5 +1,6 @@
 from sqlite3 import Date
-
+import pandas as pd
+from datetime import datetime
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from apps.proyectos.models import Proyec
@@ -28,8 +29,15 @@ class Sprint(models.Model):
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
     @property
     def duracion_dias(self):
+        """Calcula la cantidad de dias que tiene un sprint excluyendo los fines de semana"""
         if (self.fecha_inicio and self.fecha_fin):
-            duracion_dias = self.fecha_fin - self.fecha_inicio
+            i = str(self.fecha_inicio)
+            f = str(self.fecha_fin)
+            print(i,f)
+            inicio = datetime.strptime(i, '%Y-%m-%d')
+            fin = datetime.strptime(f, '%Y-%m-%d')
+            dt = pd.bdate_range(start=inicio, end=fin)
+            duracion_dias = dt.size
             return duracion_dias
 
     class Meta:
@@ -140,7 +148,7 @@ class CapacidadDiariaEnSprint(models.Model):
     models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
 
 def capacidad_equipo_por_sprint(sender, instance, **kwargs):
-    #Se calcula la suma de todas las horas de trabajo de los desarrolladores
+    """calcula la suma de todas las horas de trabajo de los desarrolladores y se multiplica por la cantidad de dias del sprint"""
     sprint = instance.sprint
     print("MODELSS", sprint.id)
     capacidad_diaria = instance.capacidad_diaria_horas
@@ -148,10 +156,9 @@ def capacidad_equipo_por_sprint(sender, instance, **kwargs):
     capacidad_suma = Sprint.objects.filter(id=sprint.id).first().capacidad_equipo + capacidad_diaria
     Sprint.objects.filter(id=sprint.id).update(capacidad_equipo=capacidad_suma)
     print("ESTOY EN MODELS ",capacidad_suma)
-    duracion_dias = sprint.fecha_fin - sprint.fecha_inicio
-    dias = duracion_dias.days
-    calculo_de_la_capacidad = duracion_dias.days*capacidad_suma
-    print("Duracion ",duracion_dias)
+    duracion = sprint.duracion_dias
+    calculo_de_la_capacidad = duracion*capacidad_suma
+    print("Duracion ",duracion)
     print("calculo ",calculo_de_la_capacidad)
     Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
 

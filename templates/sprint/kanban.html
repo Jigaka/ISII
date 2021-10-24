@@ -43,13 +43,18 @@ Gestion de Proyectos | Tabla Kanban
             margin: 10px 5px;
             padding: 10px;
             width: 280px;
-            height: 100px;
+            {#height: 100px;#}
             color: black;
             background: #ff8;
             cursor: move;
             text-align: center;
             font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
             box-shadow: 2px 2px 2px #eee;
+        }
+
+        .actividad {
+            background-color: red;
+            margin: 2px;
         }
     </style>
 {% endblock extra_css %}
@@ -74,6 +79,9 @@ Gestion de Proyectos | Tabla Kanban
                 {% if us.estado == 'Doing' %}
                     <div id={{ us.id }} class="card">
                         {{ us.nombre }}
+                        <button onclick="agregarActividad()" style="float: right" title="añadir actividad"><i class="ti-plus"></i></button>
+                        <br><br>
+                        <div id="actividades"></div>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -95,6 +103,12 @@ Gestion de Proyectos | Tabla Kanban
     <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'js/usuarios/index.js' %}"></script>
     <script type="text/javascript">
+
+        function agregarActividad() {
+            var cajaActividades = document.getElementById('actividades');
+            cajaActividades.innerHTML += "<div class='actividad'>hola</div>";
+        }
+
         var cards = document.querySelectorAll('.card');
 
         for (var i = 0, n = cards.length; i < n; i++) {

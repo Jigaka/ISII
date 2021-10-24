@@ -33,7 +33,7 @@ Gestion de Proyectos | Sprint Backlog
                     <th>Planning Poker</th>
                     <th>Estado</th>
 
-                     
+
 
                     {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
 
@@ -52,11 +52,11 @@ Gestion de Proyectos | Sprint Backlog
                  <td>{{ us.estimacion }}
                      <div>
                         {% ifequal request.user.username|stringformat:"s" us.asignacion|stringformat:"s" %}
-                       
+
                             {% if us.estimacion == 0%}
                             <a href="{%  url 'sprint:estimar_us' us.id %}">Estimar</a>
                             {% endif %}
-                       
+
                         {%endifequal%}
                      </div>
                  </td>
@@ -67,15 +67,15 @@ Gestion de Proyectos | Sprint Backlog
                         <a href="{%  url 'sprint:configurar_us' us.id %}">Asignar</a><br>
                         {% endif %}
                         {% if us.estimacion != 0%}
-                        <a href="{%  url 'sprint:reasignar_us' us.id %}">Asignar</a><br>
+                        <a href="{%  url 'sprint:reasignar_us' us.id %}">Reasignar</a><br>
                         {% endif %}
                     {% if us.estimacion != 0%}
-                    <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a>
+                    <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a><br>
                     {% endif %}
                     <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                   </td>
 
-                  {%endifequal%}   
+                  {%endifequal%}
 
                </tr>
              {% endfor %}

@@ -2,7 +2,7 @@ from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
-from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Actividad
+from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
@@ -54,7 +54,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        sprint=proyecto.proyecto_s.all().order_by('fecha_inicio')
+        sprint = proyecto.proyecto_s.all().order_by('fecha_inicio')
         for s in sprint:
             if (s.estado=='Pendiente'):
                 if date.today() >= s.fecha_inicio and date.today() <= s.fecha_fin:
@@ -66,8 +66,12 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                     for hu in hus:
                         if hu.estado != 'QA':
                             HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                            prioridad='Alta', estado='Pendiente', estimacion_user=0,estimacion_scrum=0, estimacion=0 )
-        #us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
+                                                                            prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0 )
+                            Historial_HU.objects.create(
+                                descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                                    id=hu.id).nombre + 'se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
+                                    id=hu.id).estado,
+                                hu=HistoriaUsuario.objects.get(id=hu.id))
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
@@ -88,7 +92,9 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         return context
 
     def get_success_url(self):
-        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id})
+        id_hu = self.object.pk
+
+        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=id_hu).proyecto.id})
 
 
     def post(self, request, *args, **kwargs):
@@ -100,7 +106,12 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         id = request.path.split('/')[-1]
         HU = HistoriaUsuario.objects.get(id=id)
         sprint = request.POST['sprint']
-        HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True, aprobado_PB=False, estado='Pendiente')
+        HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True, estado='ToDo')
+        Historial_HU.objects.create(
+            descripcion='Se agrega la Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                id=id).nombre+ ' al Sprint: '+ HistoriaUsuario.objects.get(
+                id=id).sprint.nombre,
+            hu=HistoriaUsuario.objects.get(id=id))
         return redirect('proyectos:ver_pb', HU.proyecto_id)
 
 
@@ -188,7 +199,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-        us = sprint.sprint.filter(sprint_backlog=True,  estado='Pendiente')
+        us = sprint.sprint.filter(sprint_backlog=True)
         return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint,'proyecto':proyecto})
 
 class TablaKanban(LoginYSuperStaffMixin, ListView):
@@ -200,7 +211,17 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
     def post(self, request, *args, **kwargs):
         id_uh = request.POST['id']
         estado = request.POST['estado']
-        HistoriaUsuario.objects.filter(id=id_uh).update(estado=estado)
+
+        Historial_HU.objects.create(descripcion='Cambio de estado '+HistoriaUsuario.objects.get(id=id_uh).estado_anterior+' a estado '+ estado, hu=HistoriaUsuario.objects.get(id=id_uh))
+        HistoriaUsuario.objects.filter(id=id_uh).update(estado=estado, estado_anterior=estado)
+        if estado == 'ToDo':
+            HistoriaUsuario.objects.filter(id=id_uh).update(fecha_ToDo=date.today())
+        elif estado == 'Doing':
+            HistoriaUsuario.objects.filter(id=id_uh).update(fecha_Doing=date.today())
+        elif estado == 'Done':
+            HistoriaUsuario.objects.filter(id=id_uh).update(fecha_Done=date.today())
+        elif estado == 'QA':
+            HistoriaUsuario.objects.filter(id=id_uh).update(fecha_QA=date.today())
         return JsonResponse({'estado':'ok'})
 
     def get(self, request, pk, *args, **kwargs):
@@ -276,11 +297,26 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
         print(pk)
         print(self.object.pk)
         id_proyecto =  HistoriaUsuario.objects.get(id=pk).proyecto.id
+        id_sprint = HistoriaUsuario.objects.get(id=pk).sprint.id
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
 
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
-        return reverse('sprint:kanban', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        id_hu=self.object.pk
+        Historial_HU.objects.create(descripcion='Cambio de estado ' + HistoriaUsuario.objects.get(
+            id=id_hu).estado_anterior + ' a estado ' + HistoriaUsuario.objects.get(
+            id=id_hu).estado, hu=HistoriaUsuario.objects.get(id=id_hu))
+        if HistoriaUsuario.objects.get(id=id_hu).estado != HistoriaUsuario.objects.get(id=id_hu).estado_anterior:
+            if HistoriaUsuario.objects.get(id=id_hu).estado == 'ToDo':
+                HistoriaUsuario.objects.filter(id=id_hu).update(fecha_ToDo=date.today(), estado_anterior='ToDo')
+            elif HistoriaUsuario.objects.get(id=id_hu).estado == 'Doing':
+                HistoriaUsuario.objects.filter(id=id_hu).update(fecha_Doing=date.today(),estado_anterior='Doing')
+            elif HistoriaUsuario.objects.get(id=id_hu).estado == 'Done':
+                HistoriaUsuario.objects.filter(id=id_hu).update(fecha_Done=date.today(),estado_anterior='Done')
+            elif HistoriaUsuario.objects.get(id=id_hu).estado == 'QA':
+                HistoriaUsuario.objects.filter(id=id_hu).update(fecha_QA=date.today(), estado_anterior='QA')
+        return reverse('sprint:kanban', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
 class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
     """Vista basada en clase, se utiliza para listar a los miembros del equipo del sprint"""
@@ -347,5 +383,19 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=self.request.user).exists()
         context['estoyEnEquipo']=estoyEnEquipo
         return context
+
     def get_success_url(self, **kwargs):
         return reverse('sprint:ver_sprint', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
+
+class Historial_por_hu( ListView):
+    """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
+    model = Historial_HU
+    template_name = 'sprint/historial_hu.html'
+    #permission_required = ('view_proyec', 'change_proyec')
+
+    def get(self, request, pk, *args, **kwargs):
+        hu =HistoriaUsuario.objects.get(id=pk)
+        historial=hu.historial_hu.all()
+        id_proyecto = hu.proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
+        return render(request, 'sprint/historial_hu.html', {'object_list': historial, 'proyecto': proyecto})

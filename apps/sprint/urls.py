@@ -1,7 +1,7 @@
 from django.urls import path
-from apps.proyectos.views import ConfigurarUs, estimarUS,Listar_us_a_estimar
+from apps.proyectos.views import ConfigurarUs, estimarUS,Listar_us_a_estimar, Reasignar_us
 from .views import AsignarCapacidadDiaria, CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, configurarEquipoSprint, \
-  Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad
+  Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad, Historial_por_hu
   
 
 urlpatterns = [
@@ -22,5 +22,7 @@ urlpatterns = [
      path('estimar_us/<int:pk>',estimarUS.as_view(), name='estimar_us'),
      path('add_actividad/<int:pk>/<int:us>',AddActividad.as_view(), name='add_actividad'),
      path('ver_actividad/<int:pk>',VerActividad.as_view(), name='ver_actividad'),
+     path('historial_hu/<int:pk>',Historial_por_hu.as_view(), name='historial_hu'),
+     path('reasignar_us/<int:pk>',Reasignar_us.as_view(), name='reasignar_us'),
     ]
 

@@ -1,3 +1,6 @@
+from sqlite3 import Date
+import pandas as pd
+from datetime import datetime
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from apps.proyectos.models import Proyec
@@ -18,14 +21,23 @@ class Sprint(models.Model):
     fecha_fin = models.DateField()
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Pendiente')  # pendiente,iniciado,finalizado
     equipo = models.ManyToManyField(User, related_name="equipo_s")
+    fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True, blank=True, null=True)
     capacidad_equipo = models.PositiveIntegerField(editable=True, default=0)
     capacidad_de_equipo_sprint = models.PositiveIntegerField(editable=True, default=0)
+
     # capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días), , limit_choices_to={'aprobado_PB':True, 'sprint_backlog':False}
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
     @property
     def duracion_dias(self):
+        """Calcula la cantidad de dias que tiene un sprint excluyendo los fines de semana"""
         if (self.fecha_inicio and self.fecha_fin):
-            duracion_dias = self.fecha_fin - self.fecha_inicio
+            i = str(self.fecha_inicio)
+            f = str(self.fecha_fin)
+            print(i,f)
+            inicio = datetime.strptime(i, '%Y-%m-%d')
+            fin = datetime.strptime(f, '%Y-%m-%d')
+            dt = pd.bdate_range(start=inicio, end=fin)
+            duracion_dias = dt.size
             return duracion_dias
 
     class Meta:
@@ -79,7 +91,7 @@ class HistoriaUsuario(models.Model):
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
     estimacion = models.PositiveIntegerField(editable=True, default=0)
     fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
-    fecha_ToDo = models.DateField(blank=True, null=True)
+    fecha_ToDo = models.DateField(blank=True, null=True, )
     fecha_Doing = models.DateField(blank=True, null=True)
     fecha_Done = models.DateField(blank=True, null=True)
     fecha_QA = models.DateField(blank=True, null=True)
@@ -129,26 +141,31 @@ def calcular_estimacion(sender, instance, **kwargs):
     if (instance.estimacion==0 and  instance.estimacion_scrum!=0 and instance.estimacion_user!=0):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
+        Historial_HU.objects.create(
+            descripcion=' Resultado del Planning Poker: ' + x.__str__(), hu=HistoriaUsuario.objects.get(id=instance.id))
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
 
 '''
-def devolver_a_PB(sender, instance, **kwargs):
-    if (instance.estado=='Finalizado'):
-        hus = instance.sprint.all()
-        for hu in hus:
-            if hu.estado != 'QA':
-                HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False,aprobado_PB=True, prioridad='Alta', estado='Pendiente')
-post_save.connect(devolver_a_PB, sender=Sprint)'''
-
+def agregar_fecha1(sender, instance, **kwargs):
+    if instance.estado != instance.estado_anterior:
+        if instance.estado == 'ToDo':
+            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_ToDo=instance.fecha, estado_anterior='ToDo')
+        elif instance.estado == 'Doing':
+            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_Doing=instance.fecha, estado_anterior='Doing')
+        elif instance.estado == 'Done':
+            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_Done=instance.fecha, estado_anterior='Done')
+        elif instance.estado == 'QA':
+            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_QA=instance.fecha, estado_anterior='QA')
+post_save.connect(agregar_fecha1, sender=HistoriaUsuario.estado)
+'''
 class CapacidadDiariaEnSprint(models.Model):
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")
     sprint= models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=False, null=False, related_name="el_sprint")
     capacidad_diaria_horas=models.PositiveIntegerField(null=False, default=8)
-
     models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
 
 def capacidad_equipo_por_sprint(sender, instance, **kwargs):
-    #Se calcula la suma de todas las horas de trabajo de los desarrolladores
+    """calcula la suma de todas las horas de trabajo de los desarrolladores y se multiplica por la cantidad de dias del sprint"""
     sprint = instance.sprint
     print("MODELSS", sprint.id)
     capacidad_diaria = instance.capacidad_diaria_horas
@@ -156,12 +173,18 @@ def capacidad_equipo_por_sprint(sender, instance, **kwargs):
     capacidad_suma = Sprint.objects.filter(id=sprint.id).first().capacidad_equipo + capacidad_diaria
     Sprint.objects.filter(id=sprint.id).update(capacidad_equipo=capacidad_suma)
     print("ESTOY EN MODELS ",capacidad_suma)
-    duracion_dias = sprint.fecha_fin - sprint.fecha_inicio
-    dias = duracion_dias.days
-    calculo_de_la_capacidad = duracion_dias.days*capacidad_suma
-    print("Duracion ",duracion_dias)
+    duracion = sprint.duracion_dias
+    calculo_de_la_capacidad = duracion*capacidad_suma
+    print("Duracion ",duracion)
     print("calculo ",calculo_de_la_capacidad)
     Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
 
 
 post_save.connect(capacidad_equipo_por_sprint, sender=CapacidadDiariaEnSprint)
+
+class Historial_HU(models.Model):
+    id = models.AutoField(primary_key=True)
+    fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
+    descripcion = models.TextField(blank=False, null=False)
+    hora = models.TimeField(auto_now_add=True, blank=True, null=True)
+    hu = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True, related_name="historial_hu")

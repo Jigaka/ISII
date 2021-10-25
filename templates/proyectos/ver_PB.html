@@ -19,8 +19,14 @@ Gestion de Proyectos | Product Backlog
                 <strong class="card-title">Product Backlog</strong>
             </div>
         </div>
-
+        <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: Pendiente</strong>
+            </div>
+        </div>
     </div>
+
     <div class="table-stats order-table ov-h">
         <table id="tabla_usuarios" class="table">
             <thead>
@@ -29,25 +35,196 @@ Gestion de Proyectos | Product Backlog
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Prioridad</th>
+                    <th>Estado</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
             <tbody>
               {% for us in object_list %}
+                  {% if us.estado == 'Pendiente' %}
                <tr>
                  <td>{{ us.id }}</td>
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-
+                   <td>{{ us.estado }}</td>
                  <td style="text-align: left;">
-                        <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a>
+                        <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
                </tr>
+                  {% endif %}
              {% endfor %}
             </tbody>
         </table>
     </div>
+
+
+
+
+        <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: ToDo</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for us in object_list %}
+                  {% if us.estado == 'ToDo' %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                   <td>{{ us.estado }}</td>
+                 <td style="text-align: left;">
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                 </td>
+               </tr>
+                  {% endif %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+     <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: Doing</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for us in object_list %}
+                  {% if us.estado == 'Doing' %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                   <td>{{ us.estado }}</td>
+                 <td style="text-align: left;">
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                 </td>
+               </tr>
+                  {% endif %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+     <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: Done</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for us in object_list %}
+                  {% if us.estado == 'Done' %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                   <td>{{ us.estado }}</td>
+                 <td style="text-align: left;">
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                 </td>
+               </tr>
+                  {% endif %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: QA</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for us in object_list %}
+                  {% if us.estado == 'QA' %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                   <td>{{ us.estado }}</td>
+                 <td style="text-align: left;">
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                 </td>
+               </tr>
+                  {% endif %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 {% endblock body %}

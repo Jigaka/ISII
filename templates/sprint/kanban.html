@@ -43,13 +43,19 @@ Gestion de Proyectos | Tabla Kanban
             margin: 10px 5px;
             padding: 10px;
             width: 280px;
-            height: 100px;
+            {#height: 100px;#}
             color: black;
             background: #ff8;
             cursor: move;
             text-align: center;
             font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
             box-shadow: 2px 2px 2px #eee;
+        }
+
+        .actividad {
+            color: white;
+            background-color: skyblue;
+            margin: 2px;
         }
     </style>
 {% endblock extra_css %}
@@ -60,10 +66,10 @@ Gestion de Proyectos | Tabla Kanban
             <h1>To Do</h1>
             {% for us in object_list %}
 
-                {% if us.estado == 'ToDo' %}
+                {% if us.userHistory.estado == 'ToDo' %}
 
-                    <div id={{ us.id }} class="card">
-                        {{ us.nombre }}
+                    <div id={{ us.userHistory.id }} class="card">
+                        {{ us.userHistory.nombre }}
                     </div>
                 {% endif %}
             {% endfor %}
@@ -71,9 +77,21 @@ Gestion de Proyectos | Tabla Kanban
         <div id="Doing" class="section">
             <h1>Doing</h1>
             {% for us in object_list %}
-                {% if us.estado == 'Doing' %}
-                    <div id={{ us.id }} class="card">
-                        {{ us.nombre }}
+                {% if us.userHistory.estado == 'Doing' %}
+                    <div id={{ us.userHistory.id }} class="card">
+                        {{ us.userHistory.nombre }}
+                        <button onclick="agregarActividad('{% url 'sprint:add_actividad' id us.userHistory.id %}')" style="float: right" title="añadir actividad"><i class="ti-plus"></i></button>
+                        <br><br>
+                        <details>
+                            <summary style="text-align: left">Actividades</summary>
+                            <div id="actividades">
+                                {% for actividad in us.actividades %}
+                                    <div class="actividad" onclick="editActividad('{% url 'sprint:ver_actividad' actividad.id %}')">
+                                        {{ actividad.nombre }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </details>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -81,13 +99,26 @@ Gestion de Proyectos | Tabla Kanban
         <div id="Done" class="section">
             <h1>Done</h1>
             {% for us in object_list %}
-                {% if us.estado == 'Done' %}
-                    <div id={{ us.id }} class="card">
-                        {{ us.nombre }}
+                {% if us.userHistory.estado == 'Done' %}
+                    <div id={{ us.userHistory.id }} class="card">
+                        {{ us.userHistory.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div><div id="QA" class="section">
+            <h1>QA</h1>
+            {% for us in object_list %}
+                {% if us.userHistory.estado == 'QA' %}
+                    <div id={{ us.userHistory.id }} class="card">
+                        {{ us.userHistory.nombre }}
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
+    </div>
+    <div class="modal fade" id="editarActividad" role="dialog">
+    </div>
+    <div class="modal fade" id="addActividad" role="dialog">
     </div>
 {% endblock body %}
 {% block extrajs %}
@@ -95,6 +126,19 @@ Gestion de Proyectos | Tabla Kanban
     <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'js/usuarios/index.js' %}"></script>
     <script type="text/javascript">
+
+        function editActividad(url) {
+            $('#editarActividad').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
+        function agregarActividad(url) {
+            $('#addActividad').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
         var cards = document.querySelectorAll('.card');
 
         for (var i = 0, n = cards.length; i < n; i++) {
@@ -199,7 +243,8 @@ Gestion de Proyectos | Tabla Kanban
                             }
                           }).then(
                             function (response){
-                                console.log(response)
+                                location.reload();
+                                console.log(response);
                             }
                         )
 
@@ -210,7 +255,7 @@ Gestion de Proyectos | Tabla Kanban
                 }
             }
             section.classList.remove('droppable');
-            e.preventDefault();
+            {#e.preventDefault();#}
         };
 
         function closestWithClass(target, className) {

@@ -6,7 +6,7 @@ from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,ap
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.models import User, Rol
 
@@ -229,8 +229,10 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         pk = self.kwargs['pk']
         id_hu = self.object.pk
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
 
     def get_success_url(self):
@@ -261,9 +263,12 @@ class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
         id_hu = self.object.pk
+        print("REASIGNAR",HistoriaUsuario.objects.get(id=id_hu).sprint.id)
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id #Se envia en el context tambien el sprint para que no haya error de id
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
 
     def get_success_url(self):
@@ -283,7 +288,18 @@ class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHis
                             'delete_historiausuario', 'change_historiausuario')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
 
+        return context
     def form_valid(self, form):
         form.instance.rechazado_PB = False
         return super(EditarUs, self).form_valid(form)
@@ -319,6 +335,17 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
     template_name = 'proyectos/aprobar_us.html'
     form_class = aprobar_usform
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def form_valid(self, form):
         form.instance.rechazado_PB = False
         return super(aprobarUS, self).form_valid(form)
@@ -337,6 +364,17 @@ class rechazarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinH
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/rechazar_us.html'
     form_class = rechazar_usform
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 

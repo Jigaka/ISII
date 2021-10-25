@@ -37,33 +37,35 @@
                 <ul class="nav navbar-nav">
                     <li id="titulo-proyecto">
                         {{proyecto.nombre}}
+                        
                     </li>
                     <li id="titulo-sprint">
                         {{sprint.nombre}}
+
                         <div style="font-size: small;">({{sprint.estado}})</div>
                     </li>
                     <li>
                         <a href="{% url 'proyectos:ver_proyecto' proyecto.id%}">
                             <i class="menu-icon fas fa-project-diagram"></i>Ir a Proyecto</a>
                     </li>
-                    
+
                     {% get_id request.path as id %}
                     <li>
-                        <a href='{% url 'sprint:kanban' id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
+                        <a href='{% url 'sprint:kanban' sprint.id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
                     </li>
                     {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                     <li>
-                        <a href="{%  url 'sprint:listar_equipo' id%}" ><i class="menu-icon fa fa-users"></i>Equipo de Trabajo</a>
+                        <a href="{%  url 'sprint:listar_equipo' sprint.id%}" ><i class="menu-icon fa fa-users"></i>Equipo de Trabajo</a>
                     </li>
                     {%endifequal%}
 
-                    {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}                    
+                    {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon"></i> Sprint Planning</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:ver_sb' id%}">Sprint Backlog</a></li>
-                            
-                            <li><i class="fa fa-user"></i> <a href="{%  url 'sprint:asignar_capacidad' id%}">Asignar capacidad diaria</a></li>
+                            <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:ver_sb' sprint.id%}">Sprint Backlog</a></li>
+
+                            <li><i class="fa fa-user"></i> <a href="{%  url 'sprint:asignar_capacidad' sprint.id%}">Asignar capacidad diaria</a></li>
                         </ul>
                     </li>
                     {%endifequal%}

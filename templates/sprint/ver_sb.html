@@ -32,7 +32,6 @@ Gestion de Proyectos | Sprint Backlog
                     <th>Desarrollador</th>
                     <th>Planning Poker</th>
                     <th>Estado</th>
-
                     {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
 
                     <th style="text-align: left;">Opciones</th>
@@ -64,30 +63,29 @@ Gestion de Proyectos | Sprint Backlog
                  <td>{{ objeto.estimacion }}
                      <div>
                         {% ifequal request.user.username|stringformat:"s" us.asignacion|stringformat:"s" %}
-                       
+
                             {% if us.estimacion == 0%}
                             <a href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
                             {% endif %}
-                       
+
                         {%endifequal%}
                      </div>
                  </td>
                  <td>{{ objeto.estado }}</td>
                  {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                  <td style="text-align: left;">
-                     {% if us.estimacion == 0%}
-                        <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar</a><br>
+                        {% if us.estimacion == 0%}
+                          <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar</a><br>
                         {% endif %}
                         {% if us.estimacion != 0%}
-                        <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Asignar</a><br>
+                          <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar</a><br>
                         {% endif %}
-                    {% if us.estimacion != 0%}
-                    <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
-                    {% endif %}
-                    <a href="{%  url 'sprint:historial_hu' objeto.id %}">Historial</a><br>
+                        {% if us.estimacion != 0%}
+                          <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
+                        {% endif %}
                   </td>
 
-                  {%endifequal%}   
+                  {%endifequal%}
 
                </tr>
                      {% endfor %}

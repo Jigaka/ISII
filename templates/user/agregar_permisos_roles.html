@@ -1,4 +1,4 @@
-{% extends 'inicio.html' %}
+{% extends 'proyectos/proyecto.html' %}
 {% block titulo %}
   Gestion de Proyectos | Permisos del Rol
 {% endblock titulo %}
@@ -7,7 +7,7 @@
   {% csrf_token %}
   <div class="card">
     <div class="card-header">
-        <strong>Añadir permisos al Rol</strong>
+        <strong>Añadir permisos al rol {{rol}} </strong>
     </div>
     <div class="card-body card-block">
         {{ form.as_p }}

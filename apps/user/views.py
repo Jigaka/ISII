@@ -177,22 +177,25 @@ class EliminarRol(LoginYSuperStaffMixin, ValidarPermisosMixinPermisos, DeleteVie
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto = RolProyecto.objects.get(id = pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
     def post(self,request,pk,*args,**kwargs):#Eliminacion logica
         object = Rol.objects.get(id = pk)
         object2 = Group.objects.get(name = object.rol)
         print("Rol a eliminar", object)
         print("Grupo a eliminar", object2)
-        print("SELF", request.user.rol.filter(id = pk))
-        print("REQ", request)
-        print("args", args)
-        print("kwargs", kwargs)
-        print("pk", pk)
         print("id pro", RolProyecto.objects.get(id = pk).proyecto.id)
         id_proyecto = RolProyecto.objects.get(id = pk).proyecto.id
         object.delete()
         object2.delete()
         return redirect('usuarios:listar_roles', id_proyecto)
-
 
 
 
@@ -248,6 +251,16 @@ class AgregarPermisosAlRol(LoginYSuperStaffMixin, ValidarPermisosMixinPermisos, 
     template_name = 'user/agregar_permisos_roles.html'
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk=self.kwargs['pk']
+        id_proyecto = RolProyecto.objects.get(id = pk).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        context['rol'] = RolProyecto.objects.get(id = pk)
+        return context
+
     def get_success_url(self, *args, **kwargs):
         return reverse_lazy('usuarios:listar_roles', kwargs={'pk': RolProyecto.objects.get(id=self.object.pk).proyecto.id})
 

@@ -2,7 +2,7 @@ from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
-from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad
+from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
@@ -64,9 +64,12 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                     Sprint.objects.filter(id=s.id).update(estado='Finalizado')
                     hus = Sprint.objects.get(id=s.id).sprint.all()
                     for hu in hus:
+                        Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
+                                                 desarrollador=hu.asignacion.getNombreUsuario(), prioridad=hu.prioridad,
+                                                 PP=hu.estimacion)
                         if hu.estado != 'QA':
                             HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                            prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0 )
+                                                                            prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
                             Historial_HU.objects.create(
                                 descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
                                     id=hu.id).nombre + 'se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
@@ -90,13 +93,9 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         id_proyecto = HistoriaUsuario.objects.get(id=pk).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
-
     def get_success_url(self):
         id_hu = self.object.pk
-
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=id_hu).proyecto.id})
-
-
     def post(self, request, *args, **kwargs):
         """ Funcion para crear un rol con los datos devueltos por el form
 
@@ -199,8 +198,14 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-        us = sprint.sprint.filter(sprint_backlog=True)
-        return render(request, 'sprint/ver_sb.html', {'object_list': us,'sprint':sprint,'proyecto':proyecto})
+        if sprint.estado=='Finalizado':
+            object_list=sprint.estado_sprint.all()
+            for x in object_list:
+                print( x.hu_id)
+        else:
+            object_list = sprint.sprint.all()
+
+        return render(request, 'sprint/ver_sb.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
 
 class TablaKanban(LoginYSuperStaffMixin, ListView):
     model = HistoriaUsuario

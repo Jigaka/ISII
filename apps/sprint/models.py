@@ -105,6 +105,7 @@ class HistoriaUsuario(models.Model):
     estimacion_user = models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
+    QA_aprobado=models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
@@ -144,20 +145,6 @@ def calcular_estimacion(sender, instance, **kwargs):
         Historial_HU.objects.create(
             descripcion=' Resultado del Planning Poker: ' + x.__str__(), hu=HistoriaUsuario.objects.get(id=instance.id))
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
-
-'''
-def agregar_fecha1(sender, instance, **kwargs):
-    if instance.estado != instance.estado_anterior:
-        if instance.estado == 'ToDo':
-            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_ToDo=instance.fecha, estado_anterior='ToDo')
-        elif instance.estado == 'Doing':
-            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_Doing=instance.fecha, estado_anterior='Doing')
-        elif instance.estado == 'Done':
-            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_Done=instance.fecha, estado_anterior='Done')
-        elif instance.estado == 'QA':
-            HistoriaUsuario.objects.filter(id=instance.id).update(fecha_QA=instance.fecha, estado_anterior='QA')
-post_save.connect(agregar_fecha1, sender=HistoriaUsuario.estado)
-'''
 class CapacidadDiariaEnSprint(models.Model):
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")
     sprint= models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=False, null=False, related_name="el_sprint")
@@ -178,13 +165,20 @@ def capacidad_equipo_por_sprint(sender, instance, **kwargs):
     print("Duracion ",duracion)
     print("calculo ",calculo_de_la_capacidad)
     Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
-
-
 post_save.connect(capacidad_equipo_por_sprint, sender=CapacidadDiariaEnSprint)
-
 class Historial_HU(models.Model):
     id = models.AutoField(primary_key=True)
     fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
     descripcion = models.TextField(blank=False, null=False)
     hora = models.TimeField(auto_now_add=True, blank=True, null=True)
     hu = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True, related_name="historial_hu")
+
+class Estado_HU(models.Model):
+    id = models.AutoField(primary_key=True)
+    hu = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_hu")
+    sprint=models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_sprint")
+    estado = models.TextField(blank=False, null=False)
+    prioridad = models.TextField(blank=False, null=False, default='Baja')
+    desarrollador = models.TextField(blank=False, null=False, default='User')
+    PP= models.IntegerField(blank=False, null=False, default=0)
+

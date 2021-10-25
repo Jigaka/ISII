@@ -44,6 +44,8 @@ class Actividad(models.Model):
     nombre = models.CharField(max_length=200, blank=False, null=False)
     hora_trabajo = models.PositiveIntegerField(editable=True, default=0)
     comentario = models.TextField(blank=False, null=False)
+    id_sprint = models.IntegerField(null=True, blank=True)
+    fecha = models.DateField(null=True)
 
 
 class HistoriaUsuario(models.Model):

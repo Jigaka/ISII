@@ -233,7 +233,8 @@ class AddActividad(LoginYSuperStaffMixin, CreateView):
         nombre = request.POST['nombre']
         comentario = request.POST['comentario']
         hora_trabajo = request.POST['hora_trabajo']
-        actividad = Actividad(nombre=nombre, comentario=comentario, hora_trabajo=hora_trabajo)
+        fecha = request.POST['fecha']
+        actividad = Actividad(nombre=nombre, comentario=comentario, hora_trabajo=hora_trabajo, id_sprint=pk, fecha=fecha)
         actividad.save()
         history = HistoriaUsuario.objects.get(id=us)
         history.actividades.add(actividad)

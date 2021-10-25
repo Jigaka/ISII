@@ -6,6 +6,7 @@ from datetime import date
 
 class DateInput(forms.DateInput):
     input_type='date'
+
 class SprintForm(forms.ModelForm):
     fecha_inicio=forms.DateField(widget=DateInput)
     fecha_fin=forms.DateField(widget=DateInput)
@@ -67,14 +68,15 @@ class CrearActividadForm(forms.ModelForm):
     '''
         Actividad realizada en una historia de usuario
     '''
-
+    fecha = forms.DateField(widget=DateInput)
 
     class Meta:
         model = Actividad
-        fields = ['nombre', 'comentario', 'hora_trabajo']
+        fields = ['nombre', 'comentario','fecha', 'hora_trabajo']
         labels = {
             'nombre' : 'Nombre de la actividad',
             'comentario' : 'Escribe un breve comentario',
+            'fecha': 'ingrese la fecha de la actividad',
             'hora_trabajo' : 'Indique las horas dedicadas'
         }
 

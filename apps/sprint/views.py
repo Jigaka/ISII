@@ -1,8 +1,8 @@
 from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form
-from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User
+from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
+from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Actividad
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
@@ -39,6 +39,7 @@ class CrearSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
         pk=self.kwargs['pk']
         context['proyecto'] = Proyec.objects.get(id=pk)
         return context
+
     def get_success_url(self):
         return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
 
@@ -151,12 +152,30 @@ class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Templ
         """
             funcion para renderizar el menu del sprint
         """
-        pk=self.kwargs['pk']
+        pk = self.kwargs['pk']
 
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
 
         return render(request, 'sprint/sprint.html',{"sprint":sprint,"proyecto":proyecto})
+
+
+class VerActividad(LoginYSuperStaffMixin, TemplateView):
+    """
+        Vista basada en clase para mostrar una actividad
+    """
+    permission_required = ('view_proyec', 'change_proyec')
+
+
+    def get(self, request, *args, **kwargs):
+        """
+            funcion para renderizar una actividad
+        """
+        pk = self.kwargs['pk']
+
+        actividad = Actividad.objects.get(id=pk)
+
+        return render(request, 'sprint/ver_actividad.html', {"actividad": actividad})
 
 
 
@@ -188,10 +207,37 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-        us = sprint.sprint.all()
+        userHistorys = sprint.sprint.all()
+        us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
         return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint, 'proyecto':proyecto})
 
+class AddActividad(LoginYSuperStaffMixin, CreateView):
+    '''
+        Vista para crear una actividad para una historia de usuario
+    '''
+    template_name = 'sprint/crear_actividad.html'
+    form_class = CrearActividadForm
+    model = Actividad
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        us = self.kwargs['us']
+        context['pk'] = pk
+        context['us'] = us
+        return context
+
+    def post(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        us = self.kwargs['us']
+        nombre = request.POST['nombre']
+        comentario = request.POST['comentario']
+        hora_trabajo = request.POST['hora_trabajo']
+        actividad = Actividad(nombre=nombre, comentario=comentario, hora_trabajo=hora_trabajo)
+        actividad.save()
+        history = HistoriaUsuario.objects.get(id=us)
+        history.actividades.add(actividad)
+        return redirect('sprint:kanban', pk)
 
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):

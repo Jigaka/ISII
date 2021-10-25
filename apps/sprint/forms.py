@@ -1,6 +1,6 @@
 from django import  forms
 from django.forms.widgets import Widget
-from .models import CapacidadDiariaEnSprint, Proyec, Sprint, HistoriaUsuario
+from .models import CapacidadDiariaEnSprint, Proyec, Sprint, HistoriaUsuario, Actividad
 from datetime import date
 
 
@@ -62,6 +62,21 @@ class agregar_hu_form(forms.ModelForm):
         # Todo volver a poner estado pendiente
         self.fields['sprint'].queryset = Sprint.objects.filter(proyecto_id=HU.proyecto.id,estado="Pendiente")
 
+
+class CrearActividadForm(forms.ModelForm):
+    '''
+        Actividad realizada en una historia de usuario
+    '''
+
+
+    class Meta:
+        model = Actividad
+        fields = ['nombre', 'comentario', 'hora_trabajo']
+        labels = {
+            'nombre' : 'Nombre de la actividad',
+            'comentario' : 'Escribe un breve comentario',
+            'hora_trabajo' : 'Indique las horas dedicadas'
+        }
 
 class configurarEquipoSprintform(forms.ModelForm):
     class Meta:

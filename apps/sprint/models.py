@@ -34,6 +34,18 @@ class Sprint(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+class Actividad(models.Model):
+    '''
+        Modelo para registrar una actividad
+    '''
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=200, blank=False, null=False)
+    hora_trabajo = models.PositiveIntegerField(editable=True, default=0)
+    comentario = models.TextField(blank=False, null=False)
+
+
 class HistoriaUsuario(models.Model):
     Pendiente = 'Pendiente'
     ToDo = 'ToDo'
@@ -79,6 +91,7 @@ class HistoriaUsuario(models.Model):
     estimacion_user = models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
+    actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):
@@ -106,6 +119,8 @@ class HistoriaUsuario(models.Model):
     def obtener_asignacion(self):
         asignacion_user = self.asignacion.all().values_list('username', flat=True)
         return asignacion_user
+
+
 
 
 def calcular_estimacion(sender, instance, **kwargs):

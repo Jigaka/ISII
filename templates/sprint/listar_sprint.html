@@ -32,7 +32,8 @@ Gestion de Proyectos | Listado de historia de usuarios
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Fecha de inicio</th>
-                    <th>Fecha de fin</th>
+                    <th>Fecha de fin Sprint</th>
+                    <th>Duración</th>
                     <th>Estado</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
@@ -44,6 +45,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ sprint.nombre }}</td>
                  <td>{{ sprint.fecha_inicio }}</td>
                  <td>{{sprint.fecha_fin}}</td>
+                 <td>{{sprint.duracion_dias}} días</td>
                  <td>{{ sprint.get_estado_display }}</td>
                  <td class="opciones" style="text-align: left;">
                         <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>

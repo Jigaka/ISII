@@ -2,7 +2,7 @@ from django import  forms
 from django.forms.widgets import Widget
 from .models import Proyec
 from apps.user.models import User
-from apps.sprint.models import HistoriaUsuario, Sprint
+from apps.sprint.models import HistoriaUsuario, Sprint, Actividad
 
 from datetime import date
 '''

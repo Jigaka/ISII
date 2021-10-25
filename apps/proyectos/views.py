@@ -6,7 +6,7 @@ from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,ap
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.models import User, Rol
 

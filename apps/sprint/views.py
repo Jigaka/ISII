@@ -250,6 +250,8 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
         print(pk)
         print(self.object.pk)
         id_proyecto =  HistoriaUsuario.objects.get(id=pk).proyecto.id
+        id_sprint = HistoriaUsuario.objects.get(id=pk).sprint.id
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
 
@@ -334,8 +336,10 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=self.request.user).exists()
         context['estoyEnEquipo']=estoyEnEquipo
         return context
+
     def get_success_url(self, **kwargs):
         return reverse('sprint:ver_sprint', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
+
 class Historial_por_hu( ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = Historial_HU

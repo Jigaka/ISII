@@ -34,54 +34,38 @@
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
             <div id="main-menu" class="main-menu">
-                <div id="titulo-proyecto">
-                    {{proyecto.nombre}}
-                </div>
                 <ul class="nav navbar-nav">
                     <li class="active">
                         <a href="{% url 'inicio' %}"><i class="menu-icon fa fa-laptop"></i>Inicio</a>
+                    </li>
+                    <li id="titulo-proyecto">
+                        {{proyecto.nombre}}
                     </li>
                     {% get_id request.path as id %}
 
                     {% if request.user.id == proyecto.encargado.id %}
                     <li>
-                        <a href='{%  url 'proyectos:listar_integrantes' id%}' > <i
+                        <a href="{%  url 'proyectos:listar_integrantes' proyecto.id%}" > <i
                                 class="menu-icon fa fa-users"></i>Integrantes</a>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Roles</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-plus"></i> <a href="{%  url 'usuarios:crear_rol' id%}">  Crear Rol</a></li>
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'usuarios:listar_roles' id%}">  Listar Roles</a></li>
-                        </ul>
-                     </li>
+                    <li>
+                        <a href="{%  url 'usuarios:listar_roles' proyecto.id%}" > <i
+                                class="menu-icon fa fa-key"></i>Roles</a>
+                    </li>
                     {% endif %}
 
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i> Historias de Usuario</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-plus"></i> <a href="{%  url 'proyectos:crear_us'  id%}"> Crear Historia de Usuario</a></li>
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'proyectos:listar_us' id%}">  Listar Historias de Usuario</a></li>
-                        </ul>
-                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fas fa-running"></i> Sprints</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
-                            <li><i class="fa fa-plus"></i> <a href="{%  url 'sprint:crear_sprint' id %}">  Crear Sprint</a></li>
-                            {% endifequal %}
-                            <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:listar_sprint' id %}">  Listar Sprints</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i>Sprint Planning</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fas fa-layer-group"></i> <a href="{%  url 'proyectos:ver_pb'  id%}"> Product Backlog</a></li>
-
-                        </ul>
-                     </li>
+                    <li>
+                        <a href="{%  url 'proyectos:listar_us' proyecto.id%}"> <i class="menu-icon fas fa-tasks"></i> Historias de Usuario</a>
                     </li>
 
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i>Product Backlog</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fas fa-layer-group"></i> <a href="{%  url 'proyectos:ver_pb'  proyecto.id%}">Ver Product Backlog</a></li>
+
+                    <li>
+                        <a href="{%  url 'sprint:listar_sprint' proyecto.id %}"> <i class="menu-icon fas fa-running"></i> Sprints</a>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>

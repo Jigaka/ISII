@@ -14,6 +14,14 @@ Gestion de Proyectos | Listado de historia de usuarios
             <div class="col-md-8">
                 <strong class="card-title">Listado de Sprints</strong>
             </div>
+            <div class="col-md-4">
+                <button type="button" style="float:right" class="btn boton-crear-us">
+                    <a href="{%  url 'sprint:crear_sprint'  id%}">
+                        <i class="fas fa-plus"></i>
+                        Crear Sprint
+                    </a>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -24,7 +32,8 @@ Gestion de Proyectos | Listado de historia de usuarios
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Fecha de inicio</th>
-                    <th>Fecha de fin</th>
+                    <th>Fecha de fin Sprint</th>
+                    <th>Duración</th>
                     <th>Estado</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
@@ -36,11 +45,16 @@ Gestion de Proyectos | Listado de historia de usuarios
                  <td>{{ sprint.nombre }}</td>
                  <td>{{ sprint.fecha_inicio }}</td>
                  <td>{{sprint.fecha_fin}}</td>
+                 <td>{{sprint.duracion_dias}} días</td>
                  <td>{{ sprint.get_estado_display }}</td>
                  <td class="opciones" style="text-align: left;">
                         <a href="{% url 'sprint:ver_sprint' sprint.id%}">Ver Sprint</a>
-                        <a href="{%  url 'sprint:editar_sprint' sprint.id %}">Editar Sprint</a>
-                        <a href="{%  url 'sprint:eliminar_sprint' sprint.id %}" class="eliminar">Eliminar Sprint</a>
+                        {% ifequal sprint.get_estado_display|stringformat:"s" "Pendiente" %}
+                            {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+                            <a href="{%  url 'sprint:editar_sprint' sprint.id %}">Editar Sprint</a>
+                            <a href="{%  url 'sprint:eliminar_sprint' sprint.id %}" class="eliminar">Eliminar&nbsp;Sprint</a>
+                            {%endifequal%}
+                        {%endifequal%}
                  </td>
 
                </tr>

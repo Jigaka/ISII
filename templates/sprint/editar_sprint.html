@@ -10,36 +10,20 @@ Gestion de Proyectos | Crear Sprint
 {% endblock extra_css %}
 
 {% block body %}
-<div class="card">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-8">
-                <strong class="card-title">Modificar Sprint</strong>
-            </div>
-        </div>
+<form method="POST">
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-header">
+          <strong>Editar Sprint #{{ form.instance.nombre }}</strong>
+      </div>
+      <div class="card-body card-block">
+          {{ form.as_p }}
+      </div>
     </div>
-    <div class="table-stats order-table ov-h fondo-claro">
-        <form method="POST">
-            {%  csrf_token %}
-                <table id="tabla-crear-proyecto">
-                {{form.as_table }}
-                </table>
-                    <button type="submit" class="btn" id="guardar">Guardar cambios</button>
-        </form>
-        <a class="btn btn-danger" style="float: right;" href="{%  url 'sprint:listar_sprint' proyecto.id %}">Cancelar</a>
-    </div>
-</div>
-<div class="modal fade" id="creacion" role="dialog">
+    <button type="submit" class="btn btn-success">Aplicar</button>
+    <a class="btn btn-primary" href="{%  url 'sprint:listar_sprint'  form.instance.proyecto_id %}" role="button">Cancelar</a>
+</form>
 
-</div>
-
-<div class="modal fade" id="edicion" role="dialog">
-
-</div>
-
-<div class="modal fade" id="eliminacion" role="dialog">
-
-</div>
 {% endblock body %}
 
 {% block extrajs %}

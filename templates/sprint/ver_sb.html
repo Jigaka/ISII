@@ -29,29 +29,68 @@ Gestion de Proyectos | Sprint Backlog
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Prioridad</th>
+                    <th>Desarrollador</th>
                     <th>Planning Poker</th>
                     <th>Estado</th>
+                    {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+
                     <th style="text-align: left;">Opciones</th>
+                    {%endifequal%}
                 </tr>
             </thead>
             <tbody>
-              {% for us in object_list %}
+
+                 {% if object_list.first.hu.id  %}
+                     {% for objeto in object_list %}
+                     <tr>
+                         <td>{{ objeto.hu.id }}</td>
+                        <td>{{ objeto.hu.nombre }}</td>
+                        <td>{{ objeto.hu.descripcion }}</td>
+                        <td>{{ objeto.prioridad }}</td>
+                        <td>{{ objeto.desarrollador }}</td>
+                        <td>{{ objeto.PP }}</td>
+                        <td>{{ objeto.estado }}</td>
+                     </tr>
+                    {% endfor %}
+{% else %}
+                     {% for objeto in object_list %}
                <tr>
-                 <td>{{ us.id }}</td>
-                 <td>{{ us.nombre }}</td>
-                 <td>{{ us.descripcion }}</td>
-                 <td>{{ us.prioridad }}</td>
-                 <td>{{ us.estimacion }}</td>
-                  <td>{{ us.estado }}</td>
-                   <td style="text-align: left;">
-                        {% if us.estimacion == 0%}
-                        <a href="{%  url 'sprint:configurar_us' us.id %}">Configurar</a><br>
+                 <td>{{ objeto.id }}</td>
+                 <td>{{ objeto.nombre }}</td>
+                 <td>{{ objeto.descripcion }}</td>
+                 <td>{{ objeto.prioridad }}</td>
+                 <td>{{ objeto.asignacion }}</td>
+                 <td>{{ objeto.estimacion }}
+                     <div>
+                        {% ifequal request.user.username|stringformat:"s" us.asignacion|stringformat:"s" %}
+
+                            {% if us.estimacion == 0%}
+                            <a href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
+                            {% endif %}
+
+                        {%endifequal%}
+                     </div>
+                 </td>
+                 <td>{{ objeto.estado }}</td>
+                 {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+                 <td style="text-align: left;">
+                        {% if objeto.estimacion == 0%}
+                          <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar</a><br>
                         {% endif %}
-                       {% if us.estimacion != 0%}
-                        <a href="{%  url 'sprint:cambio_estadoHU' us.id %}">Cambiar Estado</a><br>
+                        {% if objeto.estimacion != 0%}
+                          <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar</a><br>
                         {% endif %}
+                        {% if objeto.estimacion != 0%}
+                          <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
+                        {% endif %}
+                  </td>
+
+                  {%endifequal%}
+
                </tr>
-             {% endfor %}
+                     {% endfor %}
+                  {% endif %}
+
             </tbody>
         </table>
     </div>

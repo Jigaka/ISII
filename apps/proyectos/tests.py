@@ -14,38 +14,38 @@ class ProyectModelTest(TestCase):
         Proyec.objects.create(nombre='tienda', descripcion='hola que tal', encargado=user)
 #se compueba los campos de la clase.
     def test_name_label(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('nombre').verbose_name
         self.assertEquals(field_label, 'nombre')
     def test_estado(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('estado').verbose_name
         self.assertEquals(field_label, 'estado')
 #necesitamos probar nuestros métodos personalizados, el siguiente solo verifica que el nombre del objeto se construyó como esperábamos usando el formato "nombre"
     def test_descripcion(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('descripcion').verbose_name
         self.assertEquals(field_label, 'descripcion')
     def test_encargado(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('encargado').verbose_name
         self.assertEquals(field_label, 'encargado')
     def test_fecha_creacion(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('fecha_creacion').verbose_name
         self.assertEquals(field_label, 'fecha de creacion')
 
     def test_fecha(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('fecha').verbose_name
         self.assertEquals(field_label, 'fecha')
 
     def test_descripcion(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         field_label = project._meta.get_field('descripcion').verbose_name
         self.assertEquals(field_label, 'descripcion')
     def test_object_nombre(self):
-        project = Proyec.objects.get(id=2)
+        project = Proyec.objects.get(nombre='tienda')
         expected_object_name = project.nombre
         self.assertEquals(expected_object_name, str(project))
 # con ddf se generan objetos para luego comprobar la correcta creacion, tambien se comprueba la relacion ManytoMany entre los usuarios y el proyecto
@@ -74,11 +74,11 @@ class HistoriaUsuarioModelTest(TestCase):
         HistoriaUsuario.objects.create(nombre='vista inicio', descripcion='agregar funcionalidad', asignacion=user, estado='ToDo', estimacion=0, prioridad='Media')
 #se compueba los campos de la clase.
     def test_name(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         self.assertEquals(Us.nombre, 'vista inicio')
 
     def test_asignacion(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         user = User.objects.get(username='bl')
         self.assertEquals(Us.asignacion, user)
 
@@ -87,35 +87,35 @@ class HistoriaUsuarioModelTest(TestCase):
         Us = HistoriaUsuario.objects.get(id=1)
         self.assertEquals(Us.sprint, sprint)'''
     def test_descripcion(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         self.assertEquals(Us.descripcion, 'agregar funcionalidad')
     def test_estado(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         self.assertEquals(Us.estado, 'ToDo')
     def test_estimacion(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         self.assertEquals(Us.estimacion, 0)
     def test_prioridad(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         self.assertEquals(Us.prioridad, 'Media')
 
     def test_prioridad_numerica(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         self.assertEquals(Us.prioridad_numerica, 2)
 
 #necesitamos probar nuestros métodos personalizados, el siguiente solo verifica que el nombre del objeto se construyó como esperábamos usando el formato "nombre"
     def test_fecha_creacion(self):
-        HU = HistoriaUsuario.objects.get(id=1)
+        HU = HistoriaUsuario.objects.get(nombre='vista inicio')
         field_label = HU._meta.get_field('fecha_creacion').verbose_name
         self.assertEquals(field_label, 'fecha cre')
 
     def test_fecha(self):
-        HU = HistoriaUsuario.objects.get(id=1)
+        HU = HistoriaUsuario.objects.get(nombre='vista inicio')
         field_label = HU._meta.get_field('fecha').verbose_name
         self.assertEquals(field_label, 'fecha')
 
     def test_object_nombre(self):
-        Us = HistoriaUsuario.objects.get(id=1)
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         expected_object_name = '%s' % (Us.nombre)
         self.assertEquals(expected_object_name, str(Us))
 # con ddf se generan objetos para luego comprobar la correcta creacion, tambien se comprueba la relacion ManytoMany entre los usuarios y el proyecto
@@ -158,7 +158,7 @@ class HistoriaUsuarioModelTest(TestCase):
         self.assertTrue(form.is_valid())
     def test_forms_CrearUSForm_fail(self):
         with pytest.raises(Exception):
-            form_data = {'nombre': 'afadf', 'descripcion':'asdkfjasadds', 'prioridad':'Jose'}
+            form_data = {'nombre': 'afadf', 'descripcion':'asdkfjasadds', 'prioridad':'hola'}
             form = CrearUSForm(data=form_data)
             self.assertTrue(form.is_valid())
     def test_forms_CrearUSForm_fail2(self):

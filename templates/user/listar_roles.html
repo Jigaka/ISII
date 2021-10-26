@@ -39,6 +39,14 @@ Gestion de Proyectos | Listado de Roles
             <div class="col-md-8">
                 <strong class="card-title">Listado de Roles</strong>
             </div>
+            <div class="col-md-4">
+                <button type="button" style="float:right" class="btn boton-crear-us">
+                    <a href="{%  url 'usuarios:crear_rol' id%}">
+                        <i class="fas fa-plus"></i>
+                        Crear Rol
+                    </a>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -49,6 +57,7 @@ Gestion de Proyectos | Listado de Roles
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Opciones</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, \
     Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, \
-    ListarUS,EliminarUS, aprobarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes
+    ListarUS,EliminarUS, aprobarUS,rechazarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes
 
 
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path('editar_us/<int:pk>', EditarUs.as_view(), name='editar_us'),
     path('eliminar_us/<int:pk>',EliminarUS.as_view(), name='eliminar_us'),
     path('aprobar_us/<int:pk>',aprobarUS.as_view(), name='aprobar_us'),
+    path('rechazar_us/<int:pk>',rechazarUS.as_view(), name='rechazar_us'),
     path('ver_PB/<int:pk>', ProductBacklog.as_view(), name='ver_pb'),
     path('expulsar_integrante/<int:pk>/<int:pl>',ExpulsarIntegrantes.as_view(), name='expulsar_integrante'),
 ]

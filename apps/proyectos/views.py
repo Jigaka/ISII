@@ -2,11 +2,11 @@ from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import Permission, Group
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform
 from .models import Proyec, RolProyecto
-from apps.sprint.models import HistoriaUsuario, Sprint
-from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
+from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
+from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.models import User, Rol
 
@@ -201,6 +201,8 @@ class CrearUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, Cr
         user = User.objects.get(id=request.user.id)
         us=HistoriaUsuario(nombre=nombre, descripcion=descripcion,prioridad=prioridad,proyecto=proyecto, product_owner=user)
         us.save()
+        id_hu=HistoriaUsuario.objects.get(nombre=nombre).id
+        Historial_HU.objects.create(descripcion='Creacion de la Historia de Usuario: '+nombre+' id #'+ id_hu.__str__()+' con prioridad: '+prioridad, hu=HistoriaUsuario.objects.get(id=id_hu))
         return redirect('proyectos:listar_us', id)
 
     def get_context_data(self, **kwargs):
@@ -219,25 +221,89 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
 
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
-        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id
+        print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
 
     def get_success_url(self):
+        id_hu = self.object.pk
+        Historial_HU.objects.create(
+            descripcion='Asignacion de la Historia de Usuario a: ' + HistoriaUsuario.objects.get(
+                id=id_hu).asignacion.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
+        Historial_HU.objects.create(
+            descripcion=' Estmacion del Scum Master: ' + HistoriaUsuario.objects.get(
+                id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
+
+
+
+
+class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
+    """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'sprint/reasingar_us.html'
+    form_class = reasinarUSform
+
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        id_hu = self.object.pk
+        print("REASIGNAR",HistoriaUsuario.objects.get(id=id_hu).sprint.id)
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id #Se envia en el context tambien el sprint para que no haya error de id
+        print(id_proyecto)
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
+        return context
+
+    def get_success_url(self):
+        id_hu = self.object.pk
+        Historial_HU.objects.create(
+            descripcion='Reasignacion de la Historia de Usuario a: ' + HistoriaUsuario.objects.get(
+                id=id_hu).asignacion.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
+
 
 class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = HistoriaUsuario
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    permission_required = ('view_historiausuario', 'add_historiausuario',
+                            'delete_historiausuario', 'change_historiausuario')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+
+        return context
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        return super(EditarUs, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
@@ -249,7 +315,7 @@ class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, L
 
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=False, sprint_backlog=False).order_by('-prioridad_numerica','id')
+        us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
 
 
@@ -268,9 +334,49 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/aprobar_us.html'
     form_class = aprobar_usform
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        return super(aprobarUS, self).form_valid(form)
+
     def get_success_url(self):
+        id_hu = self.object.pk
+        Historial_HU.objects.create(
+            descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                id=id_hu).nombre+' es aprobada por el Scum Master y pasa al Product Backlog ', hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
+class rechazarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+    """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'proyectos/rechazar_us.html'
+    form_class = rechazar_usform
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
+    def get_success_url(self):
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
 
@@ -280,18 +386,15 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.filter(aprobado_PB=True, sprint_backlog=False)
+        us = proyecto.proyecto.exclude(aprobado_PB=False)
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 
-class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
     template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
-
-
-
 
     def get(self, request, pk, *args, **kwargs):
         sprint =Sprint.objects.get(id=pk)
@@ -314,10 +417,20 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
-        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        print(pk)
+        print(self.object.pk)
+        id_proyecto = HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id
+        print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        id_sprint=HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+        context['sprint']= Sprint.objects.get(id=id_sprint)
         return context
 
 
     def get_success_url(self):
-        return reverse('sprint:listar_us_a_estimar', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+        id_hu = self.object.pk
+        Historial_HU.objects.create(
+            descripcion=' Estmacion del usuario ' + HistoriaUsuario.objects.get(
+                id=id_hu).asignacion.getNombreUsuario()+' :' +HistoriaUsuario.objects.get(
+                id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
+        return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })

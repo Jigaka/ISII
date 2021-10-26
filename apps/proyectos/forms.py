@@ -2,7 +2,7 @@ from django import  forms
 from django.forms.widgets import Widget
 from .models import Proyec
 from apps.user.models import User
-from apps.sprint.models import HistoriaUsuario, Sprint
+from apps.sprint.models import HistoriaUsuario, Sprint, Actividad
 
 from datetime import date
 '''
@@ -47,21 +47,38 @@ class configurarUSform(forms.ModelForm):
         model = HistoriaUsuario
         fields = ['estimacion_scrum','asignacion']
         labels = {
-            'estimacion_scrum': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_scrum': 'Tiempo requerido (en horas)',
             'asignacion':'Asignar Historia de Usuario'
         }
+
     def __init__(self, *args, **kwargs):
         super(configurarUSform, self).__init__(*args, **kwargs)
         sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
         #print(HU)
         self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
 
+
+class reasinarUSform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['asignacion']
+        labels = {
+            'asignacion': 'Asignar Historia de Usuario'
+        }
+    def __init__(self, *args, **kwargs):
+        super(reasinarUSform, self).__init__(*args, **kwargs)
+        sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
+        # print(HU)
+        self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
+
+
+
 class estimar_userform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
         fields = ['estimacion_user']
         labels = {
-            'estimacion_user': 'estimacion de tiempo para la historia de usuario',
+            'estimacion_user': 'Tiempo requerido (en horas)',
         }
 
 
@@ -71,4 +88,12 @@ class aprobar_usform(forms.ModelForm):
         fields = ['aprobado_PB']
         labels = {
             'aprobado_PB': 'Aprobar Historia de Usuario '
+        }
+
+class rechazar_usform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['rechazado_PB']
+        labels = {
+            'rechazado_PB': 'Rechazar Historia de Usuario '
         }

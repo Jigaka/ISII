@@ -24,18 +24,24 @@ Gestion de Proyectos | Crear Sprint
 {% endblock extra_css %}
 
 {% block body %}
-<form method="POST">
-    {% csrf_token %}
-    <div class="card">
-        <div class="card-header">
-            <strong>Crear Sprint</strong>
-        </div>
-        <div class="card-body card-block">
-            {{ form.as_p }}
-        </div>
-        <button type="submit" id="guardar">Crear Sprint</button>
+
+<div class="card">
+    <div class="card-header">
+        <strong>Crear Sprint</strong>
     </div>
-  </form>
+    <div class="card-body card-block">
+        {%if existe_sprint_pendiente%}
+        <p>No se puede crear un nuevo sprint porque ya existe otro en estado pendiente.</p>   
+        <a class="btn btn-primary" href="{%  url 'sprint:listar_sprint' proyecto.id %}" role="button">Volver</a>        
+        {%else%}
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p }}
+            <button type="submit" id="guardar">Crear Sprint</button>
+        </form>        
+        {%endif%}
+    </div>
+</div>
 
 <div class="modal fade" id="creacion" role="dialog">
 

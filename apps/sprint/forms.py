@@ -29,8 +29,8 @@ class SprintForm(forms.ModelForm):
         end_date = cleaned_data.get("fecha_fin")
         if end_date <= start_date:
             raise forms.ValidationError('¡La fecha de fin no puede ser menor a la fecha de inicio!')
-        if date.today() > start_date:
-            raise forms.ValidationError('¡La fecha de inicio no debe estar en el pasado!')
+        if date.today() >= start_date:
+            raise forms.ValidationError('La fecha de inicio debe ser mayor a la fecha de hoy.')
 
         #raise forms.ValidationError(self.id_proyecto)
         

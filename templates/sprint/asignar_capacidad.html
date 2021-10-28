@@ -45,10 +45,9 @@ Gestion de Proyectos | Crear Sprint
         </div>
     </div>
     <div class="card-body card-block">
-    {%if estoyEnEquipo%}    
         {%if capacidadCargada%}
-        <p>Ya has cargado tu capacidad diaria para este Sprint.</p>   
-        <a class="btn btn-primary" href="{%  url 'sprint:ver_sprint' sprint.id %}" role="button">Volver</a> 
+        <p>Ya has cargado su capacidad diaria para este Sprint.</p>   
+        <a class="btn btn-primary" href="{%  url 'sprint:listar_equipo' sprint.id %}" role="button">Volver</a> 
         {%else%}
         <form method="POST">
             {%  csrf_token %}
@@ -56,10 +55,6 @@ Gestion de Proyectos | Crear Sprint
             <button type="submit" id="guardar">Cargar</button>
         </form>
         {%endif%}
-    {%else%}
-    <p>No estás en el equipo de trabajo para este Sprint.</p>  
-    <a class="btn btn-primary" href="{%  url 'sprint:ver_sprint' sprint.id %}" role="button">Volver</a> 
-    {%endif%}   
     </div> 
         
     

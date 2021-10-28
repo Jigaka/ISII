@@ -362,7 +362,7 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
 
     def form_valid(self, form):
         id_sprint=self.kwargs['pk']
-        id_user= self.request.user.pk
+        id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         sprint = get_object_or_404(Sprint, id=id_sprint)
         form.instance.usuario = usuario
@@ -377,22 +377,24 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
 
-        users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
-        if self.request.user.pk in users:
+        #users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
+        #if self.request.user.pk in users:
             #Estoy dentro del equipo de trabajo#
-            estoyEnEquipo=True
-        else:
+        #    estoyEnEquipo=True
+        #else:
             #Estoy fuera del equipo de trabajo#
-            estoyEnEquipo=False
+        #    estoyEnEquipo=False
 
         context['sprint']=sprint
-        context['proyecto'] = proyecto
-        context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=self.request.user).exists()
-        context['estoyEnEquipo']=estoyEnEquipo
+        context['proyecto'] = proyecto    
+        id_user= self.kwargs['pk2']
+        usuario = get_object_or_404(User, id=id_user)
+        context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
+        #context['estoyEnEquipo']=estoyEnEquipo
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse('sprint:ver_sprint', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
+        return reverse('sprint:listar_equipo', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
 
 class Historial_por_hu( ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""

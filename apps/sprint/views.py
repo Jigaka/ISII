@@ -37,7 +37,9 @@ class CrearSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk=self.kwargs['pk']
-        context['proyecto'] = Proyec.objects.get(id=pk)
+        proyecto = Proyec.objects.get(id=pk)
+        context['proyecto'] = proyecto
+        context['existe_sprint_pendiente']=Sprint.objects.filter(proyecto=proyecto,estado="Pendiente").exists()
         return context
 
     def get_success_url(self):

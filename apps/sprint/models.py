@@ -106,7 +106,7 @@ class HistoriaUsuario(models.Model):
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
     QA_aprobado=models.BooleanField(default=False)
-    actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
+    actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):

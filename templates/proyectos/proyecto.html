@@ -58,13 +58,12 @@
                         <a href="{%  url 'proyectos:listar_us' proyecto.id%}"> <i class="menu-icon fas fa-tasks"></i> Historias de Usuario</a>
                     </li>
 
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-key"></i>Product Backlog</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fas fa-layer-group"></i> <a href="{%  url 'proyectos:ver_pb'  proyecto.id%}">Ver Product Backlog</a></li>
+                    <li>
+                        <a href="{%  url 'proyectos:ver_pb'  proyecto.id%}"> <i class="menu-icon fas fa-layer-group"></i>Product Backlog</a>
+                    </li>
 
                     <li>
-                        <a href="{%  url 'sprint:listar_sprint' proyecto.id %}"> <i class="menu-icon fas fa-running"></i> Sprints</a>
+                        <a href="{%  url 'sprint:listar_sprint' proyecto.id %}"> <i class="menu-icon fas fa-running"></i>Sprints</a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

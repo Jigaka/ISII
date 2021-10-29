@@ -35,7 +35,9 @@ Gestion de Proyectos | Listado de historia de usuarios
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Capacidad diaria</th>
+                  {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
                   <th>Opciones</th>
+                  {%endifequal%}
                 </tr>
             </thead>
             <tbody>
@@ -53,9 +55,11 @@ Gestion de Proyectos | Listado de historia de usuarios
                 {% else %}
                   <td>Sin registros</td>
                 {%  endif %}
+                 {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
                  <td>
                   <a href="{%  url 'sprint:asignar_capacidad' sprint.id miembro.id%}"> Asignar capacidad diaria</a>
                  </td>
+                 {%endifequal%}
                </tr>
              {% endfor %}
             </tbody>

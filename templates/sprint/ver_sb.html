@@ -69,7 +69,7 @@ Gestion de Proyectos | Sprint Backlog
                         {%endifequal%}
                      </div>
                  </td>
-                 <td>{{ objeto.estado }}</td>
+                   <td>{{ objeto.estado }}</td>
                  {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                  <td style="text-align: left;">
                         {% if objeto.estimacion == 0%}

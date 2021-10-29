@@ -65,24 +65,9 @@ Gestion de Proyectos | Tabla Kanban
         <div id="ToDo" class="section">
             <h1>To Do</h1>
             {% for us in object_list %}
-
-                {% if us.userHistory.estado == 'ToDo' %}
-
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
-                        <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id %}')">
-                            {{ us.userHistory.nombre }}
-                        </div>
-                        <br><br>
-                        <details>
-                            <summary style="text-align: left">Actividades</summary>
-                            <div id="actividades">
-                                {% for actividad in us.actividades %}
-                                    <div class="actividad" onclick="editActividad('{% url 'sprint:ver_actividad' actividad.id %}')">
-                                        {{ actividad.nombre }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </details>
+                {% if us.estado == 'ToDo' %}
+                       <div id={{ us.hu.id }} class="card">
+                        {{ us.hu.nombre }}
                     </div>
                 {% endif %}
             {% endfor %}
@@ -90,23 +75,9 @@ Gestion de Proyectos | Tabla Kanban
         <div id="Doing" class="section">
             <h1>Doing</h1>
             {% for us in object_list %}
-                {% if us.userHistory.estado == 'Doing' %}
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}'  class="card">
-                        <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id %}')">
-                            {{ us.userHistory.nombre }}
-                        </div>
-                        <button onclick="agregarActividad('{% url 'sprint:add_actividad' id us.userHistory.id %}',{{ us.userHistory.asignacion_id}}, {{ user.id }})" style="float: right" title="añadir actividad"><i class="ti-plus"></i></button>
-                        <br><br>
-                        <details>
-                            <summary style="text-align: left">Actividades</summary>
-                            <div id="actividades">
-                                {% for actividad in us.actividades %}
-                                    <div class="actividad" onclick="editActividad('{% url 'sprint:ver_actividad' actividad.id %}')">
-                                        {{ actividad.nombre }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </details>
+                {% if us.estado == 'Doing' %}
+                    <div id={{ us.hu.id }} class="card">
+                        {{ us.hu.nombre }}
                     </div>
                 {% endif %}
             {% endfor %}
@@ -114,58 +85,31 @@ Gestion de Proyectos | Tabla Kanban
         <div id="Done" class="section">
             <h1>Done</h1>
             {% for us in object_list %}
-                {% if us.userHistory.estado == 'Done' %}
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
-                        <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id %}')">
-                            {{ us.userHistory.nombre }}
-                        </div>
-                        <br><br>
-                        <details>
-                            <summary style="text-align: left">Actividades</summary>
-                            <div id="actividades">
-                                {% for actividad in us.actividades %}
-                                    <div class="actividad" onclick="editActividad('{% url 'sprint:ver_actividad' actividad.id %}')">
-                                        {{ actividad.nombre }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </details>
-                    </div>
+                {% if us.estado == 'Done' %}
+
                 {% endif %}
             {% endfor %}
         </div><div id="QA" class="section">
             <h1>QA</h1>
             {% for us in object_list %}
-                {% if us.userHistory.estado == 'QA' %}
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
-                        <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id %}')">
-                            {{ us.userHistory.nombre }}
-                        </div>
-                        {%  if us.userHistory.estado_hu.first.aprobado_QA == False and us.userHistory.estado_hu.first.rechazado_QA == False %}
-                        <button onclick="aprobarQA('{% url 'sprint:aprobarQA' id us.userHistory.id %}')" style="float: right" title="Aprobar Historia de Usuario"><i class="ti-check"></i></button>
+                {% if us.hu.estado == 'QA' or us.estado == 'Aprobado_QA' or us.estado == 'Rechazado_QA' %}
+                    <div  class="card">
+                        {{ us.hu.nombre }}
+                        {%  if us.aprobado_QA == False and us.rechazado_QA == False %}
+                        <button onclick="aprobarQA('{% url 'sprint:aprobarQA' id us.hu.id %}')" style="float: right" title="Aprobar Historia de Usuario"><i class="ti-check"></i></button>
                         <br><br>
-                        <button onclick="rechazarQA('{% url 'sprint:rechazarQA' id us.userHistory.id %}')" style="float: right" title="Rechazar Historia de Usuario"><i class="ti-close"></i></button>
+                        <button onclick="rechazarQA('{% url 'sprint:rechazarQA' id us.hu.id %}')" style="float: right" title="Rechazar Historia de Usuario"><i class="ti-close"></i></button>
                         <br><br>
                         {% endif %}
-                        {%  if us.userHistory.estado_hu.first.aprobado_QA == True %}
+                        {%  if us.aprobado_QA == True %}
                             <p>Aprobado</p>
-                            {{ us.userHistory.estado_hu.first.comentario }}
+                            {{ us.comentario }}
                           {% endif %}
-                        {%  if us.userHistory.estado_hu.first.rechazado_QA == True %}
+                        {%  if us.rechazado_QA == True %}
                             <p>Rechazado</p>
-                             {{ us.userHistory.estado_hu.first.comentario }}
+                             {{ us.comentario }}
                           {% endif %}
-                        <br><br>
-                        <details>
-                            <summary style="text-align: left">Actividades</summary>
-                            <div id="actividades">
-                                {% for actividad in us.actividades %}
-                                    <div class="actividad" onclick="editActividad('{% url 'sprint:ver_actividad' actividad.id %}')">
-                                        {{ actividad.nombre }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </details>
+
                     </div>
                 {% endif %}
             {% endfor %}
@@ -179,15 +123,12 @@ Gestion de Proyectos | Tabla Kanban
     </div>
     <div class="modal fade" id="rechazarQA" role="dialog">
     </div>
-    <div class="modal fade" id="verUS" role="dialog"></div>
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'js/usuarios/index.js' %}"></script>
     <script type="text/javascript">
-
-
 
         function editActividad(url) {
             $('#editarActividad').load(url, function () {
@@ -205,18 +146,8 @@ Gestion de Proyectos | Tabla Kanban
             })
         }
 
-        function agregarActividad(url,usid,userid) {
-            if (usid == userid){
-                $('#addActividad').load(url, function () {
-                    $(this).modal('show');
-                })
-            } else {
-                alert('No eres del desarrollador de este user history')
-            }
-        }
-
-        function verUS(url) {
-            $('#verUS').load(url, function () {
+        function agregarActividad(url) {
+            $('#addActividad').load(url, function () {
                 $(this).modal('show');
             })
         }
@@ -225,10 +156,7 @@ Gestion de Proyectos | Tabla Kanban
 
         for (var i = 0, n = cards.length; i < n; i++) {
             var card = cards[i];
-            var ideses = card.id.split('-')
-            if(ideses[0] == ideses[1]){
-               card.draggable = true;
-            }
+            card.draggable = true;
         };
 
 
@@ -315,9 +243,8 @@ Gestion de Proyectos | Tabla Kanban
                 // Might be a card from another window.
                 if (card) {
                     if (section !== card.parentNode) {
-                        let id = card.id.split('-')[2];
                         const data = new FormData();
-                        data.append('id',id);
+                        data.append('id',card.id);
                         data.append('estado', section.id)
                         data.append('fecha_prueba', 'hoy')
                         fetch('/sprint/kanban/1',{

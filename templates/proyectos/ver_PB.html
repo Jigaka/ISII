@@ -214,7 +214,12 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                {%  if us.aprobado_QA == False %}
+                    <td><p> Pendiente_QA</p></td>
+                    {% endif %}
+                   {% if us.aprobado_QA == True %}
+                   <td><p> Aprobado_QA</p></td>
+                   {% endif %}
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>

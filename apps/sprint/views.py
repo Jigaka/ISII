@@ -1,7 +1,7 @@
 from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import CapacidadDiariaEnSprintForm, SprintForm, agregar_hu_form, configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
+from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form, aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
@@ -50,10 +50,6 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = Sprint
     template_name = 'sprint/listar_sprint.html'
-    #permission_required = ('view_proyec', 'change_proyec')
-
-
-
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
         sprint = proyecto.proyecto_s.all().order_by('fecha_inicio')
@@ -65,18 +61,23 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                 if date.today() > s.fecha_fin:
                     Sprint.objects.filter(id=s.id).update(estado='Finalizado')
                     hus = Sprint.objects.get(id=s.id).sprint.all()
+                    print(hus)
                     for hu in hus:
                         Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
-                                                 desarrollador=hu.asignacion.getNombreUsuario(), prioridad=hu.prioridad,
+                                                 desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
                                                  PP=hu.estimacion)
-                        if hu.estado != 'QA':
+                        if hu.estado != 'Done':
                             HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
                                                                             prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
                             Historial_HU.objects.create(
                                 descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
-                                    id=hu.id).nombre + 'se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
+                                    id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
                                     id=hu.id).estado,
                                 hu=HistoriaUsuario.objects.get(id=hu.id))
+                        elif hu.estado == 'Done':
+                            HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
+
+
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
@@ -226,9 +227,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
         if sprint.estado=='Finalizado':
-            object_list=sprint.estado_sprint.all()
-            for x in object_list:
-                print( x.hu_id)
+            object_list = sprint.estado_sprint.all()
         else:
             object_list = sprint.sprint.all()
 
@@ -260,9 +259,14 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-        userHistorys = sprint.sprint.all()
-        us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
-        return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint, 'proyecto':proyecto})
+        if sprint.estado != 'Finalizado':
+            userHistorys = sprint.sprint.all()
+            us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
+            return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
+        else:
+            us=sprint.estado_sprint.all()
+            return render(request, 'sprint/kanban-fin.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
+
 
 class AddActividad(LoginYSuperStaffMixin, CreateView):
     '''
@@ -291,6 +295,71 @@ class AddActividad(LoginYSuperStaffMixin, CreateView):
         actividad.save()
         history = HistoriaUsuario.objects.get(id=us)
         history.actividades.add(actividad)
+        return redirect('sprint:kanban', pk)
+
+class AprobarQA(LoginYSuperStaffMixin, CreateView):
+    '''
+        Vista para aprobar  una historia de usuario en QA
+    '''
+    template_name = 'sprint/aprobarQA.html'
+    form_class = aprobarQAForm
+    model = HistoriaUsuario
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        us = self.kwargs['us']
+        context['pk'] = pk
+        context['us'] = us
+        return context
+
+    def post(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        us = self.kwargs['us']
+        aprobado_QA = request.POST['aprobado_QA']
+        comentario = request.POST['comentario']
+        if aprobado_QA=='on':
+            us_copia = HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,
+                                                                                                comentario=comentario,
+                                                                                                estado='Aprobado_QA')
+            HistoriaUsuario.objects.filter(id=us).update(aprobado_QA=True , comentario=comentario)
+            Historial_HU.objects.create(
+                 descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                id=us).nombre + ' es aprobada. Comentario: '+HistoriaUsuario.objects.get(id=us).comentario,
+                 hu=HistoriaUsuario.objects.get(id=us))
+        return redirect('sprint:kanban', pk)
+
+class RechazarQA(LoginYSuperStaffMixin, CreateView):
+    '''
+        Vista para rechazar una historia de usuario en QA
+    '''
+    template_name = 'sprint/rechazarQA.html'
+    form_class = rechazarQAForm
+    model = HistoriaUsuario
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        us = self.kwargs['us']
+        context['pk'] = pk
+        context['us'] = us
+        return context
+
+    def post(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        us = self.kwargs['us']
+        rechazado_QA = request.POST['rechazado_QA']
+        comentario=request.POST['comentario']
+        if rechazado_QA == 'on':
+            us_copia=HistoriaUsuario.objects.get(id=us).estado_hu.filter(sprint_id=pk).update(rechazado_QA=True, comentario=comentario, estado='Rechazado_QA')
+            HistoriaUsuario.objects.filter(id=us).update(sprint_backlog=False, aprobado_PB=True,
+                                                            prioridad='Alta', estimacion_user=0, estimacion_scrum=0,
+                                                            estimacion=0, estado='Pendiente', asignacion=None,
+                                                            sprint=None)
+            Historial_HU.objects.create(
+                descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                    id=us).nombre + ' es rechazada y se agrega de nuevo al Product Backlog con prioridad Alta y estado: Pendiente',
+                hu=HistoriaUsuario.objects.get(id=us))
         return redirect('sprint:kanban', pk)
 
 

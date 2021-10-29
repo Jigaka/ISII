@@ -386,7 +386,7 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         #    estoyEnEquipo=False
 
         context['sprint']=sprint
-        context['proyecto'] = proyecto    
+        context['proyecto'] = proyecto
         id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
@@ -408,3 +408,25 @@ class Historial_por_hu( ListView):
         id_proyecto = hu.proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/historial_hu.html', {'object_list': historial, 'proyecto': proyecto})
+
+class VisualizarCapacidad(TemplateView):
+    """docstring for VisualizarCapacidad."""
+    template_name = 'sprint/capacidad.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        sprint = Sprint.objects.get(id=pk)
+        equipo = sprint.equipo.all()
+        capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all()
+        print(capacidad)
+        suma_horas_equipo = 0
+        for e in equipo:
+            for c in capacidad:
+                if e.id == c.usuario.id:
+                    suma_horas_equipo += c.capacidad_diaria_horas
+        sprint.capacidad_de_equipo_sprint = suma_horas_equipo * sprint.duracion_dias
+        print(sprint.capacidad_de_equipo_sprint)
+        Sprint.objects.filter(id=pk).update(capacidad_equipo=suma_horas_equipo)
+        Sprint.objects.filter(id=pk).update(capacidad_de_equipo_sprint=sprint.capacidad_de_equipo_sprint)
+        id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
+        return render(request, 'sprint/capacidad.html', {'sprint': sprint, 'proyecto': proyecto})

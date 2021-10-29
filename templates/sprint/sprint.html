@@ -50,9 +50,11 @@
                     </li>
 
                     {% get_id request.path as id %}
+                    {% ifnotequal sprint.estado|stringformat:"s" "Pendiente" %}
                     <li>
                         <a href='{% url 'sprint:kanban' sprint.id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
                     </li>
+                    {%endifnotequal%}
 
                     {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                     <li>

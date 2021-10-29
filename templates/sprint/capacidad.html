@@ -1,0 +1,21 @@
+{% block titulo %}
+  Gestion de Proyectos | Capacidad
+{% endblock titulo %}
+{% block body %}
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Capacidad del Sprint</h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+              <h3>Sprint: {{  sprint.nombre }}</h3>
+              <h3>Capacidad del Sprint: {{  sprint.capacidad_de_equipo_sprint }} horas</h3>
+              <h3>Duración del Sprint: {{ sprint.duracion_dias }} días</h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock body %}

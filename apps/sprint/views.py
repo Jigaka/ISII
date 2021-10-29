@@ -287,7 +287,7 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
         return context
 
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
-        return reverse('sprint:ver_sprint', kwargs={'pk': self.object.pk})
+        return reverse('sprint:listar_equipo', kwargs={'pk': self.object.pk})
 
 class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
@@ -353,8 +353,8 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
 
 class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
-    #permission_required = ('view_rol', 'add_rol',
-    #                       'delete_rol', 'change_rol')
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
     template_name = 'sprint/asignar_capacidad.html'
     model = CapacidadDiariaEnSprint
     form_class = CapacidadDiariaEnSprintForm

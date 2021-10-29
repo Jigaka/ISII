@@ -1,0 +1,286 @@
+{% extends 'sprint/sprint.html' %}
+{% load static %}
+{% block titulo %}
+{% load update_estado %}
+Gestion de Proyectos | Tabla Kanban
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+         #danger:hover{
+            color:red;
+        }
+         #board {
+            display: table;
+            margin: 0;
+            padding: 0;
+            border-spacing: 5px;
+        }
+
+        .section {
+            display: table-cell;
+            margin: 0;
+            border: 1px solid #666;
+            padding: 5px;
+            width: 300px;
+        }
+
+        .section.droppable {
+            border: 1px dashed #666;
+        }
+
+        .section>h1 {
+            margin: 0;
+            border-bottom: 1px solid #999;
+            padding: 0;
+            font-size: 12pt;
+            text-align: center;
+        }
+
+        .card {
+            display: inline-block;
+            vertical-align: top;
+            margin: 10px 5px;
+            padding: 10px;
+            width: 280px;
+            {#height: 100px;#}
+            color: black;
+            background: #ff8;
+            cursor: move;
+            text-align: center;
+            font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            box-shadow: 2px 2px 2px #eee;
+        }
+
+        .actividad {
+            color: white;
+            background-color: skyblue;
+            margin: 2px;
+        }
+    </style>
+{% endblock extra_css %}
+{% block body %}
+<h1>Tabla kanban</h1>
+    <div id="board">
+        <div id="ToDo" class="section">
+            <h1>To Do</h1>
+            {% for us in object_list %}
+                {% if us.estado == 'ToDo' %}
+                       <div id={{ us.hu.id }} class="card">
+                        {{ us.hu.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div id="Doing" class="section">
+            <h1>Doing</h1>
+            {% for us in object_list %}
+                {% if us.estado == 'Doing' %}
+                    <div id={{ us.hu.id }} class="card">
+                        {{ us.hu.nombre }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div id="Done" class="section">
+            <h1>Done</h1>
+            {% for us in object_list %}
+                {% if us.estado == 'Done' %}
+
+                {% endif %}
+            {% endfor %}
+        </div><div id="QA" class="section">
+            <h1>QA</h1>
+            {% for us in object_list %}
+                {% if us.hu.estado == 'QA' or us.estado == 'Aprobado_QA' or us.estado == 'Rechazado_QA' %}
+                    <div  class="card">
+                        {{ us.hu.nombre }}
+                        {%  if us.aprobado_QA == False and us.rechazado_QA == False %}
+                        <button onclick="aprobarQA('{% url 'sprint:aprobarQA' id us.hu.id %}')" style="float: right" title="Aprobar Historia de Usuario"><i class="ti-check"></i></button>
+                        <br><br>
+                        <button onclick="rechazarQA('{% url 'sprint:rechazarQA' id us.hu.id %}')" style="float: right" title="Rechazar Historia de Usuario"><i class="ti-close"></i></button>
+                        <br><br>
+                        {% endif %}
+                        {%  if us.aprobado_QA == True %}
+                            <p>Aprobado</p>
+                            {{ us.comentario }}
+                          {% endif %}
+                        {%  if us.rechazado_QA == True %}
+                            <p>Rechazado</p>
+                             {{ us.comentario }}
+                          {% endif %}
+
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="modal fade" id="editarActividad" role="dialog">
+    </div>
+    <div class="modal fade" id="addActividad" role="dialog">
+    </div>
+    <div class="modal fade" id="aprobarQA" role="dialog">
+    </div>
+    <div class="modal fade" id="rechazarQA" role="dialog">
+    </div>
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+    <script type="text/javascript">
+
+        function editActividad(url) {
+            $('#editarActividad').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+        function aprobarQA(url) {
+            $('#aprobarQA').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+        function rechazarQA(url) {
+            $('#rechazarQA').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
+        function agregarActividad(url) {
+            $('#addActividad').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+
+        var cards = document.querySelectorAll('.card');
+
+        for (var i = 0, n = cards.length; i < n; i++) {
+            var card = cards[i];
+            card.draggable = true;
+        };
+
+
+        var board = document.getElementById('board');
+
+        var hideMe;
+
+        board.onselectstart = function (e) {
+            e.preventDefault();
+        }
+
+        board.ondragstart = function (e) {
+            hideMe = e.target;
+            e.dataTransfer.setData('card', e.target.id);
+            e.dataTransfer.effectAllowed = 'move';
+        };
+
+        board.ondragend = function (e) {
+            e.target.style.visibility = 'visible';
+        };
+
+        var lastEneterd;
+
+        board.ondragenter = function (e) {
+            if (hideMe) {
+                hideMe.style.visibility = 'hidden';
+                hideMe = null;
+            }
+            // Save this to check in dragleave.
+            lastEntered = e.target;
+            var section = closestWithClass(e.target, 'section');
+            // TODO: Check that it's not the original section.
+            if (section) {
+                section.classList.add('droppable');
+                e.preventDefault(); // Not sure if these needs to be here. Maybe for IE?
+                return false;
+            }
+        };
+
+        board.ondragover = function (e) {
+            // TODO: Check data type.
+            // TODO: Check that it's not the original section.
+            if (closestWithClass(e.target, 'section')) {
+                e.preventDefault();
+            }
+        };
+
+        board.ondragleave = function (e) {
+            // FF is raising this event on text nodes so only check elements.
+            if (e.target.nodeType === 1) {
+                // dragleave for outer elements can trigger after dragenter for inner elements
+                // so make sure we're really leaving by checking what we just entered.
+                // relatedTarget is missing in WebKit: https://bugs.webkit.org/show_bug.cgi?id=66547
+                var section = closestWithClass(e.target, 'section');
+                if (section && !section.contains(lastEntered)) {
+                    section.classList.remove('droppable');
+                }
+            }
+            lastEntered = null; // No need to keep this around.
+        };
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        board.ondrop = function (e) {
+            var section = closestWithClass(e.target, 'section');
+            var id = e.dataTransfer.getData('card');
+            if (id) {
+
+                var card = document.getElementById(id);
+                // Might be a card from another window.
+                if (card) {
+                    if (section !== card.parentNode) {
+                        const data = new FormData();
+                        data.append('id',card.id);
+                        data.append('estado', section.id)
+                        data.append('fecha_prueba', 'hoy')
+                        fetch('/sprint/kanban/1',{
+                            method: 'POST',
+                            body:data,
+                            headers: {
+                                "X-CSRFToken": getCookie('csrftoken'),
+                                "X-Requested-With": "XMLHttpRequest",
+                            }
+                          }).then(
+                            function (response){
+                                location.reload();
+                                console.log(response);
+                            }
+                        )
+
+                        section.appendChild(card);
+                    }
+                } else {
+                    alert('couldn\'t find card #' + id);
+                }
+            }
+            section.classList.remove('droppable');
+            {#e.preventDefault();#}
+        };
+
+        function closestWithClass(target, className) {
+            while (target) {
+                if (target.nodeType === 1 &&
+                    target.classList.contains(className)) {
+                    return target;
+                }
+                target = target.parentNode;
+            }
+            return null;
+        }
+
+    </script>
+{% endblock extrajs %}

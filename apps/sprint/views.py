@@ -200,9 +200,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
         if sprint.estado=='Finalizado':
-            object_list=sprint.estado_sprint.all()
-            for x in object_list:
-                print( x.hu_id)
+            object_list = sprint.estado_sprint.all()
         else:
             object_list = sprint.sprint.all()
 
@@ -234,9 +232,14 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-        userHistorys = sprint.sprint.all()
-        us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
-        return render(request, 'sprint/kanban.html', {'object_list': us,'sprint':sprint, 'proyecto':proyecto})
+        if sprint.estado != 'Finalizado':
+            userHistorys = sprint.sprint.all()
+            us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
+            return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
+        else:
+            us=sprint.estado_sprint.all()
+            return render(request, 'sprint/kanban-fin.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
+
 
 class AddActividad(LoginYSuperStaffMixin, CreateView):
     '''

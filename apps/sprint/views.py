@@ -312,7 +312,7 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
         return context
 
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
-        return reverse('sprint:ver_sprint', kwargs={'pk': self.object.pk})
+        return reverse('sprint:listar_equipo', kwargs={'pk': self.object.pk})
 
 class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
@@ -350,12 +350,11 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
                 HistoriaUsuario.objects.filter(id=id_hu).update(fecha_QA=date.today(), estado_anterior='QA')
         return reverse('sprint:kanban', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
-class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
+class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceAlProyectoSprint, ListView):
     """Vista basada en clase, se utiliza para listar a los miembros del equipo del sprint"""
     model = Sprint
     template_name = 'sprint/listar_equipo.html'
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -376,10 +375,10 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         print("EQUIPO", equipo)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
-class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
+class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
-    #permission_required = ('view_rol', 'add_rol',
-    #                       'delete_rol', 'change_rol')
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
     template_name = 'sprint/asignar_capacidad.html'
     model = CapacidadDiariaEnSprint
     form_class = CapacidadDiariaEnSprintForm
@@ -411,7 +410,7 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
         #    estoyEnEquipo=False
 
         context['sprint']=sprint
-        context['proyecto'] = proyecto    
+        context['proyecto'] = proyecto
         id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
@@ -421,7 +420,7 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
     def get_success_url(self, **kwargs):
         return reverse('sprint:listar_equipo', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
 
-class Historial_por_hu( ListView):
+class Historial_por_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = Historial_HU
     template_name = 'sprint/historial_hu.html'
@@ -433,3 +432,25 @@ class Historial_por_hu( ListView):
         id_proyecto = hu.proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/historial_hu.html', {'object_list': historial, 'proyecto': proyecto})
+
+class VisualizarCapacidad(LoginYSuperStaffMixin, LoginNOTSuperUser, TemplateView):
+    """docstring for VisualizarCapacidad."""
+    template_name = 'sprint/capacidad.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        sprint = Sprint.objects.get(id=pk)
+        equipo = sprint.equipo.all()
+        capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all()
+        print(capacidad)
+        suma_horas_equipo = 0
+        for e in equipo:
+            for c in capacidad:
+                if e.id == c.usuario.id:
+                    suma_horas_equipo += c.capacidad_diaria_horas
+        sprint.capacidad_de_equipo_sprint = suma_horas_equipo * sprint.duracion_dias
+        print(sprint.capacidad_de_equipo_sprint)
+        Sprint.objects.filter(id=pk).update(capacidad_equipo=suma_horas_equipo)
+        Sprint.objects.filter(id=pk).update(capacidad_de_equipo_sprint=sprint.capacidad_de_equipo_sprint)
+        id_proyecto = Sprint.objects.get(id=pk).proyecto.id
+        proyecto = Proyec.objects.get(id=id_proyecto)
+        return render(request, 'sprint/capacidad.html', {'sprint': sprint, 'proyecto': proyecto})

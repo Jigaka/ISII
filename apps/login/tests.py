@@ -1,14 +1,7 @@
-import pytest
-from django.test import TestCase, Client
-
-import json
-
-from rest_framework.reverse import reverse
-
 from apps.user.models import User
-from django.test import TestCase
 from apps.proyectos.models import Proyec
-from rest_framework.test import APITestCase, force_authenticate
+from apps.sprint.models import Sprint, HistoriaUsuario
+from rest_framework.test import APITestCase
 
 
 class noLoginTestCase(APITestCase):
@@ -65,9 +58,7 @@ class noLoginTestCase(APITestCase):
 
     def test_sin_login_HU(self):
         '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
-        #user = User.objects.create(first_name='Jose', last_name='Garcete', username='jose7',
-        #                           email="afasdfasd@gmail.com")
-        #Proyec.objects.create(nombre='tienda', descripcion='hola que tal', encargado=user)
+
         response = self.client.get('/proyectos/listar_us/1')
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/proyectos/crear_us/1')
@@ -85,14 +76,18 @@ class noLoginTestCase(APITestCase):
         response = self.client.get('/proyectos/ver_PB/1')
         self.assertEqual(response.status_code, 302)
 
-
+    def test_sin_login_HU2(self):
+        '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
+        response = self.client.get('/proyectos/rechazar_us/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/proyectos/expulsar_integrante/1/1')
+        self.assertEqual(response.status_code, 302)
 
     def test_sin_login_sprint(self):
         '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
         user = User.objects.create(first_name='Jose', last_name='Garcete', username='jose7',
                                    email="afasdfasd@gmail.com")
         Proyec.objects.create(nombre='tienda', descripcion='hola que tal', encargado=user)
-
         response = self.client.get('/sprint/crear_sprint/1')
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/listar_sprint/1')
@@ -110,25 +105,33 @@ class noLoginTestCase(APITestCase):
         response = self.client.get('/sprint/cambio_estadoHU/1')
         self.assertEqual(response.status_code, 302)
 
+    def test_sin_login_sprint2(self):
+        '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
+        user = User.objects.create(first_name='Jose', last_name='Garcete', username='jose7',
+                                   email="afasdfasd@gmail.com")
+        p=Proyec.objects.create(nombre='tienda',  encargado=user)
+        s = Sprint.objects.create(nombre='s1_login', proyecto=p)
+        HistoriaUsuario.objects.create(nombre='vista inicio', sprint=s,
+                                       asignacion=user,  proyecto=p)
 
-    '''def test_con_login_proyectos(self):
-        self.client.force_login(user=self.user)
-        #self.client.login()
-        response = self.client.get('/proyectos/listar_proyectos/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/crear_proyecto/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/listar_proyectos/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/editar_proyecto/1')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/eliminar_proyecto/1')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/listar_integrantes/1')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/ver_proyecto/1')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/mis_proyectos/')
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get('/proyectos/ver_proyecto/1')
-        self.assertEqual(response.status_code, 200)'''
+        response = self.client.get('/sprint/kanban/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/listar_sprint/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/eliminar_sprint/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/editar_sprint/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/listar_equipo/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/listar_us_a_estimar_us/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/estimar_us/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/add_actividad/1/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/ver_actividad/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/reasignar_us/1')
+        self.assertEqual(response.status_code, 302)
+

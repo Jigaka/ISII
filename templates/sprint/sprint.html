@@ -52,7 +52,8 @@
                     {% get_id request.path as id %}
                     {% ifnotequal sprint.estado|stringformat:"s" "Pendiente" %}
                     <li>
-                        <a href='{% url 'sprint:kanban' sprint.id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
+                        <a href='{% url 'sprint:kanban' sprint.id%}' ><i class="menu-icon fas fa-calendar-alt"></i>Tablero Kanban</a>
+                        <a href="{%  url 'sprint:burn_down_chart' sprint.id%}" ><i class="menu-icon fa fa-area-chart"></i>BurnDownChart</a>
                     </li>
                     {%endifnotequal%}
 

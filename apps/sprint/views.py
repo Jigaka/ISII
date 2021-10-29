@@ -190,6 +190,31 @@ class VerActividad(LoginYSuperStaffMixin, TemplateView):
         return render(request, 'sprint/ver_actividad.html', {"actividad": actividad})
 
 
+class VerUS(LoginYSuperStaffMixin, TemplateView):
+    """
+        Vista basada en clase para mostrar un user history
+    """
+    permission_required = ('view_proyec', 'change_proyec')
+
+
+    def get(self, request, *args, **kwargs):
+        """
+            funcion para renderizar un user history
+        """
+        pk = self.kwargs['pk']
+
+        us = HistoriaUsuario.objects.get(id=pk)
+        if us.asignacion_id:
+            desarrollador = User.objects.get(id = us.asignacion_id)
+        else:
+            desarrollador = {
+                'username' : 'Sin asignar'
+            }
+        return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
+
+
+
+
 
 class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
 

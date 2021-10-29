@@ -54,10 +54,12 @@
                         <a href='{% url 'sprint:kanban' sprint.id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
                     </li>
 
+                    {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                     <li>
                         <a href="{%  url 'sprint:listar_equipo' sprint.id%}" ><i class="menu-icon fa fa-users"></i>Equipo de Trabajo</a>
                     </li>
-                    
+                    {%endifequal%}
+
                     {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon"></i> Sprint Planning</a>

@@ -325,12 +325,11 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
                 HistoriaUsuario.objects.filter(id=id_hu).update(fecha_QA=date.today(), estado_anterior='QA')
         return reverse('sprint:kanban', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
 
-class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
+class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceAlProyectoSprint, ListView):
     """Vista basada en clase, se utiliza para listar a los miembros del equipo del sprint"""
     model = Sprint
     template_name = 'sprint/listar_equipo.html'
-    permission_required = ('view_rol', 'add_rol',
-                           'delete_rol', 'change_rol')
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -351,7 +350,7 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         print("EQUIPO", equipo)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
-class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
+class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     #permission_required = ('view_rol', 'add_rol',
     #                       'delete_rol', 'change_rol')
@@ -396,7 +395,7 @@ class AsignarCapacidadDiaria(LoginNOTSuperUser,CreateView ):
     def get_success_url(self, **kwargs):
         return reverse('sprint:listar_equipo', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
 
-class Historial_por_hu( ListView):
+class Historial_por_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = Historial_HU
     template_name = 'sprint/historial_hu.html'
@@ -409,7 +408,7 @@ class Historial_por_hu( ListView):
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/historial_hu.html', {'object_list': historial, 'proyecto': proyecto})
 
-class VisualizarCapacidad(TemplateView):
+class VisualizarCapacidad(LoginYSuperStaffMixin, LoginNOTSuperUser, TemplateView):
     """docstring for VisualizarCapacidad."""
     template_name = 'sprint/capacidad.html'
 

@@ -105,8 +105,11 @@ class HistoriaUsuario(models.Model):
     estimacion_user = models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
-    QA_aprobado=models.BooleanField(default=False)
+    aprobado_QA=models.BooleanField(default=False)
+    rechazado_QA = models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
+    comentario=models.TextField(blank=False, null=True)
+
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):
@@ -117,14 +120,12 @@ class HistoriaUsuario(models.Model):
             self.prioridad_numerica = 3
         super(HistoriaUsuario, self).save(*args, **kwargs)
         # fin de trigger ------
-
     class Meta:
         verbose_name = 'Historia de Usuario'
         verbose_name_plural = 'Historias de Usuario'
 
     def __str__(self):
         return self.nombre
-
     def is_upperclass(self):
         return self.prioridad in {self.Baja, self.Media, self.Alta}
 
@@ -135,15 +136,13 @@ class HistoriaUsuario(models.Model):
         asignacion_user = self.asignacion.all().values_list('username', flat=True)
         return asignacion_user
 
-
-
-
 def calcular_estimacion(sender, instance, **kwargs):
     if (instance.estimacion==0 and  instance.estimacion_scrum!=0 and instance.estimacion_user!=0):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
         Historial_HU.objects.create(
             descripcion=' Resultado del Planning Poker: ' + x.__str__(), hu=HistoriaUsuario.objects.get(id=instance.id))
+
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
 class CapacidadDiariaEnSprint(models.Model):
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")
@@ -176,9 +175,12 @@ class Historial_HU(models.Model):
 class Estado_HU(models.Model):
     id = models.AutoField(primary_key=True)
     hu = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_hu")
-    sprint=models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_sprint")
+    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_sprint")
     estado = models.TextField(blank=False, null=False)
     prioridad = models.TextField(blank=False, null=False, default='Baja')
     desarrollador = models.TextField(blank=False, null=False, default='User')
-    PP= models.IntegerField(blank=False, null=False, default=0)
+    PP = models.IntegerField(blank=False, null=False, default=0)
+    aprobado_QA = models.BooleanField(default=False)
+    rechazado_QA = models.BooleanField(default=False)
+    comentario = models.TextField(blank=False, null=True)
 

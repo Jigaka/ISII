@@ -1,6 +1,5 @@
-from django import  forms
-from django.forms.widgets import Widget
-from .models import CapacidadDiariaEnSprint, Proyec, Sprint, HistoriaUsuario, Actividad
+from django import forms
+from .models import CapacidadDiariaEnSprint, Proyec, Sprint, HistoriaUsuario, Actividad,Estado_HU
 from datetime import date
 
 
@@ -108,4 +107,22 @@ class CapacidadDiariaEnSprintForm(forms.ModelForm):
         fields=['capacidad_diaria_horas']
         labels = {
             'capacidad_diaria_horas': 'Capacidad diaria (horas)'
+        }
+
+class aprobarQAForm(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['aprobado_QA', 'comentario']
+        labels = {
+            'aprobado_QA': 'Aprobar Historia de Usuario ',
+            'comentario':'Comentario'
+        }
+
+class rechazarQAForm(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['rechazado_QA','comentario']
+        labels = {
+            'rechazado_QA': 'Rechazar Historia de Usuario ',
+            'comentario': 'Comentario'
         }

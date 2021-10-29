@@ -111,6 +111,21 @@ Gestion de Proyectos | Tabla Kanban
                 {% if us.userHistory.estado == 'QA' %}
                     <div id={{ us.userHistory.id }} class="card">
                         {{ us.userHistory.nombre }}
+                        {%  if us.userHistory.estado_hu.first.aprobado_QA == False and us.userHistory.estado_hu.first.rechazado_QA == False %}
+                        <button onclick="aprobarQA('{% url 'sprint:aprobarQA' id us.userHistory.id %}')" style="float: right" title="Aprobar Historia de Usuario"><i class="ti-check"></i></button>
+                        <br><br>
+                        <button onclick="rechazarQA('{% url 'sprint:rechazarQA' id us.userHistory.id %}')" style="float: right" title="Rechazar Historia de Usuario"><i class="ti-close"></i></button>
+                        <br><br>
+                        {% endif %}
+                        {%  if us.userHistory.estado_hu.first.aprobado_QA == True %}
+                            <p>Aprobado</p>
+                            {{ us.userHistory.estado_hu.first.comentario }}
+                          {% endif %}
+                        {%  if us.userHistory.estado_hu.first.rechazado_QA == True %}
+                            <p>Rechazado</p>
+                             {{ us.userHistory.estado_hu.first.comentario }}
+                          {% endif %}
+
                     </div>
                 {% endif %}
             {% endfor %}
@@ -119,6 +134,10 @@ Gestion de Proyectos | Tabla Kanban
     <div class="modal fade" id="editarActividad" role="dialog">
     </div>
     <div class="modal fade" id="addActividad" role="dialog">
+    </div>
+    <div class="modal fade" id="aprobarQA" role="dialog">
+    </div>
+    <div class="modal fade" id="rechazarQA" role="dialog">
     </div>
 {% endblock body %}
 {% block extrajs %}
@@ -129,6 +148,16 @@ Gestion de Proyectos | Tabla Kanban
 
         function editActividad(url) {
             $('#editarActividad').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+        function aprobarQA(url) {
+            $('#aprobarQA').load(url, function () {
+                $(this).modal('show');
+            })
+        }
+        function rechazarQA(url) {
+            $('#rechazarQA').load(url, function () {
                 $(this).modal('show');
             })
         }

@@ -18,7 +18,7 @@ Gestion de Proyectos | Listado de historia de usuarios
             <div class="col-md-4">
                 <button type="button" style="float:right" class="btn boton-crear-us">
                     <a href="{%  url 'sprint:configurar_equipo' id%}">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-user-plus"></i>
                         Añadir miembro(s)
                     </a>
                 </button>
@@ -35,25 +35,27 @@ Gestion de Proyectos | Listado de historia de usuarios
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Capacidad diaria</th>
-                  <th></th>
+                  <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
 
-              {% for miembros in object_list  %}
+              {% for miembro in object_list  %}
                <tr>
-                 <td>{{ miembros.id }}</td>
-                 <td>{{ miembros.first_name }}</td>
+                 <td>{{ miembro.id }}</td>
+                 <td>{{ miembro.first_name }}</td>
                 {%  if capacidad.exists %}
                    {% for c in capacidad  %}
-                    {%  if c.usuario_id == miembros.id %}
+                    {%  if c.usuario_id == miembro.id %}
                       <td>{{ c.capacidad_diaria_horas }} horas</td>
                     {%  endif %}
                    {% endfor %}
                 {% else %}
                   <td>Sin registros</td>
                 {%  endif %}
-                 <td></td>
+                 <td>
+                  <a href="{%  url 'sprint:asignar_capacidad' sprint.id miembro.id%}"> Asignar capacidad diaria</a>
+                 </td>
                </tr>
              {% endfor %}
             </tbody>
@@ -64,15 +66,25 @@ Gestion de Proyectos | Listado de historia de usuarios
     </div>
 </div>
 <div class="col-md-4">
-  {% if sprint %}
-    <h6>Capacidad del Sprint: {{ sprint.capacidad_de_equipo_sprint }} horas</h6>
-    <h6>Duración del Sprint: {{ sprint.duracion_dias }} días</h6>
-  {%  endif %}
+  <div class="actividad" onclick="verCapacidad('{% url 'sprint:capacidad' sprint.id %}')">
+      <button type="button" class="btn btn-info" name="button">Ver capacidad del Sprint</button>
+  </div>
 
+
+</div>
+<div class="modal fade" id="verCapacidad" role="dialog">
 </div>
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'js/usuarios/index.js' %}"></script>
+    <script type="text/javascript">
+      function verCapacidad(url) {
+          $('#verCapacidad').load(url, function () {
+              $(this).modal('show');
+          })
+      }
+    </script>
+
 {% endblock extrajs %}

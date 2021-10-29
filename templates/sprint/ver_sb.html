@@ -60,14 +60,12 @@ Gestion de Proyectos | Sprint Backlog
                  <td>{{ objeto.descripcion }}</td>
                  <td>{{ objeto.prioridad }}</td>
                  <td>{{ objeto.asignacion }}</td>
-                 <td>{{ objeto.estimacion }}
+                 <td>{{ objeto.estimacion }} horas
                      <div>
-                        {% ifequal request.user.username|stringformat:"s" us.asignacion|stringformat:"s" %}
-
-                            {% if us.estimacion == 0%}
+                        {% ifequal request.user.username|stringformat:"s" objeto.asignacion|stringformat:"s" %}
+                            {% if objeto.estimacion == 0%}
                             <a href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
                             {% endif %}
-
                         {%endifequal%}
                      </div>
                  </td>

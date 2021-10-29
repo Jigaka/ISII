@@ -7,6 +7,7 @@ from apps.proyectos.models import Proyec
 from apps.user.models import User
 # Create your models here.
 class Sprint(models.Model):
+    '''clase correspondiente a un sprint '''
     Pendiente = 'Pendiente'
     Iniciado = 'Iniciado'
     Finalizado = 'Finalizado'
@@ -17,8 +18,8 @@ class Sprint(models.Model):
     )
     nombre = models.CharField(max_length=200, blank=False, null=False)
     proyecto = models.ForeignKey(Proyec, blank=False, null=False, on_delete=models.CASCADE, related_name="proyecto_s")
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
+    fecha_inicio = models.DateField(blank=True, null=True)
+    fecha_fin = models.DateField(blank=True, null=True)
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Pendiente')  # pendiente,iniciado,finalizado
     equipo = models.ManyToManyField(User, related_name="equipo_s")
     fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True, blank=True, null=True)
@@ -58,9 +59,12 @@ class Actividad(models.Model):
     comentario = models.TextField(blank=False, null=False)
     id_sprint = models.IntegerField(null=True, blank=True)
     fecha = models.DateField(null=True)
+    def __str__(self):
+        return self.nombre
 
 
 class HistoriaUsuario(models.Model):
+    '''clase correspondiente a una historia de usuario '''
     Pendiente = 'Pendiente'
     ToDo = 'ToDo'
     Doing = 'Doing'
@@ -109,7 +113,6 @@ class HistoriaUsuario(models.Model):
     rechazado_QA = models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
     comentario=models.TextField(blank=False, null=True)
-
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):
@@ -133,10 +136,12 @@ class HistoriaUsuario(models.Model):
         return self.estado in {self.Pendiente, self.ToDo, self.Doing, self.Done, self.QA}
 
     def obtener_asignacion(self):
+        ''' funcion para obtener el usuario encargado de la historia de usuario '''
         asignacion_user = self.asignacion.all().values_list('username', flat=True)
         return asignacion_user
 
 def calcular_estimacion(sender, instance, **kwargs):
+    ''' funcion para calcular el resultado del planing poker , la estimacion final '''
     if (instance.estimacion==0 and  instance.estimacion_scrum!=0 and instance.estimacion_user!=0):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
@@ -145,27 +150,15 @@ def calcular_estimacion(sender, instance, **kwargs):
 
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
 class CapacidadDiariaEnSprint(models.Model):
+    ''' clase que relaciona un miembro del equipo de un sprint con el sprint y la capacidad de trabajo de ese miembro del equipo '''
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")
     sprint= models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=False, null=False, related_name="el_sprint")
     capacidad_diaria_horas=models.PositiveIntegerField(null=False, default=8)
     models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
 
-def capacidad_equipo_por_sprint(sender, instance, **kwargs):
-    """calcula la suma de todas las horas de trabajo de los desarrolladores y se multiplica por la cantidad de dias del sprint"""
-    sprint = instance.sprint
-    print("MODELSS", sprint.id)
-    capacidad_diaria = instance.capacidad_diaria_horas
-    print(Sprint.objects.filter(id=sprint.id).first().capacidad_equipo)
-    capacidad_suma = Sprint.objects.filter(id=sprint.id).first().capacidad_equipo + capacidad_diaria
-    Sprint.objects.filter(id=sprint.id).update(capacidad_equipo=capacidad_suma)
-    print("ESTOY EN MODELS ",capacidad_suma)
-    duracion = sprint.duracion_dias
-    calculo_de_la_capacidad = duracion*capacidad_suma
-    print("Duracion ",duracion)
-    print("calculo ",calculo_de_la_capacidad)
-    Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
-post_save.connect(capacidad_equipo_por_sprint, sender=CapacidadDiariaEnSprint)
+
 class Historial_HU(models.Model):
+    ''' clase para guardar informacion el historial de cambios de una historia de usuario desde su creacion hasta su aprobacion en el QA'''
     id = models.AutoField(primary_key=True)
     fecha_creacion = models.DateField("fecha cre", auto_now=False, auto_now_add=True, blank=True, null=True)
     descripcion = models.TextField(blank=False, null=False)
@@ -173,6 +166,7 @@ class Historial_HU(models.Model):
     hu = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True, related_name="historial_hu")
 
 class Estado_HU(models.Model):
+    ''' clase para guardar informacion de una historia de usuario en un sprint en especifico'''
     id = models.AutoField(primary_key=True)
     hu = models.ForeignKey(HistoriaUsuario, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_hu")
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True,related_name="estado_sprint")
@@ -183,4 +177,3 @@ class Estado_HU(models.Model):
     aprobado_QA = models.BooleanField(default=False)
     rechazado_QA = models.BooleanField(default=False)
     comentario = models.TextField(blank=False, null=True)
-

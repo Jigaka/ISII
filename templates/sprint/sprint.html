@@ -37,7 +37,7 @@
                 <ul class="nav navbar-nav">
                     <li id="titulo-proyecto">
                         {{proyecto.nombre}}
-                        
+
                     </li>
                     <li id="titulo-sprint">
                         {{sprint.nombre}}
@@ -50,9 +50,12 @@
                     </li>
 
                     {% get_id request.path as id %}
+                    {% ifnotequal sprint.estado|stringformat:"s" "Pendiente" %}
                     <li>
                         <a href='{% url 'sprint:kanban' sprint.id%}' ><i class="menu-icon null"></i>Tablero Kanban</a>
                     </li>
+                    {%endifnotequal%}
+
                     {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                     <li>
                         <a href="{%  url 'sprint:listar_equipo' sprint.id%}" ><i class="menu-icon fa fa-users"></i>Equipo de Trabajo</a>
@@ -64,8 +67,6 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon"></i> Sprint Planning</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-bars"></i> <a href="{%  url 'sprint:ver_sb' sprint.id%}">Sprint Backlog</a></li>
-
-                            <li><i class="fa fa-user"></i> <a href="{%  url 'sprint:asignar_capacidad' sprint.id%}">Asignar capacidad diaria</a></li>
                         </ul>
                     </li>
                     {%endifequal%}

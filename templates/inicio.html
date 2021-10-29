@@ -170,7 +170,7 @@
             {% for mensaje in messages %}
                 html_mensaje += '{{ mensaje }}';
             {% endfor %}
-            notificacionError(html_mensaje);
+            notificacionSuccess(html_mensaje);
         {% endif %}
     </script>
     {% block extrajs %}

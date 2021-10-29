@@ -7,8 +7,8 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView,Te
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
      LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
-
-from datetime import date
+import pandas as pd
+from datetime import date, timedelta
 
 
 # Create your views here.
@@ -523,3 +523,48 @@ class VisualizarCapacidad(LoginYSuperStaffMixin, LoginNOTSuperUser, TemplateView
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/capacidad.html', {'sprint': sprint, 'proyecto': proyecto})
+
+class BurnDownChart(TemplateView):
+    """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
+    template_name = 'sprint/burn_down_chart3.html'
+    model = Actividad
+
+    def get(self, request, *args, **kwargs):
+        """
+            funcion para renderizar el menu del sprint
+        """
+
+        fechas = []
+        pk = self.kwargs['pk']
+        sprint = Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        actividad = Actividad.objects.filter(id_sprint=sprint.id).all().order_by('fecha')
+        for a in actividad:
+            print(a.fecha)
+        fecha_inicio = sprint.fecha_inicio
+        fecha_fin = sprint.fecha_fin
+        datos = [0]*(sprint.duracion_dias+1)
+        print(datos)
+        fecha_actual = date.today()
+        for f in range(sprint.duracion_dias):
+            d = "Day " + str(f+1)
+            fechas.append(d)
+        dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin)
+        horas_disponibles = sprint.capacidad_de_equipo_sprint
+        datos[0] = sprint.capacidad_de_equipo_sprint
+        dia = 1
+        for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
+            for i in actividad:
+                if time==i.fecha and dia < (sprint.duracion_dias+1):
+                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
+                    datos[dia] = sprint.capacidad_de_equipo_sprint
+                    dia += 1
+        dia = 0
+        print(datos)
+        for i in datos:
+            if i == 0:
+                datos[dia] = sprint.capacidad_de_equipo_sprint
+            dia +=1
+        print("Fechas", fechas)
+        print(datos)
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})

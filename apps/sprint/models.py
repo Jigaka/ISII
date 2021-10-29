@@ -110,7 +110,7 @@ class HistoriaUsuario(models.Model):
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
     QA_aprobado=models.BooleanField(default=False)
-    actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
+    actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):
@@ -158,21 +158,7 @@ class CapacidadDiariaEnSprint(models.Model):
     capacidad_diaria_horas=models.PositiveIntegerField(null=False, default=8)
     models.UniqueConstraint(fields = ['usuario', 'sprint'], name = 'restriccion_par_usuario_sprint')
 
-def capacidad_equipo_por_sprint(sender, instance, **kwargs):
-    """calcula la suma de todas las horas de trabajo de los desarrolladores y se multiplica por la cantidad de dias del sprint"""
-    sprint = instance.sprint
-    #print("MODELSS", sprint.id)
-    capacidad_diaria = instance.capacidad_diaria_horas
-    #print(Sprint.objects.filter(id=sprint.id).first().capacidad_equipo)
-    capacidad_suma = Sprint.objects.filter(id=sprint.id).first().capacidad_equipo + capacidad_diaria
-    Sprint.objects.filter(id=sprint.id).update(capacidad_equipo=capacidad_suma)
-    #print("ESTOY EN MODELS ",capacidad_suma)
-    duracion = sprint.duracion_dias
-    calculo_de_la_capacidad = duracion*capacidad_suma
-    #print("Duracion ",duracion)
-    #print("calculo ",calculo_de_la_capacidad)
-    Sprint.objects.filter(id=sprint.id).update(capacidad_de_equipo_sprint=calculo_de_la_capacidad)
-post_save.connect(capacidad_equipo_por_sprint, sender=CapacidadDiariaEnSprint)
+
 class Historial_HU(models.Model):
     ''' clase para guardar informacion el historial de cambios de una historia de usuario desde su creacion hasta su aprobacion en el QA'''
     id = models.AutoField(primary_key=True)
@@ -190,4 +176,3 @@ class Estado_HU(models.Model):
     prioridad = models.TextField(blank=False, null=False, default='Baja')
     desarrollador = models.TextField(blank=False, null=False, default='User')
     PP= models.IntegerField(blank=False, null=False, default=0)
-

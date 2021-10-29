@@ -84,7 +84,7 @@ class HistoriaUsuarioModelTest(TestCase):
         s=Sprint.objects.create(nombre='sprint1', proyecto=p)
         h=HistoriaUsuario.objects.create(nombre='vista inicio' , sprint=s, descripcion='agregar funcionalidad', asignacion=user, estado='ToDo', estimacion=0,
                                        prioridad='Media', proyecto=Proyec.objects.get(nombre='tienda1'),
-                                       aprobado_PB=True, rechazado_PB=False, sprint_backlog=True, estimacion_scrum=5, estimacion_user=11, QA_aprobado=True)
+                                       aprobado_PB=True, rechazado_PB=False, sprint_backlog=True, estimacion_scrum=5, estimacion_user=11, aprobado_QA=True)
         h.actividades.add(a1)
         h.actividades.add(a2)
         Estado_HU.objects.create(hu=h, sprint=s, estado='Pendiente')

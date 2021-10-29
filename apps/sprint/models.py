@@ -111,7 +111,7 @@ class HistoriaUsuario(models.Model):
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
     aprobado_QA=models.BooleanField(default=False)
     rechazado_QA = models.BooleanField(default=False)
-    actividades = models.ManyToManyField(Actividad, related_name = 'actividades')
+    actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     comentario=models.TextField(blank=False, null=True)
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------

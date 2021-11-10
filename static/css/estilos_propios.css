@@ -83,3 +83,14 @@
 .boton-crear-us:hover a{
     color:#03A9F3
 }
+
+.boton-iniciar-sprint a{
+    color:white;
+}
+.boton-iniciar-sprint{
+    padding:5px 10px;
+    background-color: green;
+}
+.boton-iniciar-sprint:hover{
+    background-color: darkgreen;
+}

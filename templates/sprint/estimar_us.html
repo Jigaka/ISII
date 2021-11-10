@@ -1,31 +1,36 @@
 {% extends 'sprint/sprint.html' %}
+{% load static %}
 {% block titulo %}
-  Gestion de Proyectos | Asignar y estimar Historia de Usuario
+Gestion de Proyectos | Estimar Historia de Usuario
 {% endblock titulo %}
-{% block body %}
-<form method="POST">
-  {% csrf_token %}
-  {% if error %}
-    <h2>{{ error }}</h2>
-  {% else %}
-    <div class="card">
-      <div class="card-header">
-          <strong>Estimar Historia de Usuario</strong>
-      </div>
-      <div class="card-body card-block">
-        <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
-          <div class="row form-group">
-              <div class="col col-md-3">{{ form.estimacion_user.label}}</div>
-              <div class="col-12 col-md-9">{{ form.estimacion_user}}</div>
-          </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary">Guardar</button>
-                <a class="btn btn-primary" href="{%  url 'sprint:ver_sb'  form.instance.sprint_id %}" role="button">Cancelar</a>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
 
-            </div>
-          </form>
-        </div>
-      </div>
-    {% endif %}
-</form>
+{% block body %}
+
+<div class="card">
+    <div class="card-header">
+        <strong>Estimar Historia de Usuario</strong>
+    </div>
+    <div class="card-body card-block">
+      <form method="POST">
+        <style>
+          p {
+            color:black;
+          }
+        </style>
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a class="btn btn-primary" href="{%  url 'sprint:ver_sb'  form.instance.sprint_id %}" role="button">Cancelar</a>
+      </form>        
+    </div>
+</div>
 {% endblock body %}
+
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

@@ -420,7 +420,15 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
         us = proyecto.proyecto.exclude(aprobado_PB=False)
-        return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
+
+        '''
+        Si se ha eliminado un sprint en planificación, reasignar sus USs asignadas al estado 'Pendiente'
+        '''
+        for historia in us:
+            if historia.estado=='ToDo' and not historia.sprint:
+                HistoriaUsuario.objects.filter(id=historia.id).update(estado='Pendiente',estimacion_user=0,estimacion_scrum=0, estimacion=0, asignacion=None)
+        us_updated = proyecto.proyecto.exclude(aprobado_PB=False)
+        return render(request, 'proyectos/ver_PB.html', {'object_list': us_updated,'proyecto':proyecto})
 
 
 class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):

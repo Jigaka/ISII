@@ -1,9 +1,8 @@
-from typing import List
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render, get_object_or_404
-from django.contrib.auth.models import Permission, Group
+
+from django.shortcuts import redirect, render
+from django.contrib.auth.models import  Group
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform, cambiarEstadoProyect, asignarEquipoProyect
-from .models import Proyec, RolProyecto
+from .models import Proyec
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
@@ -419,7 +418,7 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.exclude(aprobado_PB=False)
+        us = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
 

@@ -68,7 +68,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                                                  PP=hu.estimacion)
                         if hu.estado != 'Done':
                             HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                            prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
+                                                                            prioridad='Alta',prioridad_numerica=3 , estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
                             Historial_HU.objects.create(
                                 descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
                                     id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(

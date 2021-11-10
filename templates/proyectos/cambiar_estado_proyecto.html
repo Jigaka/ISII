@@ -10,21 +10,13 @@
   {% else %}
     <div class="card">
       <div class="card-header">
-          <strong>Actualizar datos del proyecto</strong>
+          <strong>Actualizar datos del proyecto <i>{{proyecto.nombre}}</i></strong>
       </div>
       <div class="card-body card-block">
         <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
-          <div class="row form-group">
-              <div class="col col-md-3">{{ form.nombre.label}}</div>
-              <div class="col-12 col-md-9">{{ form.nombre}}</div>
-          </div>
-             <div class="row form-group">
-              <div class="col col-md-3">{{ form.descripcion.label}}</div>
-              <div class="col-12 col-md-9">{{ form.descripcion}}</div>
-            </div>
             <div class="row form-group">
-              <div class="col col-md-3">{{ form.dias_estimados.label}}</div>
-              <div class="col-12 col-md-9">{{ form.dias_estimados}}</div>
+              <div class="col col-md-3">{{ form.estado.label}}</div>
+              <div class="col-12 col-md-9">{{ form.estado}}</div>
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Guardar</button>

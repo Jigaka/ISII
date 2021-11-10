@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from .views import CrearProyecto, ListarProyectos, EditarProyecto, EliminarProyecto, \
     Proyecto, ListadoIntegrantes, listarProyectosUsuario,listarProyectoporEncargado, CrearUS, EditarUs, \
-    ListarUS,EliminarUS, aprobarUS,rechazarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes
+    ListarUS,EliminarUS, aprobarUS,rechazarUS,ProductBacklog, Listar_us_a_estimar,estimarUS, ExpulsarIntegrantes, cambiarEstadoProyecto, asignarEquipoProyecto
 
 
 
@@ -11,6 +11,8 @@ urlpatterns = [
     path('crear_proyecto/',CrearProyecto.as_view(), name='crear_proyecto'),
     path('listar_proyectos/',ListarProyectos.as_view(), name='listar_proyectos'),
     path('editar_proyecto/<int:pk>/',EditarProyecto.as_view(), name='editar_proyecto'),
+    path('cambiar_estado_proyecto/<int:pk>/',cambiarEstadoProyecto.as_view(), name='cambiar_estado_proyecto'),
+    path('asignar_equipo_proyecto/<int:pk>/',asignarEquipoProyecto.as_view(), name='asignar_equipo_proyecto'),
     path('eliminar_proyecto/<int:pk>/',EliminarProyecto.as_view(), name='eliminar_proyecto'),
     path('listar_integrantes/<int:pk>',ListadoIntegrantes.as_view(), name='listar_integrantes'),
     # path('asignar_roles/<int:pk>/',AsignarRolProyecto.as_view(), name='asignar_roles'),

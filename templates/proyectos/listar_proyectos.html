@@ -45,14 +45,16 @@ Gestion de Proyectos | Listado de Proyectos
                         <td>{{ proyec.estado }}</td>
 
                         <td style="text-align: left;" class="opciones">
+                            {% if request.user in proyec.equipo.all%}
+                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
+                            {% endif %}
                             {% if  request.user.id == proyec.encargado.id %}
-                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar</a>
+                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar datos del proyecto</a>
+                                <a href="{%  url 'proyectos:asignar_equipo_proyecto' proyec.id %}"> Asignar equipo</a>
+                                <a href="{%  url 'proyectos:cambiar_estado_proyecto' proyec.id %}">Cambiar estado</a>
                             {% endif %}
                             {% if  request.user.is_superuser %}
                                 <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
-                            {% endif %}
-                            {% if request.user in proyec.equipo.all%}
-                                <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
                             {% endif %}
                         </td>
                     </tr>

@@ -2,7 +2,7 @@ from typing import List
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.models import Permission, Group
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform, cambiarEstadoProyect, asignarEquipoProyect
 from .models import Proyec, RolProyecto
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
@@ -56,6 +56,39 @@ class EditarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     form_class = editarProyect
     success_url = reverse_lazy('proyectos:mis_proyectos')
 
+'''
+Función para modificar el estado del proyecto
+'''
+class cambiarEstadoProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
+    model = Proyec
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'proyectos/cambiar_estado_proyecto.html'
+    form_class = cambiarEstadoProyect
+    success_url = reverse_lazy('proyectos:mis_proyectos')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id_proyecto = self.kwargs['pk']
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+
+'''
+Función para asignar euqipo al proyecto
+'''
+class asignarEquipoProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
+    model = Proyec
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    template_name = 'proyectos/asignar_equipo_proyecto.html'
+    form_class = asignarEquipoProyect
+    success_url = reverse_lazy('proyectos:mis_proyectos')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id_proyecto = self.kwargs['pk']
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
 
 '''
 Funcion para eliminar un proyecto.

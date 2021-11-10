@@ -24,14 +24,28 @@ class ProyectoForm(forms.ModelForm):
 class editarProyect(forms.ModelForm):
     class Meta:
         model = Proyec
-        fields = ['nombre', 'descripcion','estado','equipo','dias_estimados']
+        fields = ['nombre', 'descripcion','dias_estimados']
         labels = {
             'nombre': 'Nombre del proyecto',
             'descripcion': 'Descripcion del proyecto',
-            'estado': 'Estado del proyecto',
-            'equipo':'Equipo de trabajo',
             'dias_estimados':'Cantdad de dias estimados'
         }
+
+class cambiarEstadoProyect(forms.ModelForm):
+    class Meta:
+        model = Proyec
+        fields = ['estado']
+        labels = {
+            'estado': 'Estado del proyecto',
+        }        
+
+class asignarEquipoProyect(forms.ModelForm):
+    class Meta:
+        model = Proyec
+        fields = ['equipo']
+        labels = {
+             'equipo':'Equipo de trabajo',
+        }  
 
 class CrearUSForm(forms.ModelForm):
     class Meta:

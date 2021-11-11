@@ -15,6 +15,11 @@
     return total;
   }
 
+/**
+* elementId:id="burndown43"
+  burndownData: guarda los datos (horas trabajadas)
+  scopeChange: linea ideal
+*/
   function showBurnDown(elementId, burndownData, scopeChange = []) {
 
     var speedCanvas = document.getElementById(elementId);
@@ -22,9 +27,13 @@
     Chart.defaults.global.defaultFontFamily = "Arial";
     Chart.defaults.global.defaultFontSize = 14;
 
-    const totalHoursInSprint = burndownData[0];
+    const totalHoursInSprint = burndownData[0]; // Capacidad del sprint
     const idealHoursPerDay = totalHoursInSprint / {{sprint.duracion_dias|safe }};
     i = 0;
+    ideal = []
+    for (var j = 0, n = {{sprint.duracion_dias|safe }} +1 ; j < n; j++) {
+        ideal[j] = Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, j))
+    };
 
     var speedData = {
       labels: {{fechas|safe}},
@@ -44,19 +53,7 @@
           lineTension: 0,
           borderDash: [5, 5],
           fill: false,
-          data: [
-          //Linea ideal
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 0)), // 1
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 1)), // 2
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 2)), // 3
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 3)), // 4
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 4)), // 5
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 5)), // 6
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 6)), // 7
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 7)), // 8
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 8)), // 9
-            Math.round(totalHoursInSprint - (idealHoursPerDay * i++) + sumArrayUpTo(scopeChange, 9))  // 10
-          ]
+          data: ideal
         },
       ]
     };

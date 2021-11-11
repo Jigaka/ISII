@@ -32,7 +32,7 @@ class SprintForm(forms.ModelForm):
             raise forms.ValidationError('¡La fecha de inicio no puede estar en el pasado!')
 
         #raise forms.ValidationError(self.id_proyecto)
-        
+
         sprints=Sprint.objects.filter(proyecto__id=self.id_proyecto).exclude(id=self.id_sprint)
         #raise forms.ValidationError(str(self.id_proyecto)+"    "+str(self.id_sprint))
         #raise forms.ValidationError(self.id_proyecto) #levanto este error en pruebas para ver qué id guardó
@@ -76,7 +76,22 @@ class CrearActividadForm(forms.ModelForm):
             'nombre' : 'Nombre de la actividad',
             'comentario' : 'Escribe un breve comentario',
             'fecha': 'ingrese la fecha de la actividad',
-            'hora_trabajo' : 'Indique las horas dedicadas'
+            'hora_trabajo' : 'Horas trabajadas'
+        }
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese una actividad'
+                }
+            ),
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
         }
 
 class configurarEquipoSprintform(forms.ModelForm):

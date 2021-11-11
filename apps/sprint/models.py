@@ -70,12 +70,14 @@ class HistoriaUsuario(models.Model):
     Doing = 'Doing'
     Done = 'Done'
     QA = 'QA'
+    Cancelado= 'Cancelado'
     STATUS_CHOICES = (
         (Pendiente, "Pendiente"),
         (ToDo, 'ToDo'),
         (Doing, 'Doing'),
         (Done, 'Done'),
-        (QA, 'QA')
+        (QA, 'QA'),
+        (Cancelado, 'Cancelado')
     )
 
     Baja = 'Baja'
@@ -110,6 +112,7 @@ class HistoriaUsuario(models.Model):
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
     aprobado_QA=models.BooleanField(default=False)
+    cancelado= models.BooleanField(default=False)
     rechazado_QA = models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     comentario=models.TextField(blank=False, null=True)

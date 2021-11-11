@@ -1,12 +1,14 @@
 from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form, aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
+from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form,\
+    aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm, cancelar_huform
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
-     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, \
+    ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
 import pandas as pd
 from datetime import date, timedelta
 
@@ -319,9 +321,7 @@ class AprobarQA(LoginYSuperStaffMixin, CreateView):
         aprobado_QA = request.POST['aprobado_QA']
         comentario = request.POST['comentario']
         if aprobado_QA=='on':
-            us_copia = HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,
-                                                                                                comentario=comentario,
-                                                                                                estado='Aprobado_QA')
+            HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,comentario=comentario,estado='Aprobado_QA')
             HistoriaUsuario.objects.filter(id=us).update(aprobado_QA=True , comentario=comentario)
             Historial_HU.objects.create(
                  descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
@@ -437,11 +437,8 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceA
         sprint = Sprint.objects.get(id=pk)
         equipo = sprint.equipo.all()
         capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all()
-        print(CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all())
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-        print(id_proyecto)
-        print("EQUIPO", equipo)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
 class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView ):
@@ -483,7 +480,6 @@ class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView
         id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
-        #context['estoyEnEquipo']=estoyEnEquipo
         return context
 
     def get_success_url(self, **kwargs):
@@ -568,3 +564,29 @@ class BurnDownChart(TemplateView):
         print("Fechas", fechas)
         print(datos)
         return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})
+class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+    """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol', 'delete_rol', 'change_rol')
+    template_name = 'sprint/cancelar_hu.html'
+    form_class = cancelar_huform
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+    def post(self, request, *args, **kwargs):
+        id = request.path.split('/')[-1]
+        cancelado=request.POST['cancelado']
+        if cancelado== 'on':
+            HistoriaUsuario.objects.filter(id=id).update(cancelado=True, estado='Cancelado')
+        else:
+            HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')
+        return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
+    def get_success_url(self):
+        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })

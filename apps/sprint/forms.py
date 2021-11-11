@@ -126,3 +126,10 @@ class rechazarQAForm(forms.ModelForm):
             'rechazado_QA': 'Rechazar Historia de Usuario ',
             'comentario': 'Comentario'
         }
+class cancelar_huform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['cancelado']
+        labels = {
+            'cancelado': 'Cancelar esta historia de usuario'
+        }

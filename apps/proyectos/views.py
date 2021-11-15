@@ -1,6 +1,6 @@
-
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import  Group
+from django.template.loader import get_template
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform, cambiarEstadoProyect, asignarEquipoProyect
 from .models import Proyec
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
@@ -8,7 +8,8 @@ from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginY
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.models import User, Rol
-
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives, send_mail
 
 '''
 Funcion para crear un proyecto.
@@ -366,6 +367,38 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/aprobar_us.html'
     form_class = aprobar_usform
+    def post(self, request, *args, **kwargs):
+        id = request.path.split('/')[-1]
+        aprobado_PB=request.POST['aprobado_PB']
+        if aprobado_PB== 'on' or aprobado_PB== True:
+            HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+            idp = HistoriaUsuario.objects.get(id=id).product_owner.id
+            user = User.objects.get(id=idp)
+            context = {'hu': HistoriaUsuario.objects.get(id=id)}
+            template = get_template('correos/aprobado_pb_correo.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                           [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
+        else:
+            HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=False)
+        return redirect('proyectos:listar_us', HistoriaUsuario.objects.get(id=id).proyecto.id)
+    def form_valid(self, form):
+        form.instance.rechazado_PB = False
+        HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+        idp = HistoriaUsuario.objects.get(id=id).product_owner.id
+        user = User.objects.get(id=idp)
+        context = {'u': user.id}
+        template = get_template('correos/aprobado_pb_correo.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Pruebaa', 'Gestor', settings.EMAIL_HOST_USER, [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        print('enviando correo')
+        email.send()
+        return super(aprobarUS, self).form_valid(form)
+
+
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -378,9 +411,7 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
 
-    def form_valid(self, form):
-        form.instance.rechazado_PB = False
-        return super(aprobarUS, self).form_valid(form)
+
 
     def get_success_url(self):
         id_hu = self.object.pk

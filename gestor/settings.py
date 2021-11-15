@@ -129,6 +129,14 @@ ACCOUNT_SESSION_REMEMBER = False
 SOCIALACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'
+DEFAULT_CHARSET='utf-8'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'delia23072307@gmail.com'
+EMAIL_HOST_PASSWORD = '230723072307'
+EMAIL_USE_TLS = True
+
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url

@@ -1,6 +1,8 @@
 from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.template.loader import get_template
+
 from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form,\
     aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm, cancelar_huform
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
@@ -9,6 +11,8 @@ from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
      LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, \
     ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 import pandas as pd
 from datetime import date, timedelta
 
@@ -584,6 +588,24 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
         id = request.path.split('/')[-1]
         cancelado=request.POST['cancelado']
         if cancelado== 'on':
+            HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+            idp = HistoriaUsuario.objects.get(id=id).product_owner.id
+            user = User.objects.get(id=idp)
+            context = {'hu': HistoriaUsuario.objects.get(id=id)}
+            template = get_template('correos/canceladoPO.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
+            if HistoriaUsuario.objects.get(id=id).asignacion != None:
+                idd= HistoriaUsuario.objects.get(id=id).asignacion.id
+                user = User.objects.get(id=idd)
+                context = {'hu': HistoriaUsuario.objects.get(id=id)}
+                template = get_template('correos/canceladoAsignacion.html')
+                content = template.render(context)
+                email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+                email.attach_alternative(content, 'text/html')
+                email.send()
             HistoriaUsuario.objects.filter(id=id).update(cancelado=True, estado='Cancelado')
         else:
             HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')

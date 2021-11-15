@@ -1,12 +1,18 @@
 from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form, aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
+from django.template.loader import get_template
+
+from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form,\
+    aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm, cancelar_huform
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
-     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, \
+    ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 import pandas as pd
 from datetime import date, timedelta, datetime
 
@@ -68,7 +74,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                                                  PP=hu.estimacion)
                         if hu.estado != 'Done':
                             HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                            prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
+                                                                            prioridad='Alta',prioridad_numerica=3 , estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
                             Historial_HU.objects.create(
                                 descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
                                     id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
@@ -319,9 +325,7 @@ class AprobarQA(LoginYSuperStaffMixin, CreateView):
         aprobado_QA = request.POST['aprobado_QA']
         comentario = request.POST['comentario']
         if aprobado_QA=='on':
-            us_copia = HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,
-                                                                                                comentario=comentario,
-                                                                                                estado='Aprobado_QA')
+            HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,comentario=comentario,estado='Aprobado_QA')
             HistoriaUsuario.objects.filter(id=us).update(aprobado_QA=True , comentario=comentario)
             Historial_HU.objects.create(
                  descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
@@ -437,11 +441,8 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceA
         sprint = Sprint.objects.get(id=pk)
         equipo = sprint.equipo.all()
         capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all()
-        print(CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all())
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-        print(id_proyecto)
-        print("EQUIPO", equipo)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
 class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView ):
@@ -483,7 +484,6 @@ class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView
         id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
-        #context['estoyEnEquipo']=estoyEnEquipo
         return context
 
     def get_success_url(self, **kwargs):
@@ -551,6 +551,24 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
         dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin, tz=None)
         horas_disponibles = sprint.capacidad_de_equipo_sprint
         dia = 1
+
+       ''' for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
+            for i in actividad:
+                if time==i.fecha and dia < (sprint.duracion_dias+1):
+                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
+                    datos[dia] = sprint.capacidad_de_equipo_sprint
+                    dia += 1
+        dia = 0
+        print(datos)
+        for i in datos:
+            if i == 0:
+                datos[dia] = sprint.capacidad_de_equipo_sprint
+            dia +=1
+        print("Fechas", fechas)
+        print(datos)
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})'''
+
+
         fecha_actividad = []
         fecha_duracion = []
         horas = []
@@ -596,3 +614,48 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
             datos2.append(horas_disponibles)
 
         return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2})
+
+class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+    """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol', 'delete_rol', 'change_rol')
+    template_name = 'sprint/cancelar_hu.html'
+    form_class = cancelar_huform
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+    def post(self, request, *args, **kwargs):
+        id = request.path.split('/')[-1]
+        cancelado=request.POST['cancelado']
+        if cancelado== 'on':
+            HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+            idp = HistoriaUsuario.objects.get(id=id).product_owner.id
+            user = User.objects.get(id=idp)
+            context = {'hu': HistoriaUsuario.objects.get(id=id)}
+            template = get_template('correos/canceladoPO.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
+            if HistoriaUsuario.objects.get(id=id).asignacion != None:
+                idd= HistoriaUsuario.objects.get(id=id).asignacion.id
+                user = User.objects.get(id=idd)
+                context = {'hu': HistoriaUsuario.objects.get(id=id)}
+                template = get_template('correos/canceladoAsignacion.html')
+                content = template.render(context)
+                email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+                email.attach_alternative(content, 'text/html')
+                email.send()
+            HistoriaUsuario.objects.filter(id=id).update(cancelado=True, estado='Cancelado')
+        else:
+            HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')
+        return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
+    def get_success_url(self):
+        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })

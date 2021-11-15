@@ -2,26 +2,32 @@
   Gestion de Proyectos | Crear Actividad
 {% endblock titulo %}
 {% block body %}
-    <div class="modal-dialog modal-lg" role="document">
+<style>
+  	.center {
+      text-align: center
+  }
+</style>
+<div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
+          <h3 class="center"> <strong>Añadir Actividad</strong></h3>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <form action="{% url 'sprint:add_actividad' pk us %}" method="POST">
             {% csrf_token %}
-            <div class="card">
-                <div class="card-header">
-                    <strong>Crear Actividad</strong>
-                </div>
-                <div class="card-body card-block">
+            <div class="card" style="width: 30rem;">
+                <div class="card-body">
                 {{ form.as_p }}
                 </div>
+                <button type="submit" class="btn btn-success">Añadir</button>
             </div>
-            <button type="submit" class="btn btn-success">Crear</button>
+
         </form>
     </div>
 </div>
+
+
 
 {% endblock body %}

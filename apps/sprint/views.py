@@ -14,7 +14,7 @@ from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginY
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 import pandas as pd
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 
 # Create your views here.
@@ -524,14 +524,14 @@ class VisualizarCapacidad(LoginYSuperStaffMixin, LoginNOTSuperUser, TemplateView
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/capacidad.html', {'sprint': sprint, 'proyecto': proyecto})
 
-class BurnDownChart(TemplateView):
-    """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
+class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
+    """Vista basada en clase, se utiliza graficar la linea ideal y real del BurnDownChart"""
     template_name = 'sprint/burn_down_chart3.html'
     model = Actividad
 
     def get(self, request, *args, **kwargs):
         """
-            funcion para renderizar el menu del sprint
+            Funcion para generar el BurnDownChart
         """
 
         fechas = []
@@ -539,21 +539,20 @@ class BurnDownChart(TemplateView):
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
         actividad = Actividad.objects.filter(id_sprint=sprint.id).all().order_by('fecha')
-        for a in actividad:
-            print(a.fecha)
         fecha_inicio = sprint.fecha_inicio
         fecha_fin = sprint.fecha_fin
-        datos = [0]*(sprint.duracion_dias+1)
-        print(datos)
+        datos = [0]*(sprint.duracion_dias)
         fecha_actual = date.today()
         for f in range(sprint.duracion_dias):
             d = "Day " + str(f+1)
             fechas.append(d)
-        dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin)
+
+        fechas.insert(0, " ")
+        dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin, tz=None)
         horas_disponibles = sprint.capacidad_de_equipo_sprint
-        datos[0] = sprint.capacidad_de_equipo_sprint
         dia = 1
-        for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
+
+       ''' for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
             for i in actividad:
                 if time==i.fecha and dia < (sprint.duracion_dias+1):
                     sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
@@ -567,7 +566,55 @@ class BurnDownChart(TemplateView):
             dia +=1
         print("Fechas", fechas)
         print(datos)
-        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})'''
+
+
+        fecha_actividad = []
+        fecha_duracion = []
+        horas = []
+        fechas2 = []
+        # en la lista horas se guardan las horas trabajadas en cada actividad y en
+        # fecha_actividad se guardan las fechas en que se cargaron esas horas
+        for i in actividad:
+            horas.append(i.hora_trabajo)
+            fecha_actividad.append(str(i.fecha))
+
+        # en fecha_duracion se guarda la lista de fechas hábiles del sprint
+        for time in dt:
+            fecha_duracion.append(str(time.year) + "-" + str(time.month) + "-" + str(time.day))
+            fechas2.append(str(datetime.strftime(time,'%b %d, %Y')))
+
+        fechas2.insert(0, " ")
+        df = pd.DataFrame()
+        df["Fechas"] = fecha_duracion
+        df["Horas"] = datos
+        ultima_fecha = None
+        # En esta parte se va guardando y descontando las horas horas_disponibles del sprint
+        for i in range(sprint.duracion_dias):
+            for a,b in zip(fecha_actividad, horas):
+                if fecha_duracion[i] == a:
+                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-b
+                    df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
+                    ultima_fecha = df.iloc[i,0]
+                else:
+                    df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
+
+        datos = df["Horas"].tolist()
+        ## Si la lista (datos) tiene todos los elementos ceros entonces significa que no se cargaron aun las horas
+        datos.insert(0, horas_disponibles)
+        contador = 0
+        datos2 = []
+
+        # se grafica hasta el último registro de carga de horas
+        if ultima_fecha != None:
+            stop = fecha_duracion.index(ultima_fecha)
+            for i in range(stop+2):
+                datos2.append(datos[i])
+        else:
+            datos2.append(horas_disponibles)
+
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2})
+
 class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
     """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
     model = HistoriaUsuario

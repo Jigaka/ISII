@@ -551,24 +551,6 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
         dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin, tz=None)
         horas_disponibles = sprint.capacidad_de_equipo_sprint
         dia = 1
-
-       ''' for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
-            for i in actividad:
-                if time==i.fecha and dia < (sprint.duracion_dias+1):
-                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
-                    datos[dia] = sprint.capacidad_de_equipo_sprint
-                    dia += 1
-        dia = 0
-        print(datos)
-        for i in datos:
-            if i == 0:
-                datos[dia] = sprint.capacidad_de_equipo_sprint
-            dia +=1
-        print("Fechas", fechas)
-        print(datos)
-        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})'''
-
-
         fecha_actividad = []
         fecha_duracion = []
         horas = []
@@ -614,6 +596,23 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
             datos2.append(horas_disponibles)
 
         return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2})
+
+    ''' for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
+                for i in actividad:
+                    if time==i.fecha and dia < (sprint.duracion_dias+1):
+                        sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
+                        datos[dia] = sprint.capacidad_de_equipo_sprint
+                        dia += 1
+            dia = 0
+            print(datos)
+            for i in datos:
+                if i == 0:
+                    datos[dia] = sprint.capacidad_de_equipo_sprint
+                dia +=1
+            print("Fechas", fechas)
+            print(datos)
+            return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})'''
+
 
 class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
     """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""

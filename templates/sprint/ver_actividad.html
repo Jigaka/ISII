@@ -2,17 +2,24 @@
   Gestion de Proyectos | Crear Actividad
 {% endblock titulo %}
 {% block body %}
-    <div class="modal-dialog modal-lg" role="document">
+<style>
+  	.center {
+      text-align: center
+  }
+</style>
+<div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title">Actividad</h2>
+            <h3 class="center"> <strong>Actividad: {{ actividad.nombre }}</strong></h3>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <h2>nombre: {{ actividad.nombre }}</h2>
-        <h3>comentario: {{ actividad.comentario }}</h3>
-        <h3>horas de trabajo: {{ actividad.hora_trabajo }}</h3>
+        <div class="modal-body">
+          <h3>Comentario: {{ actividad.comentario }}</h3>
+          <h3>Horas de trabajo: {{ actividad.hora_trabajo }} horas</h3>
+          <h3>Fecha: {{ actividad.fecha }}</h3>
+        </div>
     </div>
 </div>
 {% endblock body %}

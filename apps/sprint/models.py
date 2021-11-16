@@ -113,6 +113,9 @@ class HistoriaUsuario(models.Model):
     rechazado_QA = models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     comentario=models.TextField(blank=False, null=True)
+    horas_restantes = models.IntegerField(blank=False, null=False, default=0)
+    horas_trabajadas = models.IntegerField(blank=False, null=False, default=0) # horas trabajadas por sprint
+    horas_trabajadas_en_total = models.IntegerField(blank=False, null=False, default=0) # horas trabajadas en total en esa historia de usuario
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):

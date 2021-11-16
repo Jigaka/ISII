@@ -203,7 +203,8 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             funcion para renderizar un user history
         """
         pk = self.kwargs['pk']
-
+        pl = self.kwargs['pl']
+        print(kwargs)
         us = HistoriaUsuario.objects.get(id=pk)
         if us.asignacion_id:
             desarrollador = User.objects.get(id = us.asignacion_id)
@@ -211,6 +212,24 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             desarrollador = {
                 'username' : 'Sin asignar'
             }
+
+        horas_trabajadas = 0
+        horas_trabajadas_total = 0
+        actividad = us.actividades.filter(id_sprint=pl).all()
+        actividad_total = us.actividades.all()
+        print(actividad_total)
+        for a in actividad:
+            horas_trabajadas += a.hora_trabajo
+
+        for b in actividad_total:
+            horas_trabajadas_total += b.hora_trabajo
+
+        print(horas_trabajadas)
+        horas_restantes = us.estimacion - horas_trabajadas
+        HistoriaUsuario.objects.filter(id=pk).update(horas_restantes=horas_restantes)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas=horas_trabajadas)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas_en_total=horas_trabajadas_total)
+        print(HistoriaUsuario.objects.get(id=pk).horas_restantes)
         return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
 
 
@@ -265,6 +284,7 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
             return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
         else:
             us=sprint.estado_sprint.all()
+            print("FIN")
             return render(request, 'sprint/kanban-fin.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
 
 

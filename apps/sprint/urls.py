@@ -2,12 +2,13 @@ from django.urls import path
 from apps.proyectos.views import ConfigurarUs, estimarUS,Listar_us_a_estimar, Reasignar_us
 from .views import AsignarCapacidadDiaria, CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, configurarEquipoSprint, \
   Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad, Historial_por_hu,\
-     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu
+     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu, IniciarSprint
 urlpatterns = [
      path('crear_sprint/<int:pk>', CrearSprint.as_view(), name='crear_sprint'),
      path('listar_sprint/<int:pk>', ListarSprint.as_view(), name='listar_sprint'),
      path('agregar_hu/<int:pk>', AgregarHU_sprint.as_view(), name='agregar_hu'),
      path('ver_sprint/<int:pk>', VerSprint.as_view(), name='ver_sprint'),
+     path('iniciar_sprint/<int:pk>', IniciarSprint.as_view(), name='iniciar_sprint'),
      path('ver_sb/<int:pk>', SprintBacklog.as_view(), name='ver_sb'),
      path('configurar_equipo/<int:pk>', configurarEquipoSprint.as_view(), name='configurar_equipo'),
      path('configurar_us/<int:pk>', ConfigurarUs.as_view(), name='configurar_us'),

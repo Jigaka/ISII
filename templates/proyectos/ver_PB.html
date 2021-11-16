@@ -9,6 +9,8 @@ Gestion de Proyectos | Product Backlog
          #danger:hover{
             color:red;
         }
+        .center {
+          text-align: center
     </style>
 {% endblock extra_css %}
 {% block body %}
@@ -19,7 +21,8 @@ Gestion de Proyectos | Product Backlog
                 <strong class="card-title">Product Backlog</strong>
             </div>
         </div>
-        <div class="card-header">
+    </div>
+    <div class="card-header">
         <div class="row">
             <div class="col-md-8">
                 <strong class="card-title">Historias de Usuario con estado: Pendiente</strong>
@@ -36,6 +39,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -47,10 +51,14 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                        {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -62,7 +70,7 @@ Gestion de Proyectos | Product Backlog
 
 
 
-        <div class="card-header">
+    <div class="card-header">
         <div class="row">
             <div class="col-md-8">
                 <strong class="card-title">Historias de Usuario con estado: ToDo</strong>
@@ -79,6 +87,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -91,8 +100,12 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
                    <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                      {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -121,6 +134,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -132,9 +146,13 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                      {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -162,6 +180,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -173,9 +192,13 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                      {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -203,6 +226,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -220,6 +244,51 @@ Gestion de Proyectos | Product Backlog
                    {% if us.aprobado_QA == True %}
                    <td><p> Aprobado_QA</p></td>
                    {% endif %}
+                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                 <td style="text-align: left;">
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                 </td>
+
+
+               </tr>
+                  {% endif %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+<div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: Cancelado</strong>
+            </div>
+        </div>
+    </div>
+
+     <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for us in object_list %}
+                  {% if us.estado == 'Cancelado' %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                   <td>{{ us.estado }}</td>
+                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -229,8 +298,6 @@ Gestion de Proyectos | Product Backlog
             </tbody>
         </table>
     </div>
-
-</div>
 
 {% endblock body %}
 {% block extrajs %}

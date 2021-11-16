@@ -1,14 +1,20 @@
 from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form, aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm
+from django.template.loader import get_template
+
+from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form,\
+    aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm, cancelar_huform
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView,TemplateView
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
-     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+     LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, \
+    ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 import pandas as pd
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 
 # Create your views here.
@@ -64,7 +70,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                                                 PP=hu.estimacion)
                     if hu.estado != 'Done':
                         HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                        prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
+                                                                        prioridad='Alta',prioridad_numerica=3,estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
                         Historial_HU.objects.create(
                             descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
                                 id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
@@ -75,7 +81,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
-    """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
+    """ Vista basada en clase, se utiliza para agregar las historias de usuarios al sprint"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                           'delete_rol', 'change_rol')
@@ -197,7 +203,8 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             funcion para renderizar un user history
         """
         pk = self.kwargs['pk']
-
+        pl = self.kwargs['pl']
+        print(kwargs)
         us = HistoriaUsuario.objects.get(id=pk)
         if us.asignacion_id:
             desarrollador = User.objects.get(id = us.asignacion_id)
@@ -205,6 +212,24 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             desarrollador = {
                 'username' : 'Sin asignar'
             }
+
+        horas_trabajadas = 0
+        horas_trabajadas_total = 0
+        actividad = us.actividades.filter(id_sprint=pl).all()
+        actividad_total = us.actividades.all()
+        print(actividad_total)
+        for a in actividad:
+            horas_trabajadas += a.hora_trabajo
+
+        for b in actividad_total:
+            horas_trabajadas_total += b.hora_trabajo
+
+        print(horas_trabajadas)
+        horas_restantes = us.estimacion - horas_trabajadas
+        HistoriaUsuario.objects.filter(id=pk).update(horas_restantes=horas_restantes)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas=horas_trabajadas)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas_en_total=horas_trabajadas_total)
+        print(HistoriaUsuario.objects.get(id=pk).horas_restantes)
         return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
 
 
@@ -253,6 +278,7 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
+
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
             us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
@@ -313,9 +339,7 @@ class AprobarQA(LoginYSuperStaffMixin, CreateView):
         aprobado_QA = request.POST['aprobado_QA']
         comentario = request.POST['comentario']
         if aprobado_QA=='on':
-            us_copia = HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,
-                                                                                                comentario=comentario,
-                                                                                                estado='Aprobado_QA')
+            HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,comentario=comentario,estado='Aprobado_QA')
             HistoriaUsuario.objects.filter(id=us).update(aprobado_QA=True , comentario=comentario)
             Historial_HU.objects.create(
                  descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
@@ -358,7 +382,7 @@ class RechazarQA(LoginYSuperStaffMixin, CreateView):
 
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):
-    """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
+    """ Vista basada en clase, se utiliza para asignar equipo al sprint"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
@@ -431,11 +455,8 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceA
         sprint = Sprint.objects.get(id=pk)
         equipo = sprint.equipo.all()
         capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all()
-        print(CapacidadDiariaEnSprint.objects.filter(sprint=sprint).all())
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-        print(id_proyecto)
-        print("EQUIPO", equipo)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
 class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView ):
@@ -477,7 +498,6 @@ class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView
         id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
-        #context['estoyEnEquipo']=estoyEnEquipo
         return context
 
     def get_success_url(self, **kwargs):
@@ -518,14 +538,14 @@ class VisualizarCapacidad(LoginYSuperStaffMixin, LoginNOTSuperUser, TemplateView
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/capacidad.html', {'sprint': sprint, 'proyecto': proyecto})
 
-class BurnDownChart(TemplateView):
-    """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
+class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
+    """Vista basada en clase, se utiliza graficar la linea ideal y real del BurnDownChart"""
     template_name = 'sprint/burn_down_chart3.html'
     model = Actividad
 
     def get(self, request, *args, **kwargs):
         """
-            funcion para renderizar el menu del sprint
+            Funcion para generar el BurnDownChart
         """
 
         fechas = []
@@ -533,35 +553,113 @@ class BurnDownChart(TemplateView):
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
         actividad = Actividad.objects.filter(id_sprint=sprint.id).all().order_by('fecha')
-        for a in actividad:
-            print(a.fecha)
         fecha_inicio = sprint.fecha_inicio
         fecha_fin = sprint.fecha_fin
-        datos = [0]*(sprint.duracion_dias+1)
-        print(datos)
+        datos = [0]*(sprint.duracion_dias)
         fecha_actual = date.today()
         for f in range(sprint.duracion_dias):
             d = "Day " + str(f+1)
             fechas.append(d)
-        dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin)
+
+        fechas.insert(0, " ")
+        dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin, tz=None)
         horas_disponibles = sprint.capacidad_de_equipo_sprint
-        datos[0] = sprint.capacidad_de_equipo_sprint
         dia = 1
-        for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
-            for i in actividad:
-                if time==i.fecha and dia < (sprint.duracion_dias+1):
-                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
-                    datos[dia] = sprint.capacidad_de_equipo_sprint
-                    dia += 1
-        dia = 0
-        print(datos)
-        for i in datos:
-            if i == 0:
-                datos[dia] = sprint.capacidad_de_equipo_sprint
-            dia +=1
-        print("Fechas", fechas)
-        print(datos)
-        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})
+        fecha_actividad = []
+        fecha_duracion = []
+        horas = []
+        fechas2 = []
+        # en la lista horas se guardan las horas trabajadas en cada actividad y en
+        # fecha_actividad se guardan las fechas en que se cargaron esas horas
+        for i in actividad:
+            horas.append(i.hora_trabajo)
+            fecha_actividad.append(str(i.fecha))
+
+        # en fecha_duracion se guarda la lista de fechas hábiles del sprint
+        for time in dt:
+            fecha_duracion.append(str(time.year) + "-" + str(time.month) + "-" + str(time.day))
+            fechas2.append(str(datetime.strftime(time,'%b %d, %Y')))
+
+        fechas2.insert(0, " ")
+        df = pd.DataFrame()
+        df["Fechas"] = fecha_duracion
+        df["Horas"] = datos
+        ultima_fecha = None
+        # En esta parte se va guardando y descontando las horas horas_disponibles del sprint
+        for i in range(sprint.duracion_dias):
+            for a,b in zip(fecha_actividad, horas):
+                if fecha_duracion[i] == a:
+                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-b
+                    df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
+                    ultima_fecha = df.iloc[i,0]
+                else:
+                    df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
+
+        datos = df["Horas"].tolist()
+        ## Si la lista (datos) tiene todos los elementos ceros entonces significa que no se cargaron aun las horas
+        datos.insert(0, horas_disponibles)
+        contador = 0
+        datos2 = []
+
+        # se grafica hasta el último registro de carga de horas
+        if ultima_fecha != None:
+            stop = fecha_duracion.index(ultima_fecha)
+            for i in range(stop+2):
+                datos2.append(datos[i])
+        else:
+            datos2.append(horas_disponibles)
+
+        sprint_hora = datos2[-1]
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2, 'hora': sprint_hora})
+
+
+
+
+class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
+    """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol', 'delete_rol', 'change_rol')
+    template_name = 'sprint/cancelar_hu.html'
+    form_class = cancelar_huform
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        pk = self.kwargs['pk']
+        print(pk)
+        id_hu = self.object.pk
+        id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        return context
+    def post(self, request, *args, **kwargs):
+        id = request.path.split('/')[-1]
+        cancelado=request.POST['cancelado']
+        if cancelado== 'on':
+            HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+            idp = HistoriaUsuario.objects.get(id=id).product_owner.id
+            user = User.objects.get(id=idp)
+            context = {'hu': HistoriaUsuario.objects.get(id=id)}
+            template = get_template('correos/canceladoPO.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
+            if HistoriaUsuario.objects.get(id=id).asignacion != None:
+                idd= HistoriaUsuario.objects.get(id=id).asignacion.id
+                user = User.objects.get(id=idd)
+                context = {'hu': HistoriaUsuario.objects.get(id=id)}
+                template = get_template('correos/canceladoAsignacion.html')
+                content = template.render(context)
+                email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+                email.attach_alternative(content, 'text/html')
+                email.send()
+            HistoriaUsuario.objects.filter(id=id).update(cancelado=True, estado='Cancelado')
+        else:
+            HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')
+        return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
+    def get_success_url(self):
+        return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+
 
 class IniciarSprint(TemplateView):
     template_name = 'sprint/iniciar_sprint.html'

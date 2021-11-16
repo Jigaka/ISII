@@ -2,23 +2,31 @@
   Gestion de Proyectos | Aprobar QA
 {% endblock titulo %}
 {% block body %}
-    <div class="modal-dialog modal-lg" role="document">
+<style>
+  	.center {
+      text-align: center
+  }
+</style>
+    <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
+          <h4 class="center"> Aprobar Historia de Usuario</h4>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <div class="modal-body">
         <form action="{% url 'sprint:aprobarQA' pk us %}" method="POST">
             {% csrf_token %}
-            <div class="card">
+            <div class="card" style="width: 27rem;">
                 <div class="card-body card-block">
                 {{ form.as_p }}
                 </div>
+                <button type="submit" class="btn btn-success">Aprobar </button>
+                <a class="btn" style="background-color:lightgray" href="{%  url 'sprint:kanban' pk %}" role="button">Cancelar</a>
             </div>
-            <button type="submit" class="btn btn-success">Aprobar </button>
-            <a class="btn" style="background-color:lightgray" href="{%  url 'sprint:kanban' pk %}" role="button">Cancelar</a>
         </form>
+      </div>
     </div>
 </div>
 

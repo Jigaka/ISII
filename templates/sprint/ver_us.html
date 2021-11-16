@@ -2,17 +2,26 @@
   Gestion de Proyectos | Ver User History
 {% endblock titulo %}
 {% block body %}
-    <div class="modal-dialog modal-lg" role="document">
+<style>
+  	.center {
+      text-align: center
+  }
+</style>
+<div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 class="modal-title">Historia de usuario</h2>
+            <h3 class="center"> <strong>Historia de Usuario: {{ us.nombre }}</strong></h3>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <h2>Nombre: {{ us.nombre }}</h2>
-        <h3>Descripcion: {{ us.descripcion }}</h3>
-        <h3>Desarrollador: {{ desarrollador.username }}</h3>
+        <div class="modal-body">
+          <h3>Descripcion: {{ us.descripcion }}</h3>
+          <h3>Desarrollador: {{ desarrollador.username }}</h3>
+          <h3>Horas estimadas: {{ us.estimacion }} horas</h3>
+          <h3>Horas trabajadas: {{ us.horas_trabajadas }} horas</h3>
+          <h3>Horas pendientes: {{ us.horas_restantes }} horas</h3>
+        </div>
     </div>
 </div>
 {% endblock body %}

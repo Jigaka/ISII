@@ -72,7 +72,22 @@ class CrearActividadForm(forms.ModelForm):
             'nombre' : 'Nombre de la actividad',
             'comentario' : 'Escribe un breve comentario',
             'fecha': 'ingrese la fecha de la actividad',
-            'hora_trabajo' : 'Indique las horas dedicadas'
+            'hora_trabajo' : 'Horas trabajadas'
+        }
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese una actividad'
+                }
+            ),
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
         }
 
 class configurarEquipoSprintform(forms.ModelForm):
@@ -113,6 +128,15 @@ class aprobarQAForm(forms.ModelForm):
             'aprobado_QA': 'Aprobar Historia de Usuario ',
             'comentario':'Comentario'
         }
+        widgets = {
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
+        }
 
 class rechazarQAForm(forms.ModelForm):
     class Meta:
@@ -122,3 +146,23 @@ class rechazarQAForm(forms.ModelForm):
             'rechazado_QA': 'Rechazar Historia de Usuario ',
             'comentario': 'Comentario'
         }
+
+        widgets = {
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
+        }
+
+class cancelar_huform(forms.ModelForm):
+    class Meta:
+        model = HistoriaUsuario
+        fields = ['cancelado']
+        labels = {
+            'cancelado': 'Cancelar esta historia de usuario'
+        }
+
+

@@ -79,12 +79,14 @@ class HistoriaUsuario(models.Model):
     Doing = 'Doing'
     Done = 'Done'
     QA = 'QA'
+    Cancelado= 'Cancelado'
     STATUS_CHOICES = (
         (Pendiente, "Pendiente"),
         (ToDo, 'ToDo'),
         (Doing, 'Doing'),
         (Done, 'Done'),
-        (QA, 'QA')
+        (QA, 'QA'),
+        (Cancelado, 'Cancelado')
     )
 
     Baja = 'Baja'
@@ -119,9 +121,13 @@ class HistoriaUsuario(models.Model):
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
     sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
     aprobado_QA=models.BooleanField(default=False)
+    cancelado= models.BooleanField(default=False)
     rechazado_QA = models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     comentario=models.TextField(blank=False, null=True)
+    horas_restantes = models.IntegerField(blank=False, null=False, default=0)
+    horas_trabajadas = models.IntegerField(blank=False, null=False, default=0) # horas trabajadas por sprint
+    horas_trabajadas_en_total = models.IntegerField(blank=False, null=False, default=0) # horas trabajadas en total en esa historia de usuario
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):

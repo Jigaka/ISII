@@ -9,6 +9,8 @@ Gestion de Proyectos | Product Backlog
          #danger:hover{
             color:red;
         }
+        .center {
+          text-align: center
     </style>
 {% endblock extra_css %}
 {% block body %}
@@ -19,7 +21,8 @@ Gestion de Proyectos | Product Backlog
                 <strong class="card-title">Product Backlog</strong>
             </div>
         </div>
-        <div class="card-header">
+    </div>
+    <div class="card-header">
         <div class="row">
             <div class="col-md-8">
                 <strong class="card-title">Historias de Usuario con estado: Pendiente</strong>
@@ -36,6 +39,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -47,7 +51,8 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
@@ -62,7 +67,7 @@ Gestion de Proyectos | Product Backlog
 
 
 
-        <div class="card-header">
+    <div class="card-header">
         <div class="row">
             <div class="col-md-8">
                 <strong class="card-title">Historias de Usuario con estado: ToDo</strong>
@@ -79,6 +84,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -91,6 +97,7 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
                    <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -121,6 +128,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -132,7 +140,8 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -162,6 +171,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -173,7 +183,8 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -203,6 +214,7 @@ Gestion de Proyectos | Product Backlog
                     <th>Descripcion</th>
                     <th>Prioridad</th>
                     <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
                     <th style="text-align: left;">Opciones</th>
                 </tr>
             </thead>
@@ -220,6 +232,7 @@ Gestion de Proyectos | Product Backlog
                    {% if us.aprobado_QA == True %}
                    <td><p> Aprobado_QA</p></td>
                    {% endif %}
+                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -230,8 +243,8 @@ Gestion de Proyectos | Product Backlog
         </table>
     </div>
 
-</div>
 
+</div>
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

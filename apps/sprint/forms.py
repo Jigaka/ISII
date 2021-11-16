@@ -132,6 +132,15 @@ class aprobarQAForm(forms.ModelForm):
             'aprobado_QA': 'Aprobar Historia de Usuario ',
             'comentario':'Comentario'
         }
+        widgets = {
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
+        }
 
 class rechazarQAForm(forms.ModelForm):
     class Meta:
@@ -142,6 +151,16 @@ class rechazarQAForm(forms.ModelForm):
             'comentario': 'Comentario'
         }
 
+        widgets = {
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
+        }
+
 class cancelar_huform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
@@ -149,4 +168,5 @@ class cancelar_huform(forms.ModelForm):
         labels = {
             'cancelado': 'Cancelar esta historia de usuario'
         }
+
 

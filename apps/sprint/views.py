@@ -87,7 +87,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
-    """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
+    """ Vista basada en clase, se utiliza para agregar las historias de usuarios al sprint"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                           'delete_rol', 'change_rol')
@@ -209,7 +209,8 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             funcion para renderizar un user history
         """
         pk = self.kwargs['pk']
-
+        pl = self.kwargs['pl']
+        print(kwargs)
         us = HistoriaUsuario.objects.get(id=pk)
         if us.asignacion_id:
             desarrollador = User.objects.get(id = us.asignacion_id)
@@ -217,6 +218,24 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             desarrollador = {
                 'username' : 'Sin asignar'
             }
+
+        horas_trabajadas = 0
+        horas_trabajadas_total = 0
+        actividad = us.actividades.filter(id_sprint=pl).all()
+        actividad_total = us.actividades.all()
+        print(actividad_total)
+        for a in actividad:
+            horas_trabajadas += a.hora_trabajo
+
+        for b in actividad_total:
+            horas_trabajadas_total += b.hora_trabajo
+
+        print(horas_trabajadas)
+        horas_restantes = us.estimacion - horas_trabajadas
+        HistoriaUsuario.objects.filter(id=pk).update(horas_restantes=horas_restantes)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas=horas_trabajadas)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas_en_total=horas_trabajadas_total)
+        print(HistoriaUsuario.objects.get(id=pk).horas_restantes)
         return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
 
 
@@ -265,6 +284,7 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
+
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
             us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
@@ -368,7 +388,7 @@ class RechazarQA(LoginYSuperStaffMixin, CreateView):
 
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):
-    """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
+    """ Vista basada en clase, se utiliza para asignar equipo al sprint"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
@@ -595,23 +615,10 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
         else:
             datos2.append(horas_disponibles)
 
-        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2})
+        sprint_hora = datos2[-1]
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2, 'hora': sprint_hora})
 
-    ''' for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
-                for i in actividad:
-                    if time==i.fecha and dia < (sprint.duracion_dias+1):
-                        sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
-                        datos[dia] = sprint.capacidad_de_equipo_sprint
-                        dia += 1
-            dia = 0
-            print(datos)
-            for i in datos:
-                if i == 0:
-                    datos[dia] = sprint.capacidad_de_equipo_sprint
-                dia +=1
-            print("Fechas", fechas)
-            print(datos)
-            return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})'''
+
 
 
 class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
@@ -658,3 +665,4 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
         return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
     def get_success_url(self):
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+

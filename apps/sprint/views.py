@@ -54,30 +54,24 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
         proyecto = Proyec.objects.get(id=pk)
         sprint = proyecto.proyecto_s.all().order_by('fecha_inicio')
         for s in sprint:
-            if (s.estado=='Pendiente'):
-                if date.today() >= s.fecha_inicio and date.today() <= s.fecha_fin:
-                    Sprint.objects.filter(id=s.id).update(estado='Iniciado')
-            if (s.estado=='Iniciado' or s.estado=='Pendiente'):
-                if date.today() > s.fecha_fin:
-                    Sprint.objects.filter(id=s.id).update(estado='Finalizado')
-                    hus = Sprint.objects.get(id=s.id).sprint.all()
-                    print(hus)
-                    for hu in hus:
-                        Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
-                                                 desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
-                                                 PP=hu.estimacion)
-                        if hu.estado != 'Done':
-                            HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                            prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
-                            Historial_HU.objects.create(
-                                descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
-                                    id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
-                                    id=hu.id).estado,
-                                hu=HistoriaUsuario.objects.get(id=hu.id))
-                        elif hu.estado == 'Done':
-                            HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
-
-
+            if (s.estado=='Finalizado'):
+                Sprint.objects.filter(id=s.id).update(estado='Finalizado')
+                hus = Sprint.objects.get(id=s.id).sprint.all()
+                print(hus)
+                for hu in hus:
+                    Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
+                                                desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                                PP=hu.estimacion)
+                    if hu.estado != 'Done':
+                        HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
+                                                                        prioridad='Alta', estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
+                        Historial_HU.objects.create(
+                            descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                                id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
+                                id=hu.id).estado,
+                            hu=HistoriaUsuario.objects.get(id=hu.id))
+                    elif hu.estado == 'Done':
+                        HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
@@ -568,3 +562,45 @@ class BurnDownChart(TemplateView):
         print("Fechas", fechas)
         print(datos)
         return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})
+
+class IniciarSprint(TemplateView):
+    template_name = 'sprint/iniciar_sprint.html'
+    model = Sprint
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+
+    def get(self, request, *args, **kwargs):
+        
+        pk = self.kwargs['pk']
+        sprint = Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+
+        existe_sprint_iniciado=Sprint.objects.filter(proyecto=proyecto,estado="Iniciado").exists()
+        asignacion_incompleta=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,asignacion=None).exists()
+        pp_incompleto=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,estimacion=0).exists()
+        historias_en_QA=HistoriaUsuario.objects.filter(sprint=sprint,estado="QA").exists()
+        
+        # Iniciar el sprint si se cumplen las condiciones
+        if (not existe_sprint_iniciado and not asignacion_incompleta and not pp_incompleto and not historias_en_QA):
+            nueva_fecha_inicio=date.today()
+            duracion_dias=sprint.duracion_dias                        
+            nueva_fecha_fin=nueva_fecha_inicio+sprint.duracion_cruda
+            nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
+            if (nueva_duracion_dias>duracion_dias):
+                print("nueva_duracion es mayor")
+                while(nueva_duracion_dias!=duracion_dias):
+                    nueva_fecha_fin=nueva_fecha_fin-timedelta(days=1)
+                    nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
+            elif (nueva_duracion_dias<duracion_dias):
+                print("nueva_duracion es menor")
+                while(nueva_duracion_dias!=duracion_dias):
+                    nueva_fecha_fin=nueva_fecha_fin+timedelta(days=1)
+                    nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
+            #Actualizar nueva fecha de inicio y nueva fecha de fin, cambiar estado a Iniciado
+            Sprint.objects.filter(id=sprint.id).update(fecha_inicio=nueva_fecha_inicio, fecha_fin=nueva_fecha_fin, estado='Iniciado')
+            sprint = Sprint.objects.get(id=pk)
+            mensaje="Se han actualizado las fechas de inicio y fin en base al rango de días estimados.\n \n El sprint ha sido iniciado exitosamente."
+        else:
+            mensaje="Este sprint no puede ser iniciado."    
+        
+        return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje})

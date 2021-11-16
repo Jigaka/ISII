@@ -29,6 +29,15 @@ class Sprint(models.Model):
     # capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días), , limit_choices_to={'aprobado_PB':True, 'sprint_backlog':False}
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
     @property
+    def duracion_cruda(self):
+        if (self.fecha_inicio and self.fecha_fin):
+            i = (self.fecha_inicio)
+            f = (self.fecha_fin)
+            duracion_cruda=f-i
+            return duracion_cruda
+    
+    #Duración de días hábiles (no excluye fechas especiales, solo excluye los fines de semana)
+    @property
     def duracion_dias(self):
         """Calcula la cantidad de dias que tiene un sprint excluyendo los fines de semana"""
         if (self.fecha_inicio and self.fecha_fin):

@@ -1,0 +1,24 @@
+{% extends 'sprint/sprint.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Iniciar Sprint
+{% endblock titulo %}
+
+{% block body %}
+<ul>
+  {%if existe_sprint_iniciado%}
+  <li>Ya existe otro sprint en estado Iniciado.</li>
+  {%endif%}
+  {%if asignacion_incompleta%}
+  <li>Por favor, asigne desarrolladores a todas las historias de usuario del Sprint Backlog.</li>
+  {%endif%}
+  {%if pp_incompleto%}
+  <li>Por favor, finalice el proceso de Planning Poker. Todas las historias de usuario del Sprint Backlog deben ser puntuadas.</li>
+  {%endif%}
+  {%if historias_en_QA%}
+  <li>Existen historias de usuario en estado <b>QA</b> en el Product Backlog. Por favor, revise estas historias de usuario y limpie la sección <b>QA</b>.</li>
+  {%endif%}
+</ul>
+{{mensaje|linebreaksbr}}<br><br>
+
+<a class="btn btn-primary" href="{%  url 'sprint:ver_sprint'  sprint.id %}" role="button">Volver</a>
+{% endblock body %}

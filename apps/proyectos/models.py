@@ -1,9 +1,10 @@
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.contrib.auth.models import Permission, Group
 from django.db.models.signals import post_save, pre_save
+from django.template.loader import get_template
+from django.conf import settings
 from apps.user.models import User, Rol
-
-
 
 
 '''
@@ -103,15 +104,15 @@ def agregar_encargado(sender, instance, **Kwargs):
         nombreRol = "Scrum Master"
         rol = Rol(rol = f'{nombreRol}-{nombreProyecto}')
         user = instance.encargado
-        print("USER", user)
-        print(user.rol.filter(proyecto_id=instance.id).all())
+        #print("USER", user)
+        #print(user.rol.filter(proyecto_id=instance.id).all())
         rol.save()
-        print(rol.rol)
-        print(rol.id)
-        print(type(rol))
+        #print(rol.rol)
+        #print(rol.id)
+        #print(type(rol))
         rolProyecto = RolProyecto(nombre = rol.rol, proyecto=instance, rol = rol)
         rolProyecto.save()
-        print(rolProyecto)
+        #print(rolProyecto)
         user.rol.add(rolProyecto)
         grupo = Group.objects.filter(name=rol.rol).first()
         permiso1 = Permission.objects.get(codename='view_rol')
@@ -122,6 +123,16 @@ def agregar_encargado(sender, instance, **Kwargs):
         permiso6 = Permission.objects.get(codename='view_historiausuario')
         permiso7 = Permission.objects.get(codename='delete_historiausuario')
         grupo.permissions.add(permiso1, permiso2, permiso3, permiso4, permiso5, permiso6, permiso7)
+        id = instance.id
+        idp= instance.encargado.id
+        u=User.objects.get(id=idp)
+        context = {'proyecto': Proyec.objects.get(id=id)}
+        template = get_template('correos/encargado.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                       [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
         user.groups.add(grupo)
 
 post_save.connect(agregar_fecha, sender=Proyec)

@@ -56,6 +56,9 @@ Gestion de Proyectos | Product Backlog
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                        {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -100,6 +103,9 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                      {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -144,6 +150,9 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                      {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -187,6 +196,9 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                      {% if  request.user.id == us.proyecto.encargado.id %}
+                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
+                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -236,6 +248,8 @@ Gestion de Proyectos | Product Backlog
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
+
+
                </tr>
                   {% endif %}
              {% endfor %}
@@ -244,7 +258,47 @@ Gestion de Proyectos | Product Backlog
     </div>
 
 
-</div>
+<div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Historias de Usuario con estado: Cancelado</strong>
+            </div>
+        </div>
+    </div>
+
+     <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
+                    <th>Horas Trabajadas (en total)</th>
+                    <th style="text-align: left;">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for us in object_list %}
+                  {% if us.estado == 'Cancelado' %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.nombre }}</td>
+                 <td>{{ us.descripcion }}</td>
+                 <td>{{ us.prioridad }}</td>
+                   <td>{{ us.estado }}</td>
+                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                 <td style="text-align: left;">
+                        <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
+                 </td>
+               </tr>
+                  {% endif %}
+             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

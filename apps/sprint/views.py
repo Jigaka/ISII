@@ -81,7 +81,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
-    """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
+    """ Vista basada en clase, se utiliza para agregar las historias de usuarios al sprint"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                           'delete_rol', 'change_rol')
@@ -278,13 +278,13 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
+
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
             us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
             return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
         else:
             us=sprint.estado_sprint.all()
-            print("FIN")
             return render(request, 'sprint/kanban-fin.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
 
 
@@ -384,7 +384,7 @@ class RechazarQA(LoginYSuperStaffMixin, CreateView):
 
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):
-    """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
+    """ Vista basada en clase, se utiliza para asignar equipo al sprint"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
@@ -614,5 +614,5 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
                 datos2.append(datos[i])
         else:
             datos2.append(horas_disponibles)
-
-        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2})
+        sprint_hora = datos2[-1]
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2, 'hora': sprint_hora})

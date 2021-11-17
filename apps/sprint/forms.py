@@ -14,8 +14,8 @@ class SprintForm(forms.ModelForm):
         fields=['nombre','fecha_inicio','fecha_fin']
         labels = {
             'nombre': 'Nombre',
-            'fecha_inicio': 'Fecha de inicio',
-            'fecha_fin': 'Fecha de finalización'
+            'fecha_inicio': 'Fecha de inicio (estimada)',
+            'fecha_fin': 'Fecha de finalización (estimada)'
         }
     def __init__(self, pk, id_sprint,*args, **kwargs):
         self.id_proyecto= pk
@@ -30,12 +30,8 @@ class SprintForm(forms.ModelForm):
             raise forms.ValidationError('¡La fecha de fin no puede ser menor a la fecha de inicio!')
         if date.today() > start_date:
             raise forms.ValidationError('¡La fecha de inicio no puede estar en el pasado!')
-
-        #raise forms.ValidationError(self.id_proyecto)
-
+        
         sprints=Sprint.objects.filter(proyecto__id=self.id_proyecto).exclude(id=self.id_sprint)
-        #raise forms.ValidationError(str(self.id_proyecto)+"    "+str(self.id_sprint))
-        #raise forms.ValidationError(self.id_proyecto) #levanto este error en pruebas para ver qué id guardó
         for e in sprints:
             if (start_date < e.fecha_inicio):
                 if (end_date == e.fecha_inicio):
@@ -132,6 +128,15 @@ class aprobarQAForm(forms.ModelForm):
             'aprobado_QA': 'Aprobar Historia de Usuario ',
             'comentario':'Comentario'
         }
+        widgets = {
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
+        }
 
 class rechazarQAForm(forms.ModelForm):
     class Meta:
@@ -142,6 +147,16 @@ class rechazarQAForm(forms.ModelForm):
             'comentario': 'Comentario'
         }
 
+        widgets = {
+            'comentario': forms.Textarea(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese un comentario'
+                }
+            ),
+
+        }
+
 class cancelar_huform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
@@ -149,4 +164,5 @@ class cancelar_huform(forms.ModelForm):
         labels = {
             'cancelado': 'Cancelar esta historia de usuario'
         }
+
 

@@ -431,8 +431,16 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
-        us = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
-        return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
+        us = proyecto.proyecto.exclude(aprobado_PB=False)
+
+        '''
+        Si se ha eliminado un sprint en planificación, reestablecer sus historias de usuario al estado 'Pendiente'
+        '''
+        for historia in us:
+            if historia.estado=='ToDo' and not historia.sprint:
+                HistoriaUsuario.objects.filter(id=historia.id).update(estado='Pendiente',estimacion_user=0,estimacion_scrum=0, estimacion=0, asignacion=None)
+        us_updated = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
+        return render(request, 'proyectos/ver_PB.html', {'object_list': us_updated,'proyecto':proyecto})
 
 class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
@@ -473,3 +481,18 @@ class estimarUS( UpdateView):
                 id=id_hu).asignacion.getNombreUsuario()+' :' +HistoriaUsuario.objects.get(
                 id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+
+
+
+class ReporteProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'proyectos/reporte_PB.html'
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        proyecto=Proyec.objects.get(id=pk)
+        print(proyecto)
+        print("HOAL")
+        us = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
+        return render(request, 'proyectos/reporte_PB.html', {'object_list': us,'proyecto':proyecto})

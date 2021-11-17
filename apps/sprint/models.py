@@ -29,6 +29,15 @@ class Sprint(models.Model):
     # capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días), , limit_choices_to={'aprobado_PB':True, 'sprint_backlog':False}
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
     @property
+    def duracion_cruda(self):
+        if (self.fecha_inicio and self.fecha_fin):
+            i = (self.fecha_inicio)
+            f = (self.fecha_fin)
+            duracion_cruda=f-i
+            return duracion_cruda
+    
+    #Duración de días hábiles (no excluye fechas especiales, solo excluye los fines de semana)
+    @property
     def duracion_dias(self):
         """Calcula la cantidad de dias que tiene un sprint excluyendo los fines de semana"""
         if (self.fecha_inicio and self.fecha_fin):
@@ -90,8 +99,8 @@ class HistoriaUsuario(models.Model):
     )
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False, unique=True)
-    asignacion = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True, related_name="asignacion")
-    product_owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="PO")
+    asignacion = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True, related_name="asignacion")
+    product_owner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="PO")
     descripcion = models.TextField(blank=False, null=False)
     estado = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Pendiente')
     fecha = models.DateField("fecha", auto_now=True, auto_now_add=False)
@@ -110,12 +119,15 @@ class HistoriaUsuario(models.Model):
     sprint_backlog = models.BooleanField(default=False)
     estimacion_user = models.PositiveIntegerField(editable=True, default=0)
     estimacion_scrum = models.PositiveIntegerField(editable=True, default=0)
-    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
+    sprint = models.ForeignKey(Sprint, on_delete=models.SET_NULL, blank=True, null=True, related_name="sprint", limit_choices_to={'estado': 'Pendiente'})
     aprobado_QA=models.BooleanField(default=False)
     cancelado= models.BooleanField(default=False)
     rechazado_QA = models.BooleanField(default=False)
     actividades = models.ManyToManyField(Actividad, related_name = 'actividades', blank=True)
     comentario=models.TextField(blank=False, null=True)
+    horas_restantes = models.IntegerField(blank=False, null=False, default=0)
+    horas_trabajadas = models.IntegerField(blank=False, null=False, default=0) # horas trabajadas por sprint
+    horas_trabajadas_en_total = models.IntegerField(blank=False, null=False, default=0) # horas trabajadas en total en esa historia de usuario
     def save(self, *args, **kwargs):  # redefinicion del metodo save() que contiene nuestro trigger limit_choices_to={'aprobado_PB': True, 'sprint_backlog': False}
         # Aqui ponemos el codigo del trigger -------
         if (self.prioridad == 'Baja'):

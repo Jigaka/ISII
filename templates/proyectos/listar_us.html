@@ -53,7 +53,15 @@ Gestion de Proyectos | Listado de historia de usuarios
                                 En espera        
                             {%endif%}    
                         </td>
-                        <td>{{ us.prioridad }}</td>
+                        <td> {%ifequal us.prioridad "Alta"%}
+                            <span style="color:red">{{us.prioridad}}</style>
+                            {%endifequal%}
+                            {%ifequal us.prioridad "Media"%}
+                            <span style="color:darkcyan">{{us.prioridad}}</style>
+                            {%endifequal%}
+                            {%ifequal us.prioridad "Baja"%}
+                            {{ us.prioridad }}
+                            {%endifequal%}</td>
                         <td>{{us.product_owner}}</td>
                         <td class="opciones">
                             {% if  request.user.id == us.proyecto.encargado_id %}
@@ -66,7 +74,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                                 <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a>
                                 <a href="{%  url 'proyectos:eliminar_us' us.id %}" class="eliminar"> Eliminar</a>
                         {% endif %}
-                                  <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a>
+                                  <a href="{%  url 'sprint:historial_hu' us.id %}">Ver Historial</a>
                         </td>
                     </tr>
                 {% endfor %}

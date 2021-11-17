@@ -18,6 +18,18 @@ Gestion de Proyectos | Sprint Backlog
             <div class="col-md-8">
                 <strong class="card-title">Sprint Backlog</strong>
             </div>
+            <div class="col-md-4">
+                {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+                {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+                <button type="button" style="float:right" class="btn boton-iniciar-sprint">
+                    <a href="{%  url 'sprint:iniciar_sprint' sprint.id %}">
+                        <i class=></i>
+                        <span>Iniciar Sprint</span>
+                    </a>
+                </button>
+                {%endifequal%}
+                {%endifequal%}
+            </div>
         </div>
 
     </div>
@@ -64,7 +76,7 @@ Gestion de Proyectos | Sprint Backlog
                      <div>
                         {% ifequal request.user.username|stringformat:"s" objeto.asignacion|stringformat:"s" %}
                             {% if objeto.estimacion == 0%}
-                            <a href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
+                            <a style="color:blue" href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
                             {% endif %}
                         {%endifequal%}
                      </div>
@@ -73,7 +85,7 @@ Gestion de Proyectos | Sprint Backlog
                  {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                  <td style="text-align: left;">
                         {% if objeto.estimacion == 0%}
-                          <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar</a><br>
+                          <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar y estimar</a><br>
                         {% endif %}
                         {% if objeto.estimacion != 0%}
                           <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar</a><br>
@@ -83,6 +95,10 @@ Gestion de Proyectos | Sprint Backlog
                              <a href="{%  url 'sprint:cancelar_hu' objeto.id %}">Cancelar</a><br>
                                 {% endif %}
                             {% endif %}
+                        <!--{% if objeto.estimacion != 0%}
+                          <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
+                        {% endif %}-->
+
                   </td>
                   {%endifequal%}
                </tr>

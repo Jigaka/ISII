@@ -100,9 +100,10 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                             email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion',settings.EMAIL_HOST_USER, [user.getEmail()])
                             email.attach_alternative(content, 'text/html')
                             email.send()
+
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
-    """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
+    """ Vista basada en clase, se utiliza para agregar las historias de usuarios al sprint"""
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                           'delete_rol', 'change_rol')
@@ -215,6 +216,8 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             funcion para renderizar un user history
         """
         pk = self.kwargs['pk']
+        pl = self.kwargs['pl']
+        print(kwargs)
         us = HistoriaUsuario.objects.get(id=pk)
         if us.asignacion_id:
             desarrollador = User.objects.get(id = us.asignacion_id)
@@ -222,6 +225,24 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             desarrollador = {
                 'username' : 'Sin asignar'
             }
+
+        horas_trabajadas = 0
+        horas_trabajadas_total = 0
+        actividad = us.actividades.filter(id_sprint=pl).all()
+        actividad_total = us.actividades.all()
+        print(actividad_total)
+        for a in actividad:
+            horas_trabajadas += a.hora_trabajo
+
+        for b in actividad_total:
+            horas_trabajadas_total += b.hora_trabajo
+
+        print(horas_trabajadas)
+        horas_restantes = us.estimacion - horas_trabajadas
+        HistoriaUsuario.objects.filter(id=pk).update(horas_restantes=horas_restantes)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas=horas_trabajadas)
+        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas_en_total=horas_trabajadas_total)
+        print(HistoriaUsuario.objects.get(id=pk).horas_restantes)
         return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
 
 class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
@@ -390,7 +411,7 @@ class RechazarQA(LoginYSuperStaffMixin, CreateView):
         return redirect('sprint:kanban', pk)
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):
-    """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
+    """ Vista basada en clase, se utiliza para asignar equipo al sprint"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
@@ -607,22 +628,10 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
                 datos2.append(datos[i])
         else:
             datos2.append(horas_disponibles)
-        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2})
-    ''' for time in dt:##Debo totalizar las horas de los US por sprint o sea por fecha, dia 1 tantas horas hechas y asi
-                for i in actividad:
-                    if time==i.fecha and dia < (sprint.duracion_dias+1):
-                        sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-i.hora_trabajo
-                        datos[dia] = sprint.capacidad_de_equipo_sprint
-                        dia += 1
-            dia = 0
-            print(datos)
-            for i in datos:
-                if i == 0:
-                    datos[dia] = sprint.capacidad_de_equipo_sprint
-                dia +=1
-            print("Fechas", fechas)
-            print(datos)
-            return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint,'proyecto': proyecto, 'datos': datos, 'fechas': fechas})'''
+        sprint_hora = datos2[-1]
+        return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2, 'hora': sprint_hora})
+
+
 
 class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,UpdateView ):
     """ Vista basada en clase, se utiliza para aprobar las Historia de Usuario"""
@@ -666,4 +675,78 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
             HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')
         return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
     def get_success_url(self):
+
+
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+
+
+class ReporteSprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SB.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SB.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
+
+class ReporteSprintActual(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SA.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SA.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
+
+
+class IniciarSprint(TemplateView):
+    template_name = 'sprint/iniciar_sprint.html'
+    model = Sprint
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+
+    def get(self, request, *args, **kwargs):
+        
+        pk = self.kwargs['pk']
+        sprint = Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+
+        existe_sprint_iniciado=Sprint.objects.filter(proyecto=proyecto,estado="Iniciado").exists()
+        asignacion_incompleta=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,asignacion=None).exists()
+        pp_incompleto=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,estimacion=0).exists()
+        historias_en_QA=HistoriaUsuario.objects.filter(sprint=sprint,estado="QA").exists()
+        
+        # Iniciar el sprint si se cumplen las condiciones
+        if (not existe_sprint_iniciado and not asignacion_incompleta and not pp_incompleto and not historias_en_QA):
+            nueva_fecha_inicio=date.today()
+            duracion_dias=sprint.duracion_dias                        
+            nueva_fecha_fin=nueva_fecha_inicio+sprint.duracion_cruda
+            nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
+            if (nueva_duracion_dias>duracion_dias):
+                print("nueva_duracion es mayor")
+                while(nueva_duracion_dias!=duracion_dias):
+                    nueva_fecha_fin=nueva_fecha_fin-timedelta(days=1)
+                    nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
+            elif (nueva_duracion_dias<duracion_dias):
+                print("nueva_duracion es menor")
+                while(nueva_duracion_dias!=duracion_dias):
+                    nueva_fecha_fin=nueva_fecha_fin+timedelta(days=1)
+                    nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
+            #Actualizar nueva fecha de inicio y nueva fecha de fin, cambiar estado a Iniciado
+            Sprint.objects.filter(id=sprint.id).update(fecha_inicio=nueva_fecha_inicio, fecha_fin=nueva_fecha_fin, estado='Iniciado')
+            sprint = Sprint.objects.get(id=pk)
+            mensaje="Se han actualizado las fechas de inicio y fin en base al rango de días estimados.\n \n El sprint ha sido iniciado exitosamente."
+        else:
+            mensaje="Este sprint no puede ser iniciado."    
+        
+        return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje})

@@ -248,7 +248,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
         if sprint.estado=='Finalizado':
             object_list = sprint.estado_sprint.all()
         else:
-            object_list = sprint.sprint.all()
+            object_list = sprint.sprint.all().order_by('id')
 
         return render(request, 'sprint/ver_sb.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
 

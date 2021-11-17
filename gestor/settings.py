@@ -5,7 +5,7 @@ from gestor.env import credentials
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', credentials.get('django_secret_key'))
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-ALLOWED_HOSTS = ['apepu-gestor.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['apepu-gestor.herokuapp.com' , '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -119,17 +119,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-ACCOUNT_AUTHENTICATION_METHOD='email'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED=True
-ACCOUNT_LOGOUT_ON_GET=True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_LOGOUT_ON_GET = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'inicio'
 ACCOUNT_SESSION_REMEMBER = False
 SOCIALACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapter'
 ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'
-DEFAULT_CHARSET='utf-8'
+DEFAULT_CHARSET = 'utf-8'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587

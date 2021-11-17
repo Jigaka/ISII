@@ -90,13 +90,17 @@ Gestion de Proyectos | Sprint Backlog
                         {% if objeto.estimacion != 0%}
                           <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar</a><br>
                         {% endif %}
+                        {% if  request.user.id == objeto.proyecto.encargado.id %}
+                            {% if objeto.estado != "Cancelado" %}
+                             <a href="{%  url 'sprint:cancelar_hu' objeto.id %}">Cancelar</a><br>
+                                {% endif %}
+                            {% endif %}
                         <!--{% if objeto.estimacion != 0%}
                           <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
                         {% endif %}-->
+
                   </td>
-
                   {%endifequal%}
-
                </tr>
                      {% endfor %}
                   {% endif %}

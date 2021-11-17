@@ -141,26 +141,35 @@ Gestion de Proyectos | Tabla Kanban
             {% endfor %}
         </div><div id="QA" class="section">
             <h1>QA</h1>
+            {% for us_copia in us_fin %}
+
+            {%  if us_copia.rechazado_QA == True %}
+                <div  class="card">
+                        <div onclick="verUS('{% url 'sprint:ver_us' us_copia.hu.id %}')">
+                            {{ us_copia.hu.nombre }}
+                        </div>
+                 <p>Rechazado</p>
+                {{ us_copia.comentario }}
+                </div>
+            {% endif %}
+        {% endfor %}
             {% for us in object_list %}
                 {% if us.userHistory.estado == 'QA' %}
                     <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
                         <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id sprint.id%}')">
                             <button type="button" class="btn btn-light" name="button">{{ us.userHistory.nombre }}</button>
                         </div>
-                        {%  if us.userHistory.estado_hu.first.aprobado_QA == False and us.userHistory.estado_hu.first.rechazado_QA == False %}
+                        {%  if us.userHistory.aprobado_QA == False  %}
                         <button onclick="aprobarQA('{% url 'sprint:aprobarQA' id us.userHistory.id %}')" style="float: right" title="Aprobar Historia de Usuario"><i class="ti-check"></i></button>
                         <br><br>
                         <button onclick="rechazarQA('{% url 'sprint:rechazarQA' id us.userHistory.id %}')" style="float: right" title="Rechazar Historia de Usuario"><i class="ti-close"></i></button>
                         <br><br>
                         {% endif %}
-                        {%  if us.userHistory.estado_hu.first.aprobado_QA == True %}
+                        {%  if us.userHistory.aprobado_QA == True %}
                             <p>Aprobado</p>
-                            {{ us.userHistory.estado_hu.first.comentario }}
+                            {{ us.userHistory.comentario }}
                           {% endif %}
-                        {%  if us.userHistory.estado_hu.first.rechazado_QA == True %}
-                            <p>Rechazado</p>
-                             {{ us.userHistory.estado_hu.first.comentario }}
-                          {% endif %}
+
                         <br><br>
                         <details>
                             <summary style="text-align: left">Actividades</summary>
@@ -175,6 +184,7 @@ Gestion de Proyectos | Tabla Kanban
                     </div>
                 {% endif %}
             {% endfor %}
+
         </div>
     </div>
     <div class="modal fade" id="editarActividad" role="dialog">

@@ -3,7 +3,7 @@ from django.contrib.auth.models import  Group
 from django.template.loader import get_template
 from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform, cambiarEstadoProyect, asignarEquipoProyect
 from .models import Proyec
-from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
+from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU, Estado_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy, reverse
@@ -82,7 +82,18 @@ class asignarEquipoProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateV
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/asignar_equipo_proyecto.html'
     form_class = asignarEquipoProyect
-    success_url = reverse_lazy('proyectos:mis_proyectos')
+    def get_success_url(self):
+        id = self.object.pk
+        proyecto = Proyec.objects.get(id=id)
+        for x in proyecto.equipo.all():
+            user = User.objects.get(id=x.id)
+            context = {'proyecto': proyecto}
+            template = get_template('correos/equipo.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
+        return reverse('proyectos:mis_proyectos')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,7 +117,6 @@ class EliminarProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
         object.delete()
         return redirect('proyectos:listar_proyectos')
 
-
 class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
     # permission_required = ('user.view_user', 'user.add_user',
     #                        'user.delete_user', 'user.change_user')
@@ -114,30 +124,20 @@ class Proyecto(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
         proyecto = Proyec.objects.get(id=pk)
         return render(request, 'proyectos/proyecto.html', {'proyecto':proyecto, 'proyecto_id':pk})
 
-
-
 class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
     ''' Vista basada en clase, muestra los integrantes de un proyecto'''
 
     model = User
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
-
     def get(self, request, pk, *args, **kwargs):
         """ Funcion para retornar la lista de integrantes de un proyecto
-
-
-
         Argumentos:
             pk: ID del proyecto
-
         Returns:
             view: render listado de integrantes
         """
-
-
         users = Proyec.objects.get(id=pk).equipo.all()
-
         ''' Doc para la linea de abajo
             Esta parte es un poco larga.
             Recorre la lista users, para obtener cada user. Luego, de acuerdo al user,obtiene
@@ -149,7 +149,6 @@ class ListadoIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
         proyecto = Proyec.objects.get(id=pk)
         return render(request, 'proyectos/listar_integrantes.html', {'users': integrantes, 'proyecto': proyecto})
 
-
 class ExpulsarIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     """Vista basada en clase se utiliza para expulsar un integrante del proyecto"""
 
@@ -159,20 +158,20 @@ class ExpulsarIntegrantes(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateVie
     print("ExpulsarIntegrantes")
     fields = '__all__'
     def get(self, request, *args, **kwargs):
-        print(kwargs)
-        print(self)
-        print(request)
-        print(args)
         user = User.objects.get(id = kwargs['pk'])
         proyecto = Proyec.objects.get(id=kwargs['pl'])
-        print("USER", user, "PROYECTO", proyecto)
+        context = {'proyecto': proyecto}
+        template = get_template('correos/expulsar.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                       [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
         rol = user.rol.filter(proyecto_id=kwargs['pl']).first()
-        print(rol)
         if rol == None:
             proyecto.equipo.remove(user)
             return redirect('proyectos:listar_integrantes', kwargs['pl'])
         grupo =  Group.objects.filter(name=rol.nombre).first()
-        print("ROL", rol, "GRUPO", grupo)
         proyecto.equipo.remove(user)
         user.groups.remove(grupo)
         user.rol.remove(rol)
@@ -189,29 +188,20 @@ class AsignarRolProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView
     template_name = 'proyectos/asignar_rol.html'
     success_url = reverse_lazy('proyectos:listar_proyectos')
 
-
-
 def listarProyectoporEncargado(request):
     user = User.objects.get(id=request.user.id)
     proyectos = user.encargado.all()
     return render(request, 'proyectos/listarporencargado.html', {'proyectos': proyectos})
-
-
 class listarProyectosUsuario(LoginYSuperStaffMixin, ListView):
     """Vista basada en clase para listar los proyectos en los que se esta
     ya sea como encargado o solo miembro.
     """
-
-
     model = Proyec
     def get(self, request, *args, **kwargs):
         user = User.objects.get(id=request.user.id)
         proyectos = user.equipo.all()
         return render(request, 'proyectos/listar_proyectos.html', {'object_list': proyectos,'title':'Mis proyectos'})
-
-
 class CrearUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, CreateView):
-
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     permission_required = ('view_historiausuario', 'add_historiausuario',
                             'delete_historiausuario', 'change_historiausuario')
@@ -219,10 +209,8 @@ class CrearUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, Cr
     form_class = CrearUSForm
     template_name = 'proyectos/crear_US.html'
     success_url = reverse_lazy('proyectos:listar_us')
-
     def post(self, request, *args, **kwargs):
         """ Funcion para crear un rol con los datos devueltos por el form
-
         Crea un nuevo rol con los datos devueltos por el form. Tambien relaciona dicho rol
         con el proyecto actual.
         """
@@ -237,7 +225,6 @@ class CrearUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, Cr
         id_hu=HistoriaUsuario.objects.get(nombre=nombre).id
         Historial_HU.objects.create(descripcion='Creacion de la Historia de Usuario: '+nombre+' id #'+ id_hu.__str__()+' con prioridad: '+prioridad, hu=HistoriaUsuario.objects.get(id=id_hu))
         return redirect('proyectos:listar_us', id)
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -253,33 +240,36 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
-
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        pk = self.kwargs['pk']
+        #pk = self.kwargs['pk']
         id_hu = self.object.pk
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id
-        print(id_proyecto)
+        #print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
-
     def get_success_url(self):
         id_hu = self.object.pk
-        Historial_HU.objects.create(
-            descripcion='Asignacion de la Historia de Usuario a: ' + HistoriaUsuario.objects.get(
-                id=id_hu).asignacion.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
-        Historial_HU.objects.create(
-            descripcion=' Estmacion del Scum Master: ' + HistoriaUsuario.objects.get(
-                id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
+        idp = HistoriaUsuario.objects.get( id=id_hu).asignacion.id
+        user = User.objects.get(id=idp)
+        context = {'hu': HistoriaUsuario.objects.get(id=id_hu)}
+        template = get_template('correos/asignacion.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
+        template = get_template('correos/estimar_desarrollador.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
+        Historial_HU.objects.create(descripcion='Asignacion de la Historia de Usuario a: ' + HistoriaUsuario.objects.get( id=id_hu).asignacion.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
+        Historial_HU.objects.create(descripcion=' Estmacion del Scum Master: ' + HistoriaUsuario.objects.get(id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
-
-
-
 
 class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
@@ -288,30 +278,34 @@ class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
                            'delete_rol', 'change_rol')
     template_name = 'sprint/reasingar_us.html'
     form_class = reasinarUSform
-
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         pk = self.kwargs['pk']
         id_hu = self.object.pk
-        print("REASIGNAR",HistoriaUsuario.objects.get(id=id_hu).sprint.id)
+        #print("REASIGNAR",HistoriaUsuario.objects.get(id=id_hu).sprint.id)
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id #Se envia en el context tambien el sprint para que no haya error de id
-        print(id_proyecto)
+        #print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
-
     def get_success_url(self):
         id_hu = self.object.pk
+        idp = HistoriaUsuario.objects.get(id=id_hu).asignacion.id
+        user = User.objects.get(id=idp)
+        context = {'hu': HistoriaUsuario.objects.get(id=id_hu)}
+        template = get_template('correos/asignacion.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                       [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
         Historial_HU.objects.create(
             descripcion='Reasignacion de la Historia de Usuario a: ' + HistoriaUsuario.objects.get(
                 id=id_hu).asignacion.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id})
-
-
 class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = HistoriaUsuario
@@ -321,7 +315,6 @@ class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHis
                             'delete_historiausuario', 'change_historiausuario')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
-    
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -331,16 +324,13 @@ class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHis
         id_hu = self.object.pk
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
-
         return context
     def form_valid(self, form):
         form.instance.rechazado_PB = False
         return super(EditarUs, self).form_valid(form)
-
     def get_success_url(self):
         return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
-
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = HistoriaUsuario
     template_name = 'proyectos/listar_us.html'
@@ -350,8 +340,6 @@ class ListarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, L
         proyecto = Proyec.objects.get(id=pk)
         us = proyecto.proyecto.filter(aprobado_PB=False).order_by('-prioridad_numerica','id')
         return render(request, 'proyectos/listar_us.html', {'proyecto':proyecto, 'object_list': us})
-
-
 class EliminarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario,DeleteView):
     """ Vista basada en clase, se utiliza para eliminar un proyecto"""
     model = HistoriaUsuario
@@ -372,6 +360,7 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         aprobado_PB=request.POST['aprobado_PB']
         if aprobado_PB== 'on' or aprobado_PB== True:
             HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+            '''envio de email para notificacion '''
             idp = HistoriaUsuario.objects.get(id=id).product_owner.id
             user = User.objects.get(id=idp)
             context = {'hu': HistoriaUsuario.objects.get(id=id)}
@@ -386,20 +375,7 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         return redirect('proyectos:listar_us', HistoriaUsuario.objects.get(id=id).proyecto.id)
     def form_valid(self, form):
         form.instance.rechazado_PB = False
-        HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
-        idp = HistoriaUsuario.objects.get(id=id).product_owner.id
-        user = User.objects.get(id=idp)
-        context = {'u': user.id}
-        template = get_template('correos/aprobado_pb_correo.html')
-        content = template.render(context)
-        email = EmailMultiAlternatives('Pruebaa', 'Gestor', settings.EMAIL_HOST_USER, [user.getEmail()])
-        email.attach_alternative(content, 'text/html')
-        print('enviando correo')
-        email.send()
         return super(aprobarUS, self).form_valid(form)
-
-
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -410,9 +386,6 @@ class aprobarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
-
-
-
     def get_success_url(self):
         id_hu = self.object.pk
         Historial_HU.objects.create(
@@ -437,12 +410,23 @@ class rechazarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinH
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
-
     def get_success_url(self):
-        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+        id_hu = self.object.pk
+        hu = HistoriaUsuario.objects.get(id=id_hu)
+        idp = hu.product_owner.id
+        user = User.objects.get(id=idp)
+        context = {'hu': HistoriaUsuario.objects.get(id=id_hu)}
+        template = get_template('correos/rechazado.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                       [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
+        Historial_HU.objects.create(descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(id=id_hu).nombre + ' es rechazada por el Scrum Master',
+            hu=HistoriaUsuario.objects.get(id=id_hu))
+        return reverse('proyectos:listar_us', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id})
 
 class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
-
     model = HistoriaUsuario
     template_name = 'proyectos/ver_PB.html'
     permission_required = ('view_rol', 'add_rol',
@@ -452,13 +436,11 @@ class ProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMi
         us = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
         return render(request, 'proyectos/ver_PB.html', {'object_list': us,'proyecto':proyecto})
 
-
 class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = HistoriaUsuario
     template_name = 'sprint/us-a-estimar.html'
     permission_required = ('view_proyec', 'change_proyec')
-
     def get(self, request, pk, *args, **kwargs):
         sprint =Sprint.objects.get(id=pk)
         user = User.objects.get(id=request.user.id)
@@ -467,14 +449,12 @@ class Listar_us_a_estimar(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermi
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/us-a-estimar.html', {'object_list': us, 'proyecto': proyecto})
 
-
-class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
+class estimarUS( UpdateView):
     """ Vista basada en clase, se utiliza para que el developer estime su historia de usuario asignado"""
     model = HistoriaUsuario
-    permission_required = ('view_proyec', 'change_proyec')
+    #permission_required = ('view_proyec', 'change_proyec')
     template_name = 'sprint/estimar_us.html'
     form_class = estimar_userform
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -486,10 +466,8 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         id_sprint=HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
-        context['sprint']= Sprint.objects.get(id=id_sprint)
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
-
-
     def get_success_url(self):
         id_hu = self.object.pk
         Historial_HU.objects.create(

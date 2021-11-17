@@ -51,7 +51,7 @@ Gestion de Proyectos | Product Backlog
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                        {% if  request.user.id == us.proyecto.encargado.id %}
+                            {% if  request.user.id == us.proyecto.encargado.id %}
                              <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
                             {% endif %}
                  </td>
@@ -96,9 +96,7 @@ Gestion de Proyectos | Product Backlog
                    <td>{{ us.estado }}</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                      {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
-                            {% endif %}
+
                  </td>
                </tr>
                   {% endif %}
@@ -141,9 +139,6 @@ Gestion de Proyectos | Product Backlog
                    <td>{{ us.estado }}</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                      {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
-                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -185,9 +180,6 @@ Gestion de Proyectos | Product Backlog
                    <td>{{ us.estado }}</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                      {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
-                            {% endif %}
                  </td>
                </tr>
                   {% endif %}

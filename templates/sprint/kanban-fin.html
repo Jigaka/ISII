@@ -64,8 +64,11 @@ Gestion de Proyectos | Tabla Kanban
     <div id="board">
         <div id="ToDo" class="section">
             <h1>To Do</h1>
+
             {% for us in object_list %}
+
                 {% if us.estado == 'ToDo' %}
+
                        <div id={{ us.hu.id }} class="card">
                         {{ us.hu.nombre }}
                     </div>
@@ -92,7 +95,7 @@ Gestion de Proyectos | Tabla Kanban
         </div><div id="QA" class="section">
             <h1>QA</h1>
             {% for us in object_list %}
-                {% if us.hu.estado == 'QA' or us.estado == 'Aprobado_QA' or us.estado == 'Rechazado_QA' %}
+                {% if us.estado == 'QA' or us.estado == 'Aprobado_QA' or us.estado == 'Rechazado_QA' %}
                     <div  class="card">
                         {{ us.hu.nombre }}
                         {%  if us.aprobado_QA == False and us.rechazado_QA == False %}

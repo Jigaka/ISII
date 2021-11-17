@@ -72,24 +72,35 @@ Gestion de Proyectos | Sprint Backlog
                  <td>{{ objeto.descripcion }}</td>
                  <td>{{ objeto.prioridad }}</td>
                  <td>{{ objeto.asignacion }}</td>
-                 <td>{{ objeto.estimacion }} horas
-                     <div>
+                 <td>
+                    {% if objeto.estimacion == 0%}
+                    Pendiente
+                    <div>
                         {% ifequal request.user.username|stringformat:"s" objeto.asignacion|stringformat:"s" %}
-                            {% if objeto.estimacion == 0%}
-                            <a style="color:blue" href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
-                            {% endif %}
+                        <a style="color:blue" href="{%  url 'sprint:estimar_us' objeto.id %}">Estimar</a>
                         {%endifequal%}
                      </div>
+                    {%else%}
+                    {{ objeto.estimacion }} horas
+                    {%endif%}
                  </td>
                    <td>{{ objeto.estado }}</td>
                  {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                  <td style="text-align: left;">
                         {% if objeto.estimacion == 0%}
-                          <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar y estimar</a><br>
+                        {% if objeto.estimacion_scrum == 0%}
+                            <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar y estimar</a><br>
+                        {%else%}
+                            <a href="{%  url 'sprint:configurar_us' objeto.id %}">Reasignar y estimar</a><br>
+                        {%endif%}
                         {% endif %}
                         {% if objeto.estimacion != 0%}
-                          <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar</a><br>
+                          <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar desarrollador</a><br>
                         {% endif %}
+
+                        {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+                        <a href="{%  url 'proyectos:quitar_us_de_sb' objeto.id sprint.id %}">Quitar de sprint</a><br>
+                        {% endifequal %}
                         <!--{% if objeto.estimacion != 0%}
                           <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
                         {% endif %}-->

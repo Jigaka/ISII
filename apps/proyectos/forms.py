@@ -70,6 +70,12 @@ class configurarUSform(forms.ModelForm):
         sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
         #print(HU)
         self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        estimacion_scrum = cleaned_data.get('estimacion_scrum')
+        if (estimacion_scrum <= 0):
+            raise forms.ValidationError('Por favor inserte un número positivo.')
 
 
 class reasinarUSform(forms.ModelForm):
@@ -94,6 +100,12 @@ class estimar_userform(forms.ModelForm):
         labels = {
             'estimacion_user': 'Tiempo requerido (en horas)',
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        estimacion_user = cleaned_data.get('estimacion_user')
+        if (estimacion_user <= 0):
+            raise forms.ValidationError('Por favor inserte un número positivo.')
+    
 
 
 class aprobar_usform(forms.ModelForm):

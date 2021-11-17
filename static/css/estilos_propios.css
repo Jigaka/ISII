@@ -1,10 +1,5 @@
 .eliminar:hover{
-    color:white;
-    background-color: red;
-    border-radius: 2px;
-}   
-.eliminar{
-    color: red;
+    color:red;
 }
 .opciones a{
     padding: 0 8px;
@@ -28,13 +23,9 @@
     color:white;
 }
 .aprobar:hover{
-    color:white;
-    background-color:green;
-    border-radius: 2px;
-}   
-.aprobar{
     color: green;
-}
+}   
+
 .fondo-claro{
     background-color: #e8e9ef;
 }
@@ -91,4 +82,15 @@
 }
 .boton-crear-us:hover a{
     color:#03A9F3
+}
+
+.boton-iniciar-sprint a{
+    color:white;
+}
+.boton-iniciar-sprint{
+    padding:5px 10px;
+    background-color: green;
+}
+.boton-iniciar-sprint:hover{
+    background-color: darkgreen;
 }

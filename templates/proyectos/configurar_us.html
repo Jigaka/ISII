@@ -13,13 +13,16 @@ Gestion de Proyectos | Asignar y estimar Historia de Usuario
     <div class="card-header">
         <strong>Asignar y estimar Historia de Usuario</strong>
     </div>
+    <div class="card-header">
+
+      <strong>Nombre :</strong> {{ us.nombre }}<br>
+      <strong>Descripcion :</strong> {{ us.descripcion }}<br>
+      <strong>Prioridad :</strong> {{ us.prioridad }}<br>
+    </div>
+
     <div class="card-body card-block">
       <form method="POST">
-        <style>
-          p {
-            color:black;
-          }
-        </style>
+        <style>p {color:black;}</style>
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit" class="btn btn-primary">Guardar</button>

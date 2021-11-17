@@ -78,15 +78,15 @@ class configurarUSform(forms.ModelForm):
             raise forms.ValidationError('Por favor inserte un número positivo.')
 
 
-class reasinarUSform(forms.ModelForm):
+class reasignarUSform(forms.ModelForm):
     class Meta:
         model = HistoriaUsuario
         fields = ['asignacion']
         labels = {
-            'asignacion': 'Asignar Historia de Usuario'
+            'asignacion': 'Asignar desarrollador'
         }
     def __init__(self, *args, **kwargs):
-        super(reasinarUSform, self).__init__(*args, **kwargs)
+        super(reasignarUSform, self).__init__(*args, **kwargs)
         sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
         # print(HU)
         self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo

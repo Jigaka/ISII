@@ -1,0 +1,10 @@
+{% extends 'sprint/sprint.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Iniciar Sprint
+{% endblock titulo %}
+
+{% block body %}
+{{mensaje|linebreaksbr}}<br><br>
+
+<a class="btn btn-primary" href="{%  url 'sprint:ver_sb'  sprint.id %}" role="button">Volver</a>
+{% endblock body %}

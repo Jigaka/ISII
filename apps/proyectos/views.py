@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import  Group
 from django.template.loader import get_template
-from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasinarUSform, rechazar_usform, cambiarEstadoProyect, asignarEquipoProyect
+from .forms import ProyectoForm, configurarUSform, editarProyect, CrearUSForm,aprobar_usform, estimar_userform, reasignarUSform, rechazar_usform, cambiarEstadoProyect, asignarEquipoProyect
 from .models import Proyec
 from apps.sprint.models import HistoriaUsuario, Sprint, Historial_HU
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint
@@ -266,6 +266,7 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         context['sprint'] = Sprint.objects.get(id=id_sprint)
+        context['us']=HistoriaUsuario.objects.get(id=id_hu)
         return context
 
     def get_success_url(self):
@@ -286,8 +287,8 @@ class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
     model = HistoriaUsuario
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
-    template_name = 'sprint/reasingar_us.html'
-    form_class = reasinarUSform
+    template_name = 'sprint/reasignar_us.html'
+    form_class = reasignarUSform
 
 
     def get_context_data(self, **kwargs):
@@ -302,6 +303,7 @@ class Reasignar_us(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
         print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         context['sprint'] = Sprint.objects.get(id=id_sprint)
+        context['us']= HistoriaUsuario.objects.get(id=id_hu)
         return context
 
     def get_success_url(self):
@@ -495,6 +497,7 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         id_sprint=HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
         context['sprint']= Sprint.objects.get(id=id_sprint)
+        context['us']=HistoriaUsuario.objects.get(id=pk)
         return context
 
 
@@ -505,3 +508,27 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                 id=id_hu).asignacion.getNombreUsuario()+' :' +HistoriaUsuario.objects.get(
                 id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+
+
+class QuitarUSdeSprintBacklog(TemplateView):
+    template_name = 'proyectos/quitar_us_de_sb.html'
+    model = HistoriaUsuario
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+
+    def get(self, request, *args, **kwargs):
+        
+        pk = self.kwargs['pk']
+        us=HistoriaUsuario.objects.get(id=pk)
+        sprint_id= self.kwargs['sprint_id']
+        sprint= Sprint.objects.get(id=sprint_id)
+        proyecto=sprint.proyecto
+
+        us_esta_en_sprint = HistoriaUsuario.objects.filter(id=pk,sprint=sprint).exists()
+        if us_esta_en_sprint:            
+            mensaje=(us.nombre)+(" está en ")+(sprint.nombre)
+            HistoriaUsuario.objects.filter(id=pk).update(estado='Pendiente',estimacion_user=0,estimacion_scrum=0, estimacion=0, asignacion=None, sprint=None, sprint_backlog=False)
+        else:    
+            mensaje=(us.nombre)+(" NO está en ")+(sprint.nombre)
+
+        return render(request, 'proyectos/quitar_us_de_sb.html',{'sprint': sprint,'mensaje':mensaje, 'proyecto':proyecto})

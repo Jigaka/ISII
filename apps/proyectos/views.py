@@ -30,8 +30,6 @@ class CrearProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
 
 class ListarProyectos(LoginYSuperStaffMixin, LoginYSuperUser, ListView):
     """Vista basada en clase para mostrar todos los proyectos para el admin"""
-
-
     model = Proyec
     permission_required = ('user.view_user', 'user.add_user',
                            'user.delete_user', 'user.change_user')

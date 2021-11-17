@@ -78,22 +78,26 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
                                     id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado:Pendiente',
                                 hu=HistoriaUsuario.objects.get(id=hu.id))
                         elif hu.estado == 'QA':
-                            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
-                                                     desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
-                                                     PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,
-                                                     rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
-
+                            if hu.aprobado_QA:
+                                Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado='Aprobado_QA',
+                                                         desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                                         PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,
+                                                         rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
+                            else:
+                                Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
+                                                         desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                                         PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,
+                                                         rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
                         elif hu.estado == 'Done':
                             HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
-                            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado='QA',desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
                             PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
                             idp = hu.proyecto.encargado.id
                             user = User.objects.get(id=idp)
                             context = {'hu': HistoriaUsuario.objects.get(id=hu.id)}
                             template = get_template('correos/revisar_QA.html')
                             content = template.render(context)
-                            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion',
-                                                           settings.EMAIL_HOST_USER, [user.getEmail()])
+                            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion',settings.EMAIL_HOST_USER, [user.getEmail()])
                             email.attach_alternative(content, 'text/html')
                             email.send()
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})

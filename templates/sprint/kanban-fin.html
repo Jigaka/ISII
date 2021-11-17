@@ -89,7 +89,9 @@ Gestion de Proyectos | Tabla Kanban
             <h1>Done</h1>
             {% for us in object_list %}
                 {% if us.estado == 'Done' %}
-
+                    <div id={{ us.hu.id }} class="card">
+                        {{ us.hu.nombre }}
+                    </div>
                 {% endif %}
             {% endfor %}
         </div><div id="QA" class="section">

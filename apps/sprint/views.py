@@ -661,6 +661,35 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 
+class ReporteSprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SB.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SB.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
+
+class ReporteSprintActual(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SA.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SA.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
+
+
 class IniciarSprint(TemplateView):
     template_name = 'sprint/iniciar_sprint.html'
     model = Sprint
@@ -702,3 +731,4 @@ class IniciarSprint(TemplateView):
             mensaje="Este sprint no puede ser iniciado."    
         
         return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje})
+

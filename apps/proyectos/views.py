@@ -321,7 +321,7 @@ class EditarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHis
                             'delete_historiausuario', 'change_historiausuario')
     template_name = 'proyectos/editar_us.html'
     form_class = CrearUSForm
-    
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -505,3 +505,18 @@ class estimarUS(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHi
                 id=id_hu).asignacion.getNombreUsuario()+' :' +HistoriaUsuario.objects.get(
                 id=id_hu).estimacion_scrum.__str__(), hu=HistoriaUsuario.objects.get(id=id_hu))
         return reverse('sprint:ver_sb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).sprint.id })
+
+
+
+class ReporteProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'proyectos/reporte_PB.html'
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        proyecto=Proyec.objects.get(id=pk)
+        print(proyecto)
+        print("HOAL")
+        us = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
+        return render(request, 'proyectos/reporte_PB.html', {'object_list': us,'proyecto':proyecto})

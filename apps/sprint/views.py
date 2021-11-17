@@ -666,3 +666,30 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
     def get_success_url(self):
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
+class ReporteSprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SB.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SB.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
+
+class ReporteSprintActual(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SA.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SA.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})

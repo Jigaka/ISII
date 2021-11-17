@@ -2,7 +2,7 @@ from django.urls import path
 from apps.proyectos.views import ConfigurarUs, estimarUS,Listar_us_a_estimar, Reasignar_us
 from .views import AsignarCapacidadDiaria, CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, configurarEquipoSprint, \
   Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad, Historial_por_hu,\
-     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu
+     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu, ReporteSprintBacklog, ReporteSprintActual
 urlpatterns = [
      path('crear_sprint/<int:pk>', CrearSprint.as_view(), name='crear_sprint'),
      path('listar_sprint/<int:pk>', ListarSprint.as_view(), name='listar_sprint'),
@@ -29,4 +29,6 @@ urlpatterns = [
      path('capacidad/<int:pk>',VisualizarCapacidad.as_view(), name='capacidad'),
      path('burn_down_chart/<int:pk>',BurnDownChart.as_view(), name='burn_down_chart'),
      path('cancelar_hu/<int:pk>',Cancelar_hu.as_view(), name='cancelar_hu'),
+     path('reporte_SB/<int:pk>',ReporteSprintBacklog.as_view(), name='reporte_SB'),
+     path('reporte_SA/<int:pk>',ReporteSprintActual.as_view(), name='reporte_SA'),
     ]

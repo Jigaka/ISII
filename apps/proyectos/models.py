@@ -5,8 +5,6 @@ from django.db.models.signals import post_save, pre_save
 from django.template.loader import get_template
 from django.conf import settings
 from apps.user.models import User, Rol
-
-
 '''
 Modelo para el proyecto a desarrollar.
 Este represe la clase del proyecto, el cual contiene

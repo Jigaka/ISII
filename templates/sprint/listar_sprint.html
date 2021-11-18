@@ -57,6 +57,10 @@ Gestion de Proyectos | Listado de historia de usuarios
                             <a href="{%  url 'sprint:eliminar_sprint' sprint.id %}" class="eliminar">Eliminar&nbsp;Sprint</a>
                             {%endifequal%}
                         {%endifequal%}
+                        <a href="{%  url 'sprint:reporte_SB' sprint.id %}">Generar Reporte</a>
+                        {% ifequal sprint.get_estado_display|stringformat:"s" "Iniciado" %}
+                        <a href="{%  url 'sprint:reporte_SA' sprint.id %}">Reporte del Sprint Iniciado</a>
+                        {%endifequal%}
                  </td>
 
                </tr>

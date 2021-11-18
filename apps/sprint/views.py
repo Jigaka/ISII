@@ -1,8 +1,6 @@
-from typing import List
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import get_template
-
 from .forms import CapacidadDiariaEnSprintForm,rechazarQAForm, SprintForm, agregar_hu_form,\
     aprobarQAForm,configurarEquipoSprintform, cambio_estadoHU_form, CrearActividadForm, cancelar_huform
 from .models import CapacidadDiariaEnSprint, Proyec,  Sprint, HistoriaUsuario, User, Historial_HU, Actividad,Estado_HU
@@ -51,7 +49,6 @@ class CrearSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
     def get_success_url(self):
         return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
 
-
 class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOTSuperUser, ListView ):
     """ Vista basada en clase, se utiliza para listar las historias de usuarios del sistema del proyecto"""
     model = Sprint
@@ -59,26 +56,52 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
         sprint = proyecto.proyecto_s.all().order_by('fecha_inicio')
-        #for s in sprint:
-        #    if (s.estado=='Finalizado'):
-        #        Sprint.objects.filter(id=s.id).update(estado='Finalizado')
-        #        hus = Sprint.objects.get(id=s.id).sprint.all()
-        #        print(hus)
-        #        for hu in hus:
-        #            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
-        #                                        desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
-        #                                        PP=hu.estimacion)
-        #            if hu.estado != 'Done':
-        #                HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-        #                                                                prioridad='Alta',prioridad_numerica=3,estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
-        #                Historial_HU.objects.create(
-        #                    descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
-        #                        id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
-        #                        id=hu.id).estado,
-        #                    hu=HistoriaUsuario.objects.get(id=hu.id))
-        #            elif hu.estado == 'Done':
-        #                HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
+        for s in sprint:
+            #if (s.estado=='Pendiente'):
+            #    if date.today() >= s.fecha_inicio and date.today() <= s.fecha_fin:
+            #        Sprint.objects.filter(id=s.id).update(estado='Iniciado')
+            if (s.estado=='Iniciado' or s.estado=='Pendiente'):
+                if date.today() > s.fecha_fin:
+                    Sprint.objects.filter(id=s.id).update(estado='Finalizado')
+                    hus = Sprint.objects.get(id=s.id).sprint.all()
+                    print(hus)
+                    for hu in hus:
+                        if hu.estado != 'Done' and hu.estado != 'QA':
+                            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
+                                                     desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                                     PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,
+                                                     rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
+                            HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
+                                                                            prioridad='Alta',prioridad_numerica=3 , estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
+                            Historial_HU.objects.create(
+                                descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                                    id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado:Pendiente',
+                                hu=HistoriaUsuario.objects.get(id=hu.id))
+                        elif hu.estado == 'QA':
+                            if hu.aprobado_QA:
+                                Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado='Aprobado_QA',
+                                                         desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                                         PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,
+                                                         rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
+                            else:
+                                Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
+                                                         desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                                         PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,
+                                                         rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
+                        elif hu.estado == 'Done':
+                            HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
+                            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado='QA',desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                            PP=hu.estimacion, aprobado_QA=hu.aprobado_QA,rechazado_QA=hu.rechazado_QA, comentario=hu.comentario)
+                            idp = hu.proyecto.encargado.id
+                            user = User.objects.get(id=idp)
+                            context = {'hu': HistoriaUsuario.objects.get(id=hu.id)}
+                            template = get_template('correos/revisar_QA.html')
+                            content = template.render(context)
+                            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion',settings.EMAIL_HOST_USER, [user.getEmail()])
+                            email.attach_alternative(content, 'text/html')
+                            email.send()
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
+
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
     """ Vista basada en clase, se utiliza para agregar las historias de usuarios al sprint"""
@@ -87,7 +110,6 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
                           'delete_rol', 'change_rol')
     template_name = 'sprint/agregarHU.html'
     form_class = agregar_hu_form
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -101,7 +123,6 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=id_hu).proyecto.id})
     def post(self, request, *args, **kwargs):
         """ Funcion para crear un rol con los datos devueltos por el form
-
         Crea un nuevo rol con los datos devueltos por el form. Tambien relaciona dicho rol
         con el proyecto actual.
         """
@@ -109,6 +130,15 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
         HU = HistoriaUsuario.objects.get(id=id)
         sprint = request.POST['sprint']
         HistoriaUsuario.objects.filter(id=id).update(sprint=sprint, sprint_backlog=True, estado='ToDo')
+        idp = HU.product_owner.id
+        user = User.objects.get(id=idp)
+        context = {'hu': HistoriaUsuario.objects.get(id=id)}
+        template = get_template('correos/addsprint.html')
+        content = template.render(context)
+        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                       [user.getEmail()])
+        email.attach_alternative(content, 'text/html')
+        email.send()
         Historial_HU.objects.create(
             descripcion='Se agrega la Historia de Usuario: ' + HistoriaUsuario.objects.get(
                 id=id).nombre+ ' al Sprint: '+ HistoriaUsuario.objects.get(
@@ -116,15 +146,13 @@ class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisos
             hu=HistoriaUsuario.objects.get(id=id))
         return redirect('proyectos:ver_pb', HU.proyecto_id)
 
-
 class EliminarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSuperUser, DeleteView):
     """ Vista basada en clase, se utiliza para eliminar un proyecto"""
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
     def get_success_url(self):
-        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id })
-
+        return reverse('sprint:listar_sprint', kwargs={'pk': Sprint.objects.get(id=self.object.pk).proyecto.id})
 class EditarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSuperUser, UpdateView):
     """ Vista basada en clase, se utiliza para editar las historias de usuarios del proyecto"""
     model = Sprint
@@ -132,7 +160,6 @@ class EditarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSu
                            'delete_rol', 'change_rol')
     template_name = 'sprint/editar_sprint.html'
     form_class = SprintForm
-
     def get_form_kwargs(self):
         kwargs = super(EditarSprint,self).get_form_kwargs()
         id_sprint=self.kwargs['pk']
@@ -153,51 +180,38 @@ class EditarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSu
         id_proyecto= Sprint.objects.get(id=self.object.pk).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
-
-
 class VerSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, TemplateView):
     """
         Vista basada en clase para mostrar el menu de un sprint
     """
     permission_required = ('view_proyec', 'change_proyec')
-
     def get(self, request, *args, **kwargs):
         """
             funcion para renderizar el menu del sprint
         """
         pk = self.kwargs['pk']
-
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-
         return render(request, 'sprint/sprint.html',{"sprint":sprint,"proyecto":proyecto})
-
 
 class VerActividad(LoginYSuperStaffMixin, TemplateView):
     """
         Vista basada en clase para mostrar una actividad
     """
     permission_required = ('view_proyec', 'change_proyec')
-
-
     def get(self, request, *args, **kwargs):
         """
             funcion para renderizar una actividad
         """
         pk = self.kwargs['pk']
-
         actividad = Actividad.objects.get(id=pk)
-
         return render(request, 'sprint/ver_actividad.html', {"actividad": actividad})
-
 
 class VerUS(LoginYSuperStaffMixin, TemplateView):
     """
         Vista basada en clase para mostrar un user history
     """
     permission_required = ('view_proyec', 'change_proyec')
-
-
     def get(self, request, *args, **kwargs):
         """
             funcion para renderizar un user history
@@ -232,12 +246,7 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
         print(HistoriaUsuario.objects.get(id=pk).horas_restantes)
         return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
 
-
-
-
-
 class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, ListView):
-
     model = HistoriaUsuario
     template_name = 'sprint/ver_sb.html'
     #permission_required = ('view_rol', 'add_rol',
@@ -257,11 +266,9 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
     template_name = 'sprint/ver_sb.html'
     '''permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')'''
-
     def post(self, request, *args, **kwargs):
         id_uh = request.POST['id']
         estado = request.POST['estado']
-
         Historial_HU.objects.create(descripcion='Cambio de estado '+HistoriaUsuario.objects.get(id=id_uh).estado_anterior+' a estado '+ estado, hu=HistoriaUsuario.objects.get(id=id_uh))
         HistoriaUsuario.objects.filter(id=id_uh).update(estado=estado, estado_anterior=estado)
         if estado == 'ToDo':
@@ -269,29 +276,33 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         elif estado == 'Doing':
             HistoriaUsuario.objects.filter(id=id_uh).update(fecha_Doing=date.today())
         elif estado == 'Done':
+            idp = HistoriaUsuario.objects.get(id=id_uh).proyecto.encargado.id
+            user = User.objects.get(id=idp)
+            context = {'hu': HistoriaUsuario.objects.get(id=id)}
+            template = get_template('correos/estado_Done.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,[user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
             HistoriaUsuario.objects.filter(id=id_uh).update(fecha_Done=date.today())
         elif estado == 'QA':
             HistoriaUsuario.objects.filter(id=id_uh).update(fecha_QA=date.today())
         return JsonResponse({'estado':'ok'})
-
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
-
         if sprint.estado == 'Iniciado':
             sprint_iniciado=True
         else:
             sprint_iniciado=False  
-
+        us_fin = sprint.estado_sprint.all()
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
             us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
-            return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto, 'sprint_iniciado':sprint_iniciado})
+            return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto, 'us_fin':us_fin, 'sprint_iniciado':sprint_iniciado})
         else:
-            print("Sprint finalizado")
-            us=sprint.estado_sprint.all()
-            return render(request, 'sprint/kanban-fin.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
+            return render(request, 'sprint/kanban-fin.html', {'object_list': us_fin, 'sprint': sprint, 'proyecto': proyecto})    
 
 
 class AddActividad(LoginYSuperStaffMixin, CreateView):
@@ -301,7 +312,6 @@ class AddActividad(LoginYSuperStaffMixin, CreateView):
     template_name = 'sprint/crear_actividad.html'
     form_class = CrearActividadForm
     model = Actividad
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs['pk']
@@ -330,7 +340,6 @@ class AprobarQA(LoginYSuperStaffMixin, CreateView):
     template_name = 'sprint/aprobarQA.html'
     form_class = aprobarQAForm
     model = HistoriaUsuario
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs['pk']
@@ -338,15 +347,22 @@ class AprobarQA(LoginYSuperStaffMixin, CreateView):
         context['pk'] = pk
         context['us'] = us
         return context
-
     def post(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
         us = self.kwargs['us']
         aprobado_QA = request.POST['aprobado_QA']
         comentario = request.POST['comentario']
-        if aprobado_QA=='on':
+        if aprobado_QA == 'on':
+            user = User.objects.get(id=HistoriaUsuario.objects.get(id=us).asignacion.id)
+            context = {'hu': HistoriaUsuario.objects.get(id=us)}
+            template = get_template('correos/aprobado_QA.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                           [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
             HistoriaUsuario.objects.get(id=us).estado_hu.update(aprobado_QA=True,comentario=comentario,estado='Aprobado_QA')
-            HistoriaUsuario.objects.filter(id=us).update(aprobado_QA=True , comentario=comentario)
+            HistoriaUsuario.objects.filter(id=us).update(aprobado_QA=True, comentario=comentario, estado='QA')
             Historial_HU.objects.create(
                  descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
                 id=us).nombre + ' es aprobada. Comentario: '+HistoriaUsuario.objects.get(id=us).comentario,
@@ -360,7 +376,6 @@ class RechazarQA(LoginYSuperStaffMixin, CreateView):
     template_name = 'sprint/rechazarQA.html'
     form_class = rechazarQAForm
     model = HistoriaUsuario
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs['pk']
@@ -368,24 +383,39 @@ class RechazarQA(LoginYSuperStaffMixin, CreateView):
         context['pk'] = pk
         context['us'] = us
         return context
-
     def post(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
         us = self.kwargs['us']
         rechazado_QA = request.POST['rechazado_QA']
         comentario=request.POST['comentario']
         if rechazado_QA == 'on':
-            us_copia=HistoriaUsuario.objects.get(id=us).estado_hu.filter(sprint_id=pk).update(rechazado_QA=True, comentario=comentario, estado='Rechazado_QA')
-            HistoriaUsuario.objects.filter(id=us).update(sprint_backlog=False, aprobado_PB=True,
-                                                            prioridad='Alta', estimacion_user=0, estimacion_scrum=0,
-                                                            estimacion=0, estado='Pendiente', asignacion=None,
-                                                            sprint=None)
+            '''Envio del correo electronico al usuario asignado'''
+            hu=HistoriaUsuario.objects.get(id=us)
+            if HistoriaUsuario.objects.get(id=us).estado_hu.filter(sprint_id=pk):
+                HistoriaUsuario.objects.get(id=us).estado_hu.filter(sprint_id=pk).update(rechazado_QA=True,
+                                                                                     comentario=comentario,
+                                                                                     estado='Rechazado_QA')
+            else:
+                Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado='Rechazado_QA',
+                                     desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+                                     PP=hu.estimacion, rechazado_QA=True, comentario=comentario)
+
+            user = User.objects.get(id=HistoriaUsuario.objects.get(id=us).asignacion.id)
+            context = {'hu': HistoriaUsuario.objects.get(id=us)}
+            template = get_template('correos/rechazado_QA.html')
+            content = template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,[user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
+            HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
+                                                            prioridad='Alta', prioridad_numerica=3, estimacion_user=0,
+                                                            estimacion_scrum=0, estimacion=0, estado='Pendiente',
+                                                            asignacion=None, sprint=None)
             Historial_HU.objects.create(
                 descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
                     id=us).nombre + ' es rechazada y se agrega de nuevo al Product Backlog con prioridad Alta y estado: Pendiente',
                 hu=HistoriaUsuario.objects.get(id=us))
         return redirect('sprint:kanban', pk)
-
 
 class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinSprint, UpdateView):
     """ Vista basada en clase, se utiliza para asignar equipo al sprint"""
@@ -394,7 +424,6 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
                            'delete_rol', 'change_rol')
     template_name = 'sprint/configurar_equipo.html'
     form_class = configurarEquipoSprintform
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -403,8 +432,18 @@ class configurarEquipoSprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPe
         id_proyecto= Sprint.objects.get(id=self.object.pk).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
-
-    def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
+    def get_success_url(self):
+        id = self.object.pk
+        sprint = Sprint.objects.get(id=id)
+        for x in sprint.equipo.all():
+            user = User.objects.get(id=x.id)
+            context = {'sprint': Sprint.objects.get(id=id)}
+            template = get_template('correos/equipo_sprint.html')
+            content=template.render(context)
+            email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                           [user.getEmail()])
+            email.attach_alternative(content, 'text/html')
+            email.send()
         return reverse('sprint:listar_equipo', kwargs={'pk': self.object.pk})
 
 class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
@@ -413,7 +452,6 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
     #permission_required = ('view_proyec', 'change_proyec')
     template_name = 'sprint/cambio_estado.html'
     form_class = cambio_estadoHU_form
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -426,7 +464,6 @@ class Cambio_de_estadoHU(LoginYSuperStaffMixin, LoginNOTSuperUser, UpdateView):
         context['sprint'] = Sprint.objects.get(id=id_sprint)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
-
     def get_success_url(self):#HistoriaUsuario.objects.get(id=self.object.pk).sprint.id
         id_hu=self.object.pk
         Historial_HU.objects.create(descripcion='Cambio de estado ' + HistoriaUsuario.objects.get(
@@ -447,7 +484,6 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceA
     """Vista basada en clase, se utiliza para listar a los miembros del equipo del sprint"""
     model = Sprint
     template_name = 'sprint/listar_equipo.html'
-
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
@@ -473,7 +509,6 @@ class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView
     model = CapacidadDiariaEnSprint
     form_class = CapacidadDiariaEnSprintForm
     success_url = reverse_lazy('inicio.html')
-
     def form_valid(self, form):
         id_sprint=self.kwargs['pk']
         id_user= self.kwargs['pk2']
@@ -490,22 +525,12 @@ class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView
         pk=self.kwargs['pk']
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-
-        #users = Sprint.objects.values_list('equipo', flat=True).filter(id=pk)
-        #if self.request.user.pk in users:
-            #Estoy dentro del equipo de trabajo#
-        #    estoyEnEquipo=True
-        #else:
-            #Estoy fuera del equipo de trabajo#
-        #    estoyEnEquipo=False
-
         context['sprint']=sprint
         context['proyecto'] = proyecto
         id_user= self.kwargs['pk2']
         usuario = get_object_or_404(User, id=id_user)
         context['capacidadCargada']=CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=usuario).exists()
         return context
-
     def get_success_url(self, **kwargs):
         return reverse('sprint:listar_equipo', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
 
@@ -513,8 +538,6 @@ class Historial_por_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = Historial_HU
     template_name = 'sprint/historial_hu.html'
-    #permission_required = ('view_proyec', 'change_proyec')
-
     def get(self, request, pk, *args, **kwargs):
         hu =HistoriaUsuario.objects.get(id=pk)
         historial=hu.historial_hu.all()
@@ -600,13 +623,11 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
                     ultima_fecha = df.iloc[i,0]
                 else:
                     df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
-
         datos = df["Horas"].tolist()
         ## Si la lista (datos) tiene todos los elementos ceros entonces significa que no se cargaron aun las horas
         datos.insert(0, horas_disponibles)
         contador = 0
         datos2 = []
-
         # se grafica hasta el último registro de carga de horas
         if ultima_fecha != None:
             stop = fecha_duracion.index(ultima_fecha)
@@ -614,10 +635,8 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
                 datos2.append(datos[i])
         else:
             datos2.append(horas_disponibles)
-
         sprint_hora = datos2[-1]
         return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2, 'hora': sprint_hora})
-
 
 
 
@@ -631,17 +650,16 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        pk = self.kwargs['pk']
-        print(pk)
+        #pk = self.kwargs['pk']
+        #print(pk)
         id_hu = self.object.pk
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         return context
     def post(self, request, *args, **kwargs):
         id = request.path.split('/')[-1]
-        cancelado=request.POST['cancelado']
-        if cancelado== 'on':
-            HistoriaUsuario.objects.filter(id=id).update(aprobado_PB=True)
+        cancelado = request.POST['cancelado']
+        if cancelado == 'on':
             idp = HistoriaUsuario.objects.get(id=id).product_owner.id
             user = User.objects.get(id=idp)
             context = {'hu': HistoriaUsuario.objects.get(id=id)}
@@ -650,8 +668,8 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
             email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER, [user.getEmail()])
             email.attach_alternative(content, 'text/html')
             email.send()
-            if HistoriaUsuario.objects.get(id=id).asignacion != None:
-                idd= HistoriaUsuario.objects.get(id=id).asignacion.id
+            if HistoriaUsuario.objects.get(id=id).asignacion != None :
+                idd = HistoriaUsuario.objects.get(id=id).asignacion.id
                 user = User.objects.get(id=idd)
                 context = {'hu': HistoriaUsuario.objects.get(id=id)}
                 template = get_template('correos/canceladoAsignacion.html')
@@ -664,7 +682,38 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
             HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')
         return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
     def get_success_url(self):
+
+
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
+
+
+class ReporteSprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SB.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SB.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
+
+class ReporteSprintActual(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+
+    model = HistoriaUsuario
+    template_name = 'sprint/reporte_SA.html'
+    #permission_required = ('view_rol', 'add_rol',
+    #                       'delete_rol', 'change_rol')
+    def get(self, request, pk, *args, **kwargs):
+        sprint=Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        print(object_list)
+
+        return render(request, 'sprint/reporte_SA.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
 
 
 class IniciarSprint(TemplateView):
@@ -708,6 +757,7 @@ class IniciarSprint(TemplateView):
             mensaje="Este sprint no puede ser iniciado."    
         
         return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje})
+
 
 class SolicitarFinalizarSprint(TemplateView):
     template_name = 'sprint/solicitar_finalizar_sprint.html'

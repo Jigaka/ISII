@@ -88,26 +88,20 @@ Gestion de Proyectos | Sprint Backlog
                  {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                  <td style="text-align: left;">
                         {% if objeto.estimacion == 0%}
-                        {% if objeto.estimacion_scrum == 0%}
+                            {% if objeto.estimacion_scrum == 0%}
                             <a href="{%  url 'sprint:configurar_us' objeto.id %}">Asignar y estimar</a><br>
-                        {%else%}
+                            {%else%}
                             <a href="{%  url 'sprint:configurar_us' objeto.id %}">Reasignar y estimar</a><br>
-                        {%endif%}
+                            {%endif%}
                         {% endif %}
                         {% if objeto.estimacion != 0%}
-                          <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar desarrollador</a><br>
+                            <a href="{%  url 'sprint:reasignar_us' objeto.id %}">Reasignar desarrollador</a><br>
                         {% endif %}
-
                         {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
-                        <a href="{%  url 'proyectos:quitar_us_de_sb' objeto.id sprint.id %}">Quitar de sprint</a><br>
+                            <a href="{%  url 'proyectos:quitar_us_de_sb' objeto.id sprint.id %}">Quitar de sprint</a><br>
                         {% endifequal %}
-                        <!--{% if objeto.estimacion != 0%}
-                          <a href="{%  url 'sprint:cambio_estadoHU' objeto.id %}">Cambiar Estado</a>
-                        {% endif %}-->
                   </td>
-
                   {%endifequal%}
-
                </tr>
                      {% endfor %}
                   {% endif %}

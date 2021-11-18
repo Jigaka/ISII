@@ -21,6 +21,9 @@ Gestion de Proyectos | Product Backlog
             <div class="col-md-8">
                 <strong class="card-title">Product Backlog</strong>
             </div>
+            <div class="col-md-4">
+                <button type="button" style="float:right" class="btn boton-correos"><a href="{% url 'proyectos:reporte_PB' proyecto.id%}">Generar Reporte</a></button>
+            </div>
         </div>
     </div>
     <div class="card-header">
@@ -58,8 +61,8 @@ Gestion de Proyectos | Product Backlog
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                         {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar historia de usuario</a><br>
-                            {% endif %}
+                        <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar historia de usuario</a><br>
+                        {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -104,9 +107,6 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                      {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar historia de usuario</a><br>
-                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -151,9 +151,6 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                      {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar historia de usuario</a><br>
-                            {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -197,9 +194,6 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                      {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar historia de usuario</a><br>
-                            {% endif %}
                  </td>
                </tr>
                   {% endif %}

@@ -3,7 +3,9 @@ from django.test import TestCase
 from faker import Faker
 from ddf import G, F
 from apps.proyectos.models import Proyec
-from apps.sprint.models import HistoriaUsuario, Sprint, Actividad, Historial_HU, Estado_HU
+from apps.sprint.forms import CrearActividadForm, configurarEquipoSprintform, CapacidadDiariaEnSprintForm, \
+    aprobarQAForm, rechazarQAForm, cancelar_huform
+from apps.sprint.models import HistoriaUsuario, Sprint, Actividad, Historial_HU, Estado_HU, CapacidadDiariaEnSprint
 from apps.user.models import User
 from apps.proyectos.forms import ProyectoForm,rechazar_usform,configurarUSform, aprobar_usform, CrearUSForm, estimar_userform, editarProyect
 
@@ -84,7 +86,8 @@ class HistoriaUsuarioModelTest(TestCase):
         s=Sprint.objects.create(nombre='sprint1', proyecto=p)
         h=HistoriaUsuario.objects.create(nombre='vista inicio' , sprint=s, descripcion='agregar funcionalidad', asignacion=user, estado='ToDo', estimacion=0,
                                        prioridad='Media', proyecto=Proyec.objects.get(nombre='tienda1'),
-                                       aprobado_PB=True, rechazado_PB=False, sprint_backlog=True, estimacion_scrum=5, estimacion_user=11, aprobado_QA=True)
+                                       aprobado_PB=True, rechazado_PB=False, sprint_backlog=True, estimacion_scrum=5,
+                                         estimacion_user=11, aprobado_QA=True, horas_restantes=5, horas_trabajadas=15, horas_trabajadas_en_total=20)
         h.actividades.add(a1)
         h.actividades.add(a2)
         Estado_HU.objects.create(hu=h, sprint=s, estado='Pendiente')
@@ -101,6 +104,37 @@ class HistoriaUsuarioModelTest(TestCase):
         Us = HistoriaUsuario.objects.get(nombre='vista inicio')
         field_label = Us._meta.get_field('nombre').verbose_name
         self.assertEquals(field_label, 'nombre')
+    def test_horas_restantes(self):
+        '''test del atributo horas_restantes del modelo Historia Usuario'''
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
+        self.assertEquals(Us.horas_restantes, 5)
+    def test_horas_restantes_label(self):
+        '''test del label del atributohoras_restantes del modelo Historia Usuario'''
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
+        field_label = Us._meta.get_field('horas_restantes').verbose_name
+        self.assertEquals(field_label, 'horas restantes')
+
+    def test_horas_trabajadas(self):
+        '''test del atributo horas_trabajadas del modelo Historia Usuario'''
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
+        self.assertEquals(Us.horas_trabajadas, 15)
+    def test_horas_trabajadas_label(self):
+        '''test del label del atributo horas_trabajadas del modelo Historia Usuario'''
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
+        field_label = Us._meta.get_field('horas_trabajadas').verbose_name
+        self.assertEquals(field_label, 'horas trabajadas')
+
+    def test_horas_trabajadas_en_total(self):
+        '''test del atributo horas_trabajadas_en_total del modelo Historia Usuario'''
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
+        self.assertEquals(Us.horas_trabajadas_en_total, 20)
+    def test_horas_trabajadas_en_total_label(self):
+        '''test del label del atributo horas_trabajadas_en_total del modelo Historia Usuario'''
+        Us = HistoriaUsuario.objects.get(nombre='vista inicio')
+        field_label = Us._meta.get_field('horas_trabajadas_en_total').verbose_name
+        self.assertEquals(field_label, 'horas trabajadas en total')
+
+
     def test_asignacion(self):
         '''test del label del atributo asignacion del modelo Historia Usuario'''
         Us = HistoriaUsuario.objects.get(nombre='vista inicio')
@@ -242,6 +276,46 @@ class HistoriaUsuarioModelTest(TestCase):
             form_data = {'estimacion_scrum': 10}
             form = configurarUSform(data=form_data)
             self.assertTrue(form.is_valid())
+
+    def test_forms_aprobarQAForm(self):
+        '''Probamos la validez del form aprobarQAForm '''
+        form_data = {'aprobado_QA': 'True', 'comentario':'muy bien'}
+        form = aprobarQAForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    @pytest.mark.django_db
+    def test_forms_aprobarQAForm_fail(self):
+        '''se detecta una Exception de un formulario aprobarQAForm con un valor incompleto'''
+        with pytest.raises(Exception):
+            form_data = {'aprobado_QA': 'True'}
+            form = aprobarQAForm(data=form_data)
+            self.assertTrue(form.is_valid())
+
+    def test_forms_rechazarQAForm(self):
+        '''Probamos la validez del form rechazarQAForm '''
+        form_data = {'rechazado_QA': 'True', 'comentario':'muy bien'}
+        form = rechazarQAForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    @pytest.mark.django_db
+    def test_forms_rechazarQAForm_fail(self):
+        '''se detecta una Exception de un formulario rechazarQAForm con un valor incompleto'''
+        with pytest.raises(Exception):
+            form_data = {'rechazado_QA': 'True'}
+            form = rechazarQAForm(data=form_data)
+            self.assertTrue(form.is_valid())
+
+    def test_forms_cancelar_huform(self):
+        '''Probamos la validez del form cancelar_huform '''
+        form_data = {'cancelado': 'True'}
+        form = cancelar_huform(data=form_data)
+        self.assertTrue(form.is_valid())
+
+
+
+
+
+
 
 
 
@@ -390,6 +464,44 @@ class SprintModelTest(TestCase):
         s = Sprint.objects.create(nombre='sprint2', proyecto=p, estado="Pendiente")
         s.equipo.add(user1)
         s.equipo.add(user2)
+
+        CapacidadDiariaEnSprint.objects.create(usuario=user1, sprint=s, capacidad_diaria_horas=5)
+
+
+
+
+    def test_sprint_capacidad(self):
+        s = Sprint.objects.get(nombre='sprint2')
+        capacidad=CapacidadDiariaEnSprint.objects.get(id=1)
+        self.assertEquals(capacidad.sprint, s)
+
+    def test_sprint_capacidad_label(self):
+        capacidad=CapacidadDiariaEnSprint.objects.get(id=1)
+        field_label = capacidad._meta.get_field('sprint').verbose_name
+        self.assertEquals(field_label, 'sprint')
+
+    def test_usuario_capacidad(self):
+        user = User.objects.get(username='belen')
+        capacidad = CapacidadDiariaEnSprint.objects.get(id=1)
+        self.assertEquals(capacidad.usuario, user)
+
+    def test_usuario_capacidad_label(self):
+        capacidad =CapacidadDiariaEnSprint.objects.get(id=1)
+        field_label = capacidad._meta.get_field('usuario').verbose_name
+        self.assertEquals(field_label, 'usuario')
+
+    def test_capacidad_diaria_horas_capacidad(self):
+        capacidad = CapacidadDiariaEnSprint.objects.get(id=1)
+        self.assertEquals(capacidad.capacidad_diaria_horas, 5)
+
+    def test_capacidad_diaria_horas_capacidad_label(self):
+        capacidad =CapacidadDiariaEnSprint.objects.get(id=1)
+        field_label = capacidad._meta.get_field('capacidad_diaria_horas').verbose_name
+        self.assertEquals(field_label, 'capacidad diaria horas')
+
+
+
+
     def test_name(self):
         s = Sprint.objects.get(nombre='sprint2')
         self.assertEquals(s.nombre, 'sprint2')
@@ -453,6 +565,32 @@ class SprintModelTest(TestCase):
 
 
 
+    @pytest.mark.django_db
+    def test_forms_configurarEquipoSprintform_fail(self):
+        '''se detecta una Exception de un formulario configurarEquipoSprintform formulario incompleto'''
+        with pytest.raises(Exception):
+            form_data = { }
+            form = configurarEquipoSprintform(data=form_data)
+            self.assertTrue(form.is_valid())
+
+    def test_forms_CapacidadDiariaEnSprintForm(self):
+        '''se prueba el correcto funcionamiento del formulario configurarEquipoSprintform'''
+        form_data = { 'capacidad_diaria_horas' : 15 }
+        form = CapacidadDiariaEnSprintForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    @pytest.mark.django_db
+    def test_forms_CapacidadDiariaEnSprintForm_fail(self):
+        '''se detecta una Exception de el formulario configurarEquipoSprintform formulario con un numero negativo'''
+        with pytest.raises(Exception):
+            form_data = {'capacidad_diaria_horas': -12}
+            form = CapacidadDiariaEnSprintForm(data=form_data)
+            self.assertTrue(form.is_valid())
+
+
+
+
+
 class ActividadModelTest(TestCase):
 
     @classmethod
@@ -463,22 +601,18 @@ class ActividadModelTest(TestCase):
     def test_name(self):
         a = Actividad.objects.get(nombre='actividadprueba')
         self.assertEquals(a.nombre, 'actividadprueba')
-
     def test_name_label(self):
         a = Actividad.objects.get(nombre='actividadprueba')
         field_label = a._meta.get_field('nombre').verbose_name
         self.assertEquals(field_label, 'nombre')
-
     def test_object_nombre(self):
         '''test de la funcion str creada para el modelo Sprint '''
         a = Actividad.objects.get(nombre='actividadprueba')
         expected_object_name = a.nombre
         self.assertEquals(expected_object_name, str(a))
-
     def test_comentario(self):
         a = Actividad.objects.get(nombre='actividadprueba')
         self.assertEquals(a.comentario, 'esto es una prueba')
-
     def test_comentario_label(self):
         a = Actividad.objects.get(nombre='actividadprueba')
         field_label = a._meta.get_field('comentario').verbose_name
@@ -490,11 +624,28 @@ class ActividadModelTest(TestCase):
     def test_hora_trabajo(self):
         a = Actividad.objects.get(nombre='actividadprueba')
         self.assertEquals(a.hora_trabajo, 11)
-
     def test_id_sprint(self):
         a = Actividad.objects.get(nombre='actividadprueba')
         self.assertEquals(a.id_sprint, 2)
 
+    def test_forms_CrearActividadForm(self):
+        '''Probamos la validez del form estimar_userform '''
+        form_data = { 'nombre': 'actividad1', 'comentario':'actividad de prueba','fecha':'10/10/21', 'hora_trabajo': 10}
+        form = CrearActividadForm(data=form_data)
+        self.assertTrue(form.is_valid())
 
+    @pytest.mark.django_db
+    def test_forms_CrearActividadForm_fail(self):
+        '''se detecta una Exception de un formulario CrearActividadForm formulario incompleto'''
+        with pytest.raises(Exception):
+            form_data = {'nombre': 'actividad1', 'comentario': 'actividad de prueba', 'fecha': '10/10/21'}
+            form = CrearActividadForm(data=form_data)
+            self.assertTrue(form.is_valid())
 
-
+    @pytest.mark.django_db
+    def test_forms_CrearActividadForm_fail2(self):
+        '''se detecta una Exception de un formulario CrearActividadForm formulario incompleto'''
+        with pytest.raises(Exception):
+            form_data = {'nombre': 'actividad1', 'comentario': 'actividad de prueba', 'fecha': '10/10/21', 'hora_trabajo': -8}
+            form = CrearActividadForm(data=form_data)
+            self.assertTrue(form.is_valid())

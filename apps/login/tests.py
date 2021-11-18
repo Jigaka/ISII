@@ -71,8 +71,6 @@ class noLoginTestCase(APITestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/listar_us_a_estimar_us/1')
         self.assertEqual(response.status_code, 302)
-        response = self.client.get('/sprint/estimar_us/1')
-        self.assertEqual(response.status_code, 302)
         response = self.client.get('/proyectos/ver_PB/1')
         self.assertEqual(response.status_code, 302)
 
@@ -107,13 +105,13 @@ class noLoginTestCase(APITestCase):
 
     def test_sin_login_sprint2(self):
         '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login'''
+
         user = User.objects.create(first_name='Jose', last_name='Garcete', username='jose7',
                                    email="afasdfasd@gmail.com")
         p=Proyec.objects.create(nombre='tienda',  encargado=user)
         s = Sprint.objects.create(nombre='s1_login', proyecto=p)
         HistoriaUsuario.objects.create(nombre='vista inicio', sprint=s,
                                        asignacion=user,  proyecto=p)
-
         response = self.client.get('/sprint/kanban/1')
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/listar_sprint/1')
@@ -126,12 +124,34 @@ class noLoginTestCase(APITestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/listar_us_a_estimar_us/1')
         self.assertEqual(response.status_code, 302)
-        response = self.client.get('/sprint/estimar_us/1')
-        self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/add_actividad/1/1')
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/ver_actividad/1')
         self.assertEqual(response.status_code, 302)
         response = self.client.get('/sprint/reasignar_us/1')
+        self.assertEqual(response.status_code, 302)
+
+    def test_sin_login_sprint3(self):
+        '''se comprueba que no le de acceso al inicio a un usuario sin hacer login y que se redirija a login '''
+        '''se comprueban las urls agregadas para la ultima iteracion'''
+
+        user = User.objects.create(first_name='Jose', last_name='Garcete', username='jose7',
+                                   email="afasdfasd@gmail.com")
+        p = Proyec.objects.create(nombre='tienda', encargado=user)
+        s = Sprint.objects.create(nombre='s1_login', proyecto=p)
+        HistoriaUsuario.objects.create(nombre='vista inicio', sprint=s,asignacion=user, proyecto=p)
+        response = self.client.get('/sprint/ver_us/1/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/burn_down_chart/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/capacidad/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/editar_sprint/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/cancelar_hu/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/reporte_SB/1')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/sprint/reporte_SA/1')
         self.assertEqual(response.status_code, 302)
 

@@ -25,6 +25,7 @@ class Sprint(models.Model):
     fecha_creacion = models.DateField("fecha de creacion", auto_now=False, auto_now_add=True, blank=True, null=True)
     capacidad_equipo = models.PositiveIntegerField(editable=True, default=0)
     capacidad_de_equipo_sprint = models.PositiveIntegerField(editable=True, default=0)
+    suma_planing_poker = models.PositiveIntegerField(editable=True, default=0)
 
     # capacidad_de_equipo (sumar la capacidad diaria de cada integrnte y multiplicarlo por la cantidad de días), , limit_choices_to={'aprobado_PB':True, 'sprint_backlog':False}
     # La cantidad de días incluye fines de semana (¿cómo resolver esto?)
@@ -35,7 +36,7 @@ class Sprint(models.Model):
             f = (self.fecha_fin)
             duracion_cruda=f-i
             return duracion_cruda
-    
+
     #Duración de días hábiles (no excluye fechas especiales, solo excluye los fines de semana)
     @property
     def duracion_dias(self):
@@ -157,13 +158,20 @@ class HistoriaUsuario(models.Model):
 
 def calcular_estimacion(sender, instance, **kwargs):
     ''' funcion para calcular el resultado del planing poker , la estimacion final '''
+    model = Sprint
+    sprint = instance.sprint
     if (instance.estimacion==0 and  instance.estimacion_scrum!=0 and instance.estimacion_user!=0):
         x=(instance.estimacion_scrum+instance.estimacion_user)/2
         HistoriaUsuario.objects.filter(id=instance.id).update(estimacion=x)
+        suma = x + sprint.suma_planing_poker
+        Sprint.objects.filter(id=sprint.id).update(suma_planing_poker=suma)
         Historial_HU.objects.create(
             descripcion=' Resultado del Planning Poker: ' + x.__str__(), hu=HistoriaUsuario.objects.get(id=instance.id))
 
 post_save.connect(calcular_estimacion, sender=HistoriaUsuario)
+
+
+
 class CapacidadDiariaEnSprint(models.Model):
     ''' clase que relaciona un miembro del equipo de un sprint con el sprint y la capacidad de trabajo de ese miembro del equipo '''
     usuario= models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="el_usuario")

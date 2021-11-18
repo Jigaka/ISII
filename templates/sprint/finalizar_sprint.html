@@ -1,0 +1,11 @@
+{% extends 'sprint/sprint.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Iniciar Sprint
+{% endblock titulo %}
+
+{% block body %}
+<p style="color:black">
+El Sprint <b>{{sprint.nombre}}</b> ha sido finalizado. 
+</p>
+<a class="btn btn-primary" href="{%  url 'sprint:kanban'  sprint.id %}" role="button">Volver</a>
+{% endblock body %}

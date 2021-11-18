@@ -59,25 +59,25 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
     def get(self, request, pk, *args, **kwargs):
         proyecto = Proyec.objects.get(id=pk)
         sprint = proyecto.proyecto_s.all().order_by('fecha_inicio')
-        for s in sprint:
-            if (s.estado=='Finalizado'):
-                Sprint.objects.filter(id=s.id).update(estado='Finalizado')
-                hus = Sprint.objects.get(id=s.id).sprint.all()
-                print(hus)
-                for hu in hus:
-                    Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
-                                                desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
-                                                PP=hu.estimacion)
-                    if hu.estado != 'Done':
-                        HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
-                                                                        prioridad='Alta',prioridad_numerica=3,estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
-                        Historial_HU.objects.create(
-                            descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
-                                id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
-                                id=hu.id).estado,
-                            hu=HistoriaUsuario.objects.get(id=hu.id))
-                    elif hu.estado == 'Done':
-                        HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
+        #for s in sprint:
+        #    if (s.estado=='Finalizado'):
+        #        Sprint.objects.filter(id=s.id).update(estado='Finalizado')
+        #        hus = Sprint.objects.get(id=s.id).sprint.all()
+        #        print(hus)
+        #        for hu in hus:
+        #            Estado_HU.objects.create(hu=hu, sprint=hu.sprint, estado=hu.estado,
+        #                                        desarrollador=hu.asignacion.username, prioridad=hu.prioridad,
+        #                                        PP=hu.estimacion)
+        #            if hu.estado != 'Done':
+        #                HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, aprobado_PB=True,
+        #                                                                prioridad='Alta',prioridad_numerica=3,estimacion_user=0,estimacion_scrum=0, estimacion=0, estado='Pendiente', asignacion=None, sprint=None)
+        #                Historial_HU.objects.create(
+        #                    descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+        #                        id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
+        #                        id=hu.id).estado,
+        #                    hu=HistoriaUsuario.objects.get(id=hu.id))
+        #            elif hu.estado == 'Done':
+        #                HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
         return render(request, 'sprint/listar_sprint.html', {'proyecto':proyecto, 'object_list': sprint})
 
 class AgregarHU_sprint(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixinHistoriaUsuario, UpdateView):
@@ -279,11 +279,17 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
 
+        if sprint.estado == 'Iniciado':
+            sprint_iniciado=True
+        else:
+            sprint_iniciado=False  
+
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
             us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
-            return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
+            return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto, 'sprint_iniciado':sprint_iniciado})
         else:
+            print("Sprint finalizado")
             us=sprint.estado_sprint.all()
             return render(request, 'sprint/kanban-fin.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto})
 
@@ -702,3 +708,58 @@ class IniciarSprint(TemplateView):
             mensaje="Este sprint no puede ser iniciado."    
         
         return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje})
+
+class SolicitarFinalizarSprint(TemplateView):
+    template_name = 'sprint/solicitar_finalizar_sprint.html'
+    model = Sprint
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        sprint = Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        return render(request, 'sprint/solicitar_finalizar_sprint.html',{'sprint': sprint,'proyecto': proyecto})
+
+class FinalizarSprint(TemplateView):
+    template_name = 'sprint/finalizar_sprint.html'
+    model = Sprint
+    permission_required = ('view_rol', 'add_rol',
+                           'delete_rol', 'change_rol')
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        sprint = Sprint.objects.get(id=pk)
+        proyecto=sprint.proyecto
+        '''
+        Finalizar Sprint y realizar las modificaciones correspondientes a sus historias de usuario
+        '''
+        Sprint.objects.filter(id=pk).update(estado="Finalizado")
+        sprint_updated = Sprint.objects.get(id=pk)      
+        hus=HistoriaUsuario.objects.filter(sprint=sprint_updated)  
+        for hu in hus:
+            print (hu.nombre)
+            Estado_HU.objects.create(
+                hu=hu, 
+                sprint=hu.sprint, 
+                estado=hu.estado,
+                desarrollador=hu.asignacion.username, 
+                prioridad=hu.prioridad,
+                PP=hu.estimacion)
+            if hu.estado != 'Done':
+                HistoriaUsuario.objects.filter(id=hu.id).update(
+                    sprint_backlog=False, aprobado_PB=True,
+                    prioridad='Alta',
+                    prioridad_numerica=3,
+                    estimacion_user=0,
+                    estimacion_scrum=0, 
+                    estimacion=0, 
+                    estado='Pendiente', 
+                    asignacion=None, 
+                    sprint=None)
+                Historial_HU.objects.create(
+                    descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                        id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado: '+ HistoriaUsuario.objects.get(
+                        id=hu.id).estado,
+                    hu=HistoriaUsuario.objects.get(id=hu.id))
+            elif hu.estado == 'Done':
+                HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')    
+        return render(request, 'sprint/finalizar_sprint.html',{'sprint': sprint_updated,'proyecto': proyecto})

@@ -11,7 +11,7 @@ Gestion de Proyectos | Product Backlog
         }
         .center {
           text-align: center
-        }  
+        }
     </style>
 {% endblock extra_css %}
 {% block body %}
@@ -35,7 +35,7 @@ Gestion de Proyectos | Product Backlog
     </div>
 
     <div class="table-stats order-table ov-h">
-        <table id="tabla_usuarios" class="table">
+        <table id="tabla_usuarios" class="table text-center">
             <thead>
                 <tr>
                     <th> # </th>
@@ -56,7 +56,7 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
                  <td>{{ us.estado }}</td>
-                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                 <td>{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
@@ -83,7 +83,7 @@ Gestion de Proyectos | Product Backlog
     </div>
 
     <div class="table-stats order-table ov-h">
-        <table id="tabla_usuarios" class="table">
+        <table id="tabla_usuarios" class="table text-center">
             <thead>
                 <tr>
                     <th>#</th>
@@ -103,8 +103,8 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.nombre }}</td>
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
-                   <td>{{ us.estado }}</td>
-                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                 <td>{{ us.estado }}</td>
+                 <td>{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -127,7 +127,7 @@ Gestion de Proyectos | Product Backlog
     </div>
 
     <div class="table-stats order-table ov-h">
-        <table id="tabla_usuarios" class="table">
+        <table id="tabla_usuarios" class="table text-center">
             <thead>
                 <tr>
                     <th>#</th>
@@ -148,7 +148,7 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
                  <td>{{ us.estado }}</td>
-                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                 <td>{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -170,7 +170,7 @@ Gestion de Proyectos | Product Backlog
     </div>
 
     <div class="table-stats order-table ov-h">
-        <table id="tabla_usuarios" class="table">
+        <table id="tabla_usuarios" class="table text-center">
             <thead>
                 <tr>
                     <th>#</th>
@@ -191,7 +191,7 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
                  <td>{{ us.estado }}</td>
-                 <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                 <td>{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -213,7 +213,7 @@ Gestion de Proyectos | Product Backlog
     </div>
 
     <div class="table-stats order-table ov-h">
-        <table id="tabla_usuarios" class="table">
+        <table id="tabla_usuarios" class="table text-center">
             <thead>
                 <tr>
                     <th>#</th>
@@ -239,7 +239,7 @@ Gestion de Proyectos | Product Backlog
                    {% if us.aprobado_QA == True %}
                    <td><p> Aprobado_QA</p></td>
                    {% endif %}
-                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                  <td>{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>
@@ -262,7 +262,7 @@ Gestion de Proyectos | Product Backlog
     </div>
 
      <div class="table-stats order-table ov-h">
-        <table id="tabla_usuarios" class="table">
+        <table id="tabla_usuarios" class="table text-center">
             <thead>
                 <tr>
                     <th>#</th>
@@ -283,7 +283,7 @@ Gestion de Proyectos | Product Backlog
                  <td>{{ us.descripcion }}</td>
                  <td>{{ us.prioridad }}</td>
                    <td>{{ us.estado }}</td>
-                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
+                  <td>{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
                  </td>

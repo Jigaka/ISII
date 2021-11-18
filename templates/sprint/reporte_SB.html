@@ -34,16 +34,30 @@ Gestion de Proyectos | Sprint Backlog
               </tr>
           </thead>
           <tbody>
+            {% if object_list.first.hu.id  %}
+              {% for us in object_list %}
+               <tr>
+                 <td>{{ us.id }}</td>
+                 <td>{{ us.hu.nombre }}</td>
+                 <td>{{ us.estado }}</td>
+                 <td>{{ us.estimacion }} horas</td>
+                  <td class="center">{{ us.hu.horas_trabajadas }} horas</td>
+                  <td></td>
+               </tr>
+             {% endfor %}
+            {% else %}
             {% for us in object_list %}
-             <tr>
-               <td>{{ us.id }}</td>
-               <td>{{ us.nombre }}</td>
-               <td>{{ us.estado }}</td>
-               <td>{{ us.estimacion }} horas</td>
-                <td class="center">{{ us.horas_trabajadas }} horas</td>
-                <td></td>
-             </tr>
-           {% endfor %}
+              <tr>
+                <td>{{ us.id }}</td>
+                <td>{{ us.nombre }}</td>
+                <td>{{ us.estado }}</td>
+                <td>{{ us.estimacion }} horas</td>
+                 <td class="center">{{ us.horas_trabajadas }} horas</td>
+                 <td></td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+
           </tbody>
         </table>
     </div>

@@ -679,7 +679,7 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
 
         fechas.insert(0, " ")
         dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin, tz=None)
-        horas_disponibles = sprint.capacidad_de_equipo_sprint
+        horas_disponibles = sprint.suma_planing_poker
         dia = 1
         fecha_actividad = []
         fecha_duracion = []
@@ -783,7 +783,12 @@ class ReporteSprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
     def get(self, request, pk, *args, **kwargs):
         sprint=Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
-        object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
+        if sprint.estado=='Finalizado':
+            object_list = sprint.estado_sprint.all()
+        else:
+            object_list = sprint.sprint.all().order_by('id')
+
+        #object_list = HistoriaUsuario.objects.filter(sprint=sprint).all()
         print(object_list)
 
         return render(request, 'sprint/reporte_SB.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})

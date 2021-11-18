@@ -3,28 +3,24 @@
   Gestion de Proyectos | Edicion de proyecto
 {% endblock titulo %}
 {% block body %}
-<form method="POST">
-  {% csrf_token %}
-  {% if error %}
-    <h2>{{ error }}</h2>
-  {% else %}
-    <div class="card">
-      <div class="card-header">
-          <strong>Actualizar datos del proyecto <i>{{proyecto.nombre}}</i></strong>
-      </div>
-      <div class="card-body card-block">
-        <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">
-            <div class="row form-group">
-              <div class="col col-md-3">{{ form.estado.label}}</div>
-              <div class="col-12 col-md-9">{{ form.estado}}</div>
-            </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary">Guardar</button>
-              <a class="btn btn-danger" href="{% url 'proyectos:mis_proyectos' %}">Cancelar</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    {% endif %}
-</form>
+<div class="card">
+	<div class="card-header">
+      <strong>Cambiar estado del proyecto <i>{{proyecto.nombre}}</i></strong>
+	</div>
+	<div class="card-body card-block">
+		<form method="POST">
+			<style>p {color:black;}</style>
+			{% csrf_token %}
+			{{form.as_p}}
+			<button type="submit" class="btn btn-danger">Cambiar</button>
+			<a class="btn btn-primary" href="{% url 'proyectos:mis_proyectos' %}">Volver</a>
+		</form>    
+	</div>
+</div>
+
+
 {% endblock body %}
+
+
+
+

@@ -2,7 +2,7 @@ from django import  forms
 from django.forms.widgets import Widget
 from .models import Proyec
 from apps.user.models import User
-from apps.sprint.models import HistoriaUsuario, Sprint, Actividad
+from apps.sprint.models import HistoriaUsuario, Sprint, Actividad, CapacidadDiariaEnSprint
 
 from datetime import date
 '''
@@ -37,7 +37,7 @@ class cambiarEstadoProyect(forms.ModelForm):
         fields = ['estado']
         labels = {
             'estado': 'Estado del proyecto',
-        }        
+        }
 
 class asignarEquipoProyect(forms.ModelForm):
     class Meta:
@@ -45,7 +45,7 @@ class asignarEquipoProyect(forms.ModelForm):
         fields = ['equipo']
         labels = {
              'equipo':'Equipo de trabajo',
-        }  
+        }
 
 class CrearUSForm(forms.ModelForm):
     class Meta:
@@ -65,15 +65,31 @@ class configurarUSform(forms.ModelForm):
             'asignacion':'Asignar Historia de Usuario'
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, pk, id_sprint, *args, **kwargs):
         super(configurarUSform, self).__init__(*args, **kwargs)
         sprint = HistoriaUsuario.objects.get(nombre=kwargs.get('instance')).sprint
-        #print(HU)
+        self.sprint = sprint
         self.fields['asignacion'].queryset = Sprint.objects.get(id=sprint.id).equipo
-    
-    def clean(self):
+
+
+    def clean(self, *args, **kwargs):
+        #super(configurarUSform, self).__init__(*args, **kwargs)
         cleaned_data = super().clean()
         estimacion_scrum = cleaned_data.get('estimacion_scrum')
+        user =  cleaned_data.get('asignacion')
+        sprint =  self.sprint
+        duracion = sprint.duracion_dias
+        capacidad = CapacidadDiariaEnSprint.objects.filter(sprint=sprint,usuario=user).all()
+
+        if capacidad.exists() == False:
+            raise forms.ValidationError('Por favor primero ingrese la capacidad diaria del desarrollador.')
+
+        for c in capacidad:
+            if c.usuario.id == user.id:
+                c2 = c.capacidad_diaria_horas
+        cu = duracion* c2
+        if (estimacion_scrum > cu):
+            raise forms.ValidationError('Por favor que el tiempo requerido de la Historia de Usuario no sobrepase la capacidad del desarrollador asignado.')
         if (estimacion_scrum <= 0):
             raise forms.ValidationError('Por favor inserte un número positivo.')
 
@@ -105,7 +121,7 @@ class estimar_userform(forms.ModelForm):
         estimacion_user = cleaned_data.get('estimacion_user')
         if (estimacion_user <= 0):
             raise forms.ValidationError('Por favor inserte un número positivo.')
-    
+
 
 
 class aprobar_usform(forms.ModelForm):

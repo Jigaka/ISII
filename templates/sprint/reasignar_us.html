@@ -10,7 +10,12 @@
   {% else %}
     <div class="card">
       <div class="card-header">
-          <strong>Asignar Historia de Usuario</strong>
+          <strong>Asignar desarrollador a historia de usuario</strong>
+      </div>
+      <div class="card-header">
+        <strong>Nombre :</strong> {{ us.nombre }}<br>
+        <strong>Descripcion :</strong> {{ us.descripcion }}<br>
+        <strong>Prioridad :</strong> {{ us.prioridad }}<br>
       </div>
       <div class="card-body card-block">
         <form action="#" method="post" enctype="multipart/form-data" class="form-horizontal">

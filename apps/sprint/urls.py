@@ -2,7 +2,7 @@ from django.urls import path
 from apps.proyectos.views import ConfigurarUs, estimarUS,Listar_us_a_estimar, Reasignar_us
 from .views import AsignarCapacidadDiaria, CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, configurarEquipoSprint, \
   Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad, Historial_por_hu,\
-     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu, ReporteSprintBacklog, ReporteSprintActual, IniciarSprint
+     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu, ReporteSprintBacklog, ReporteSprintActual, IniciarSprint, SolicitarFinalizarSprint, FinalizarSprint
 
 urlpatterns = [
      path('crear_sprint/<int:pk>', CrearSprint.as_view(), name='crear_sprint'),
@@ -17,6 +17,8 @@ urlpatterns = [
      path('kanban/<int:pk>', TablaKanban.as_view(), name='kanban'),
      path('eliminar_sprint/<int:pk>',EliminarSprint.as_view(),name='eliminar_sprint'),
      path('editar_sprint/<int:pk>', EditarSprint.as_view(), name='editar_sprint'),
+     path('solicitar_finalizar_sprint/<int:pk>',SolicitarFinalizarSprint.as_view(), name='solicitar_finalizar_sprint'),
+     path('finalizar_sprint/<int:pk>',FinalizarSprint.as_view(), name='finalizar_sprint'),
      path('listar_equipo/<int:pk>', ListarEquipo.as_view(), name='listar_equipo'),
      path('cargar_capacidad/<int:pk>/<int:pk2>', AsignarCapacidadDiaria.as_view(), name='asignar_capacidad'),
      path('listar_us_a_estimar_us/<int:pk>',Listar_us_a_estimar.as_view(), name='listar_us_a_estimar'),

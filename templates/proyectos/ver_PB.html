@@ -11,6 +11,7 @@ Gestion de Proyectos | Product Backlog
         }
         .center {
           text-align: center
+        }  
     </style>
 {% endblock extra_css %}
 {% block body %}
@@ -37,7 +38,7 @@ Gestion de Proyectos | Product Backlog
         <table id="tabla_usuarios" class="table">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th> # </th>
                     <th>Nombre</th>
                     <th>Descripcion</th>
                     <th>Prioridad</th>
@@ -59,9 +60,9 @@ Gestion de Proyectos | Product Backlog
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:agregar_hu' us.id %}">Agregar a Sprint</a><br>
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-                            {% if  request.user.id == us.proyecto.encargado.id %}
-                             <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar</a><br>
-                            {% endif %}
+                        {% if  request.user.id == us.proyecto.encargado.id %}
+                        <a href="{%  url 'sprint:cancelar_hu' us.id %}">Cancelar historia de usuario</a><br>
+                        {% endif %}
                  </td>
                </tr>
                   {% endif %}
@@ -106,7 +107,6 @@ Gestion de Proyectos | Product Backlog
                  <td class="center">{{ us.horas_trabajadas_en_total }} horas</td>
                  <td style="text-align: left;">
                         <a href="{%  url 'sprint:historial_hu' us.id %}">Historial</a><br>
-
                  </td>
                </tr>
                   {% endif %}

@@ -1,0 +1,12 @@
+{% extends 'sprint/sprint.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Iniciar Sprint
+{% endblock titulo %}
+
+{% block body %}
+<p style="color:black">
+    ¿Desea finalizar el sprint <b>{{sprint.nombre}}</b> antes de tiempo?
+</p>
+<a class="btn btn-danger" href="{%  url 'sprint:finalizar_sprint'  sprint.id %}" role="button">Sí, finalizar Sprint</a>
+<a class="btn btn-primary" href="{%  url 'sprint:kanban'  sprint.id %}" role="button">Volver</a>
+{% endblock body %}

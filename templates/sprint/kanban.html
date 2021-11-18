@@ -6,6 +6,7 @@ Gestion de Proyectos | Tabla Kanban
 {% endblock titulo %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_propios.css' %}" type="text/css">
     <style>
          #danger:hover{
             color:red;
@@ -46,7 +47,6 @@ Gestion de Proyectos | Tabla Kanban
             margin: 10px 5px;
             padding: 10px;
             width: 280px;
-            {#height: 100px;#}
             color: black;
             background: #ff8;
             cursor: move;
@@ -61,11 +61,21 @@ Gestion de Proyectos | Tabla Kanban
             margin: 2px;
         }
         .center {
-          text-align: center
+          text-align: center;
+        }
     </style>
 {% endblock extra_css %}
 {% block body %}
 <h3> <strong>TABLA KANBAN</strong></h3>
+{% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
+    {%if sprint_iniciado%}
+    <button type="button" class="btn boton-finalizar-sprint">
+        <a href="{%url 'sprint:solicitar_finalizar_sprint' sprint.id %}">
+            Finalizar Sprint
+        </a>
+    </button>
+    {%endif%}
+{%endifequal%}
 <br>
     <div id="board">
         <div id="ToDo" class="section">

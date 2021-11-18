@@ -94,3 +94,16 @@
 .boton-iniciar-sprint:hover{
     background-color: darkgreen;
 }
+
+
+.boton-finalizar-sprint a{
+    color:white;
+}
+.boton-finalizar-sprint{
+    margin: 10px 0px;
+    padding:5px 10px;
+    background-color: rgb(211, 31, 31);
+}
+.boton-finalizar-sprint:hover{
+    background-color: darkred;
+}

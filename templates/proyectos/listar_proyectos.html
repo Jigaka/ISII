@@ -46,7 +46,9 @@ Gestion de Proyectos | Listado de Proyectos
 
                         <td style="text-align: left;" class="opciones">
                             {% if request.user in proyec.equipo.all%}
+                            {% ifnotequal proyec.estado|stringformat:"s" "Pendiente" %}
                                 <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
+                            {%endifnotequal%}
                             {% endif %}
                             {% if  request.user.id == proyec.encargado.id %}
                                 <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar datos del proyecto</a>

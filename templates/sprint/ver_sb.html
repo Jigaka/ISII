@@ -111,6 +111,18 @@ Gestion de Proyectos | Sprint Backlog
     </div>
 </div>
 
+<div class="col-md-4">
+  <li>Capacidad planificada del Sprint: {{capacidad_sprint}} horas</li>
+  <li>Suma total del Planning Poker: {{suma_historia}} horas</li>
+  {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+    <li>Capacidad restante del Sprint: {{capacidad_pendientes}} horas</li>
+    <br>
+    {% if capacidad_pendientes <= 0 %}
+      <i><strong>¡Atención! El total de horas estimadas de las Historias de Usuario sobrepasan la capacidad planificada del Sprint</strong></i>
+    {% endif %}
+  {% endifequal %}
+</div>
+
 {% endblock body %}
 {% block extrajs %}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>

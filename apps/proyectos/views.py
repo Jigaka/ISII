@@ -511,10 +511,10 @@ class QuitarUSdeSprintBacklog(TemplateView):
 
         us_esta_en_sprint = HistoriaUsuario.objects.filter(id=pk,sprint=sprint).exists()
         if us_esta_en_sprint:            
-            mensaje=(us.nombre)+(" está en ")+(sprint.nombre)
             HistoriaUsuario.objects.filter(id=pk).update(estado='Pendiente',estimacion_user=0,estimacion_scrum=0, estimacion=0, asignacion=None, sprint=None, sprint_backlog=False)
+            mensaje="Operación exitosa."
         else:    
-            mensaje=(us.nombre)+(" NO está en ")+(sprint.nombre)
+            mensaje=(us.nombre)+(" no está en el sprint ")+(sprint.nombre)+". No se ha realizado ninguna operación."
 
         return render(request, 'proyectos/quitar_us_de_sb.html',{'sprint': sprint,'mensaje':mensaje, 'proyecto':proyecto})
 

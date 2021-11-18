@@ -137,6 +137,7 @@ class HistoriaUsuario(models.Model):
             self.prioridad_numerica = 2
         elif (self.prioridad == 'Alta'):
             self.prioridad_numerica = 3
+
         super(HistoriaUsuario, self).save(*args, **kwargs)
         # fin de trigger ------
     class Meta:

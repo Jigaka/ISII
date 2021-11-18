@@ -238,18 +238,25 @@ class ConfigurarUs(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixi
                            'delete_rol', 'change_rol')
     template_name = 'proyectos/configurar_us.html'
     form_class = configurarUSform
+
+    def get_form_kwargs(self, **kwargs):
+        print(kwargs)
+        print(self)
+        #id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id
+        kwargs = super(ConfigurarUs,self).get_form_kwargs()
+        self.kwargs['id_sprint']=0
+        kwargs.update(self.kwargs)
+        return kwargs
+
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        #pk = self.kwargs['pk']
         id_hu = self.object.pk
         id_proyecto = HistoriaUsuario.objects.get(id=id_hu).proyecto.id
         id_sprint = HistoriaUsuario.objects.get(id=id_hu).sprint.id
-        #print(id_proyecto)
         context['proyecto'] = Proyec.objects.get(id=id_proyecto)
         context['sprint'] = Sprint.objects.get(id=id_sprint)
         return context
+
     def get_success_url(self):
         id_hu = self.object.pk
         idp = HistoriaUsuario.objects.get( id=id_hu).asignacion.id

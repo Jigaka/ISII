@@ -39,6 +39,25 @@ class cambiarEstadoProyect(forms.ModelForm):
             'estado': 'Estado del proyecto',
         }
 
+    def __init__(self,pk, *args, **kwargs):
+        self.id_proyecto= pk
+        super(cambiarEstadoProyect, self).__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean()
+        estado = cleaned_data.get('estado')
+        if estado=="Concluido":
+            proyecto = Proyec.objects.get(id=self.id_proyecto)
+            existen_hus=HistoriaUsuario.objects.filter(proyecto=proyecto).exists()
+            if not existen_hus: 
+                raise forms.ValidationError("En este proyecto no se ha creado ninguna historia de usuario. Si lo desea, puede cancelar el proyecto.")
+            else:
+                hus=HistoriaUsuario.objects.filter(proyecto=proyecto)
+                for hu in hus:
+                    if not hu.aprobado_QA:
+                        if not hu.cancelado:
+                            raise forms.ValidationError("Para concluir un proyecto, todas las historias de usuario deben estar aprobadas o canceladas.")
+
 class asignarEquipoProyect(forms.ModelForm):
     class Meta:
         model = Proyec

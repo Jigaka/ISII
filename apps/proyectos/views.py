@@ -65,6 +65,11 @@ class cambiarEstadoProyecto(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateV
     form_class = cambiarEstadoProyect
     success_url = reverse_lazy('proyectos:mis_proyectos')
 
+    def get_form_kwargs(self):
+        kwargs = super(cambiarEstadoProyecto,self).get_form_kwargs()
+        kwargs.update(self.kwargs)
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id_proyecto = self.kwargs['pk']

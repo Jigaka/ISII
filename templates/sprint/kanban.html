@@ -74,7 +74,7 @@ Gestion de Proyectos | Tabla Kanban
 
                 {% if us.userHistory.estado == 'ToDo' %}
 
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
+                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}-{{ proyecto.encargado.id }}-{{ us.userHistory.estado }}' class="card">
                         <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id sprint.id%}')">
                             <button type="button" class="btn btn-light" name="button">{{ us.userHistory.nombre }}</button>
                         </div>
@@ -97,7 +97,7 @@ Gestion de Proyectos | Tabla Kanban
             <h1>Doing</h1>
             {% for us in object_list %}
                 {% if us.userHistory.estado == 'Doing' %}
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}'  class="card">
+                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}-{{ proyecto.encargado.id }}-{{ us.userHistory.estado }}'  class="card">
                         <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id sprint.id%}')">
                             <button type="button" class="btn btn-light" name="button">{{ us.userHistory.nombre }}</button>
                         </div>
@@ -121,7 +121,7 @@ Gestion de Proyectos | Tabla Kanban
             <h1>Done</h1>
             {% for us in object_list %}
                 {% if us.userHistory.estado == 'Done' %}
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
+                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}-{{ proyecto.encargado.id }}-{{ us.userHistory.estado }}' class="card">
                         <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id sprint.id%}')">
                             <button type="button" class="btn btn-light" name="button">{{ us.userHistory.nombre }}</button>
                         </div>
@@ -139,7 +139,8 @@ Gestion de Proyectos | Tabla Kanban
                     </div>
                 {% endif %}
             {% endfor %}
-        </div><div id="QA" class="section">
+       {% if user.id == proyecto.encargado.id %}
+            </div><div id="QA" class="section">
             <h1>QA</h1>
             {% for us_copia in us_fin %}
 
@@ -155,7 +156,7 @@ Gestion de Proyectos | Tabla Kanban
         {% endfor %}
             {% for us in object_list %}
                 {% if us.userHistory.estado == 'QA' %}
-                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}' class="card">
+                    <div id='{{us.userHistory.asignacion_id}}-{{user.id}}-{{ us.userHistory.id }}-{{ proyecto.encargado.id }}-{{ us.userHistory.estado }}' class="card">
                         <div onclick="verUS('{% url 'sprint:ver_us' us.userHistory.id sprint.id%}')">
                             <button type="button" class="btn btn-light" name="button">{{ us.userHistory.nombre }}</button>
                         </div>
@@ -186,6 +187,7 @@ Gestion de Proyectos | Tabla Kanban
             {% endfor %}
 
         </div>
+       {% endif %}
     </div>
     <div class="modal fade" id="editarActividad" role="dialog">
     </div>
@@ -244,8 +246,10 @@ Gestion de Proyectos | Tabla Kanban
             var ideses = card.id.split('-')
             if(ideses[0] == ideses[1]){
                card.draggable = true;
+            } else if(ideses[1] == ideses[3] && ideses[4]=='Done'){
+               card.draggable = true;
             }
-        };
+        }
 
 
         var board = document.getElementById('board');
@@ -332,6 +336,7 @@ Gestion de Proyectos | Tabla Kanban
                 if (card) {
                     if (section !== card.parentNode) {
                         let id = card.id.split('-')[2];
+                        if(card.id.split('-')[1]==card.id.split('-')[3] && section.id!='QA') return;
                         const data = new FormData();
                         data.append('id',id);
                         data.append('estado', section.id)

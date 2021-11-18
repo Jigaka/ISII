@@ -112,15 +112,17 @@ Gestion de Proyectos | Sprint Backlog
 </div>
 
 <div class="col-md-4">
-  <li>Capacidad planificada del Sprint: {{capacidad_sprint}} horas</li>
-  <li>Suma total del Planning Poker: {{suma_historia}} horas</li>
-  {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
-    <li>Capacidad restante del Sprint: {{capacidad_pendientes}} horas</li>
-    <br>
-    {% if capacidad_pendientes <= 0 %}
-      <i><strong>¡Atención! El total de horas estimadas de las Historias de Usuario sobrepasan la capacidad planificada del Sprint</strong></i>
-    {% endif %}
-  {% endifequal %}
+  {% if capacidad_sprint != 0%}
+    <li>Capacidad planificada del Sprint: {{capacidad_sprint}} horas</li>
+    <li>Suma total del Planning Poker: {{suma_historia}} horas</li>
+    {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+      <li>Capacidad restante del Sprint: {{capacidad_pendientes}} horas</li>
+      <br>
+      {% if capacidad_pendientes <= 0 %}
+        <i><strong>¡Atención! El total de horas estimadas de las Historias de Usuario sobrepasan la capacidad planificada del Sprint</strong></i>
+      {% endif %}
+    {% endifequal %}
+  {% endif %}
 </div>
 
 {% endblock body %}

@@ -145,7 +145,7 @@ Gestion de Proyectos | Tabla Kanban
 
             {%  if us_copia.rechazado_QA == True %}
                 <div  class="card">
-                        <div onclick="verUS('{% url 'sprint:ver_us' us_copia.hu.id %}')">
+                        <div onclick="verUS('{% url 'sprint:ver_us' us_copia.hu.id sprint.id%}')">
                             {{ us_copia.hu.nombre }}
                         </div>
                  <p>Rechazado</p>

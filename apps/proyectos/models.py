@@ -1,4 +1,5 @@
 from django.core.mail import EmailMultiAlternatives
+from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import Permission, Group
 from django.db.models.signals import post_save, pre_save
@@ -127,6 +128,13 @@ def agregar_encargado(sender, instance, **Kwargs):
         context = {'proyecto': Proyec.objects.get(id=id)}
         template = get_template('correos/encargado.html')
         content = template.render(context)
+        # send_mail(
+        #     'Subject here',
+        #     'Here is the message.',
+        #     'from@example.com',
+        #     ['garcetejoseka@gmail.com'],
+        #     fail_silently=False,
+        # )
         email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
                                        [user.getEmail()])
         email.attach_alternative(content, 'text/html')

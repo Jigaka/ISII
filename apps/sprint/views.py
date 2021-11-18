@@ -58,10 +58,10 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
         sprint = proyecto.proyecto_s.all().order_by('fecha_inicio')
         for s in sprint:
             if (s.estado=='Iniciado' or s.estado=='Pendiente'):
-                '''
-                Finalizar Sprint y realizar las modificaciones correspondientes a sus historias de usuario
-                '''
                 if date.today() > s.fecha_fin:
+                    '''
+                    Finalizar Sprint y realizar las modificaciones correspondientes a sus historias de usuario
+                    '''
                     Sprint.objects.filter(id=s.id).update(estado='Finalizado')
                     hus = Sprint.objects.get(id=s.id).sprint.all()
                     print(hus)
@@ -292,18 +292,97 @@ class TablaKanban(LoginYSuperStaffMixin, ListView):
         sprint=Sprint.objects.get(id=pk)
         id_proyecto = Sprint.objects.get(id=pk).proyecto.id
         proyecto = Proyec.objects.get(id=id_proyecto)
+
+        if (sprint.estado=='Iniciado'):
+            if date.today() > sprint.fecha_fin:
+                '''
+                Finalizar Sprint y realizar las modificaciones correspondientes a sus historias de usuario
+                '''
+                Sprint.objects.filter(id=pk).update(estado="Finalizado")
+                
+                # Reasignar la variable sprint, traer los datos actualizados
+                sprint= Sprint.objects.get(id=pk)      
+                
+                hus=HistoriaUsuario.objects.filter(sprint=sprint)  
+                for hu in hus:
+                    if hu.estado != 'Done' and hu.estado != 'QA':
+                        Estado_HU.objects.create(hu=hu, 
+                                                sprint=hu.sprint, 
+                                                estado=hu.estado,
+                                                desarrollador=hu.asignacion.username, 
+                                                prioridad=hu.prioridad,
+                                                PP=hu.estimacion, 
+                                                aprobado_QA=hu.aprobado_QA,
+                                                rechazado_QA=hu.rechazado_QA, 
+                                                comentario=hu.comentario)
+                        HistoriaUsuario.objects.filter(id=hu.id).update(sprint_backlog=False, 
+                                                                        aprobado_PB=True,
+                                                                        prioridad='Alta',
+                                                                        prioridad_numerica=3 , 
+                                                                        estimacion_user=0,
+                                                                        estimacion_scrum=0, 
+                                                                        estimacion=0, 
+                                                                        estado='Pendiente', 
+                                                                        asignacion=None, 
+                                                                        sprint=None)
+                        Historial_HU.objects.create(
+                            descripcion='La Historia de Usuario: ' + HistoriaUsuario.objects.get(
+                                id=hu.id).nombre + ' sin concluir se agrega de nuevo al Product Backlog con prioridad Alta y estado:Pendiente',
+                            hu=HistoriaUsuario.objects.get(id=hu.id))
+                    elif hu.estado == 'QA':
+                        if hu.aprobado_QA:
+                            Estado_HU.objects.create(hu=hu, 
+                                                    sprint=hu.sprint, 
+                                                    estado='Aprobado_QA',
+                                                    desarrollador=hu.asignacion.username, 
+                                                    prioridad=hu.prioridad,
+                                                    PP=hu.estimacion, 
+                                                    aprobado_QA=hu.aprobado_QA,
+                                                    rechazado_QA=hu.rechazado_QA, 
+                                                    comentario=hu.comentario)
+                        else:
+                            Estado_HU.objects.create(hu=hu, 
+                                                    sprint=hu.sprint, 
+                                                    estado=hu.estado,
+                                                    desarrollador=hu.asignacion.username, 
+                                                    prioridad=hu.prioridad,
+                                                    PP=hu.estimacion, 
+                                                    aprobado_QA=hu.aprobado_QA,
+                                                    rechazado_QA=hu.rechazado_QA, 
+                                                    comentario=hu.comentario)
+                    elif hu.estado == 'Done':
+                        HistoriaUsuario.objects.filter(id=hu.id).update(estado='QA')
+                        Estado_HU.objects.create(hu=hu, 
+                                                sprint=hu.sprint, 
+                                                estado='QA',
+                                                desarrollador=hu.asignacion.username, 
+                                                prioridad=hu.prioridad,
+                                                PP=hu.estimacion, 
+                                                aprobado_QA=hu.aprobado_QA,
+                                                rechazado_QA=hu.rechazado_QA, 
+                                                comentario=hu.comentario)
+                        idp = hu.proyecto.encargado.id
+                        user = User.objects.get(id=idp)
+                        context = {'hu': HistoriaUsuario.objects.get(id=hu.id)}
+                        template = get_template('correos/revisar_QA.html')
+                        content = template.render(context)
+                        email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion',settings.EMAIL_HOST_USER, [user.getEmail()])
+                        email.attach_alternative(content, 'text/html')
+                        email.send()
+
+        # Volver a consultar el estado del sprint
         if sprint.estado == 'Iniciado':
             sprint_iniciado=True
         else:
             sprint_iniciado=False  
         us_fin = sprint.estado_sprint.all()
+        
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
             us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
             return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto, 'us_fin':us_fin, 'sprint_iniciado':sprint_iniciado})
         else:
             return render(request, 'sprint/kanban-fin.html', {'object_list': us_fin, 'sprint': sprint, 'proyecto': proyecto})    
-
 
 class AddActividad(LoginYSuperStaffMixin, CreateView):
     '''

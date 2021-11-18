@@ -807,13 +807,16 @@ class IniciarSprint(TemplateView):
         sprint = Sprint.objects.get(id=pk)
         proyecto=sprint.proyecto
 
+        sprint_vacio= not HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True).exists()
         existe_sprint_iniciado=Sprint.objects.filter(proyecto=proyecto,estado="Iniciado").exists()
         asignacion_incompleta=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,asignacion=None).exists()
         pp_incompleto=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,estimacion=0).exists()
         historias_en_QA=HistoriaUsuario.objects.filter(sprint=sprint,estado="QA").exists()
         
+        print("¿Sprint vacio?")
+        print (sprint_vacio)
         # Iniciar el sprint si se cumplen las condiciones
-        if (not existe_sprint_iniciado and not asignacion_incompleta and not pp_incompleto and not historias_en_QA):
+        if (not sprint_vacio and not existe_sprint_iniciado and not asignacion_incompleta and not pp_incompleto and not historias_en_QA):
             nueva_fecha_inicio=date.today()
             duracion_dias=sprint.duracion_dias                        
             nueva_fecha_fin=nueva_fecha_inicio+sprint.duracion_cruda
@@ -835,7 +838,7 @@ class IniciarSprint(TemplateView):
         else:
             mensaje="Este sprint no puede ser iniciado."    
         
-        return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje})
+        return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje, 'sprint_vacio':sprint_vacio})
 
 
 class SolicitarFinalizarSprint(TemplateView):

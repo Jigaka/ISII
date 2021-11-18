@@ -8,6 +8,9 @@
   {%if existe_sprint_iniciado%}
   <li>Ya existe otro sprint en estado Iniciado.</li>
   {%endif%}
+  {%if sprint_vacio%}
+  <li>Este sprint está vacío. Por favor, añada historias de usuario al sprint.</li>
+  {%endif%}
   {%if asignacion_incompleta%}
   <li>Por favor, asigne desarrolladores a todas las historias de usuario del Sprint Backlog.</li>
   {%endif%}

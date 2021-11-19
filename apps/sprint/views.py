@@ -387,7 +387,7 @@ class TablaKanban(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, Lis
 
         if sprint.estado != 'Finalizado':
             userHistorys = sprint.sprint.all()
-            us = [{'userHistory' : us, 'actividades' : us.actividades.all()} for us in userHistorys]
+            us = [{'userHistory' : us, 'actividades' : us.actividades.filter(id_sprint=sprint.id).all()} for us in userHistorys]
             return render(request, 'sprint/kanban.html', {'object_list': us, 'sprint': sprint, 'proyecto': proyecto, 'us_fin':us_fin, 'sprint_iniciado':sprint_iniciado})
         else:
             return render(request, 'sprint/kanban-fin.html', {'object_list': us_fin, 'sprint': sprint, 'proyecto': proyecto})

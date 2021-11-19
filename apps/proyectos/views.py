@@ -532,7 +532,16 @@ class ReporteProductBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPer
                            'delete_rol', 'change_rol')
     def get(self, request, pk, *args, **kwargs):
         proyecto=Proyec.objects.get(id=pk)
-        print(proyecto)
-        print("HOAL")
         us = proyecto.proyecto.exclude(aprobado_PB=False).order_by('-prioridad_numerica')
         return render(request, 'proyectos/reporte_PB.html', {'object_list': us,'proyecto':proyecto})
+
+
+class HistorialProyecto(TemplateView):
+    template_name = 'sprint/iniciar_sprint.html'
+    model = Proyec
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        proyecto = Proyec.objects.get(id=pk)
+        sprint = proyecto.proyecto_s.all()
+        equipo=proyecto.equipo.all()
+        return render(request, 'proyectos/historial_proyecto.html',{'sprint': sprint, 'proyecto': proyecto, 'equipo': equipo})

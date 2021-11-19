@@ -59,9 +59,7 @@ class ListarSprint(LoginYSuperStaffMixin, ValidarQuePertenceAlProyecto, LoginNOT
         for s in sprint:
             if (s.estado=='Iniciado' or s.estado=='Pendiente'):
                 if date.today() > s.fecha_fin:
-                    '''
-                    Finalizar Sprint y realizar las modificaciones correspondientes a sus historias de usuario
-                    '''
+                
                     Sprint.objects.filter(id=s.id).update(estado='Finalizado')
                     hus = Sprint.objects.get(id=s.id).sprint.all()
                     print(hus)
@@ -207,6 +205,27 @@ class VerActividad(LoginYSuperStaffMixin, TemplateView):
         actividad = Actividad.objects.get(id=pk)
         return render(request, 'sprint/ver_actividad.html', {"actividad": actividad})
 
+class ListarActividades(ListView):
+    """
+        Vista basada en clase para listar actividades por HU
+    """
+    model = Actividad
+    template_name = 'sprint/listar_actividades.html'
+    def get(self, request, pk, *args, **kwargs):
+        copia=Estado_HU.objects.get(id=pk)
+        sprint=Sprint.objects.get(id=copia.sprint.id)
+        actividades=HistoriaUsuario.objects.get(id=copia.hu.id).actividades.filter(id_sprint=copia.sprint.id)
+        return render(request, 'sprint/listar_actividades.html', {'actividades': actividades, 'proyecto':sprint.proyecto, 'us':HistoriaUsuario.objects.get(id=copia.hu.id), 'sprint':sprint})
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        id_sprint= Actividad.objects.get(id=self.object.pk).id_sprint
+        id_proyecto=Sprint.objects.get(id=id_sprint).proyecto.id
+        context['proyecto'] = Proyec.objects.get(id=id_proyecto)
+        context['sprint'] = Sprint.objects.get(id=id_sprint)
+        return context
+
 class VerUS(LoginYSuperStaffMixin, TemplateView):
     """
         Vista basada en clase para mostrar un user history
@@ -226,7 +245,6 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             desarrollador = {
                 'username' : 'Sin asignar'
             }
-
         horas_trabajadas = 0
         horas_trabajadas_total = 0
         actividad = us.actividades.filter(id_sprint=pl).all()
@@ -418,6 +436,7 @@ class AddActividad(LoginYSuperStaffMixin, CreateView):
         actividad.save()
         history = HistoriaUsuario.objects.get(id=us)
         history.actividades.add(actividad)
+        Historial_HU.objects.create(descripcion='El usuario asignado: ' + history.asignacion.username + ' registra la actividad: '+ nombre + ' horas invertidas '+ hora_trabajo ,hu=history)
         return redirect('sprint:kanban', pk)
 
 class AprobarQA(LoginYSuperStaffMixin, CreateView):
@@ -765,12 +784,11 @@ class Cancelar_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMixin
                 email.attach_alternative(content, 'text/html')
                 email.send()
             HistoriaUsuario.objects.filter(id=id).update(cancelado=True, estado='Cancelado')
+            Historial_HU.objects.create(descripcion='La Historia de Usuario>' + HistoriaUsuario.objects.get(id=id).nombre + ' ha sido cancelada, estado actual: Cancelado', hu=HistoriaUsuario.objects.get(id=id))
         else:
             HistoriaUsuario.objects.filter(id=id).update(cancelado=False, estado='Cancelado')
         return redirect('proyectos:ver_pb', HistoriaUsuario.objects.get(id=id).proyecto.id)
     def get_success_url(self):
-
-
         return reverse('proyectos:ver_pb', kwargs={'pk': HistoriaUsuario.objects.get(id=self.object.pk).proyecto.id })
 
 
@@ -822,7 +840,7 @@ class IniciarSprint(TemplateView):
 
         sprint_vacio= not HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True).exists()
         existe_sprint_iniciado=Sprint.objects.filter(proyecto=proyecto,estado="Iniciado").exists()
-        asignacion_incompleta=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,asignacion=None).exists()
+        asignacion_incompleta=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,asignacion=None).exclude(estado='Cancelado').exists()
         pp_incompleto=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,estimacion=0).exists()
         historias_en_QA=HistoriaUsuario.objects.filter(sprint=sprint,estado="QA").exists()
      
@@ -836,19 +854,26 @@ class IniciarSprint(TemplateView):
             nueva_fecha_fin=nueva_fecha_inicio+sprint.duracion_cruda
             nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
             if (nueva_duracion_dias>duracion_dias):
-                print("nueva_duracion es mayor")
                 while(nueva_duracion_dias!=duracion_dias):
                     nueva_fecha_fin=nueva_fecha_fin-timedelta(days=1)
                     nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
             elif (nueva_duracion_dias<duracion_dias):
-                print("nueva_duracion es menor")
                 while(nueva_duracion_dias!=duracion_dias):
                     nueva_fecha_fin=nueva_fecha_fin+timedelta(days=1)
                     nueva_duracion_dias=pd.bdate_range(start=nueva_fecha_inicio, end=nueva_fecha_fin).size
             #Actualizar nueva fecha de inicio y nueva fecha de fin, cambiar estado a Iniciado
             Sprint.objects.filter(id=sprint.id).update(fecha_inicio=nueva_fecha_inicio, fecha_fin=nueva_fecha_fin, estado='Iniciado')
             sprint = Sprint.objects.get(id=pk)
-            mensaje="Se han actualizado las fechas de inicio y fin en base al rango de días estimados.\n \n El sprint ha sido iniciado exitosamente."
+            mensaje = "Se han actualizado las fechas de inicio y fin en base al rango de días estimados.\n \n El sprint ha sido iniciado exitosamente."
+            for x in sprint.equipo.all():
+                user = User.objects.get(id=x.id)
+                context = {'sprint': sprint}
+                template = get_template('correos/inicio_sprint.html')
+                content = template.render(context)
+                email = EmailMultiAlternatives('Notificacion Apepu Gestor', 'Notificacion', settings.EMAIL_HOST_USER,
+                                               [user.getEmail()])
+                email.attach_alternative(content, 'text/html')
+                email.send()
         else:
 
             mensaje="Este sprint no puede ser iniciado."    

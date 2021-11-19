@@ -44,7 +44,6 @@ class Sprint(models.Model):
         if (self.fecha_inicio and self.fecha_fin):
             i = str(self.fecha_inicio)
             f = str(self.fecha_fin)
-            print(i,f)
             inicio = datetime.strptime(i, '%Y-%m-%d')
             fin = datetime.strptime(f, '%Y-%m-%d')
             dt = pd.bdate_range(start=inicio, end=fin)

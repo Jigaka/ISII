@@ -4,7 +4,7 @@ START=$(date +%s.%N)
 echo 'Creando database...'
 heroku pg:reset DATABASE_URL -a apepu-gestor --confirm apepu-gestor
 echo 'Poblando base de datos...'
-heroku pg:psql postgresql-convex-29137 --app apepu-gestor < desarrollo_heroku.sql
+heroku pg:psql postgresql-defined-44252 --app apepu-gestor < desarrollo_heroku.sql
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
 echo '+-------------------------------------+'

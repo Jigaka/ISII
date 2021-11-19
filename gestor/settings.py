@@ -131,6 +131,17 @@ ACCOUNT_ADAPTER = 'apps.login.adapter.RestrictEmailAdapterAccount'
 AUTH_USER_MODEL = 'user.User'
 DEFAULT_CHARSET = 'utf-8'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = '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' # this is exactly the value 'apikey'
+# # EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
+
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'delia23072307@gmail.com'

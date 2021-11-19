@@ -8,7 +8,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView,Te
 from django.urls import reverse_lazy, reverse
 from apps.user.mixins import LoginYSuperStaffMixin, ValidarPermisosMixin, LoginYSuperUser, \
      LoginNOTSuperUser, ValidarPermisosMixinPermisos, ValidarPermisosMixinHistoriaUsuario, ValidarPermisosMixinSprint, \
-    ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint
+    ValidarQuePertenceAlProyecto, ValidarQuePertenceAlProyectoSprint, ValidarQuePertenceAlProyectoHistoria
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 import pandas as pd
@@ -287,7 +287,7 @@ class SprintBacklog(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarPermisosMix
         capacidad_pendientes = capacidad_sprint - suma_historia
         return render(request, 'sprint/ver_sb.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto, 'capacidad_sprint': capacidad_sprint, 'capacidad_pendientes': capacidad_pendientes, 'suma_historia': suma_historia})
 
-class TablaKanban(LoginYSuperStaffMixin, ListView):
+class TablaKanban(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, ListView):
     model = HistoriaUsuario
     template_name = 'sprint/ver_sb.html'
     '''permission_required = ('view_rol', 'add_rol',
@@ -607,7 +607,7 @@ class ListarEquipo(LoginYSuperStaffMixin, LoginNOTSuperUser, ValidarQuePertenceA
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/listar_equipo.html', {'sprint':sprint, 'object_list': equipo, 'proyecto': proyecto, 'capacidad': capacidad})
 
-class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView ):
+class AsignarCapacidadDiaria(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, LoginNOTSuperUser,CreateView ):
     """ Vista basada en clase, se utiliza para editar los usuarios del sistema"""
     permission_required = ('view_rol', 'add_rol',
                            'delete_rol', 'change_rol')
@@ -640,7 +640,7 @@ class AsignarCapacidadDiaria(LoginYSuperStaffMixin, LoginNOTSuperUser,CreateView
     def get_success_url(self, **kwargs):
         return reverse('sprint:listar_equipo', kwargs={'pk': CapacidadDiariaEnSprint.objects.get(id=self.object.pk).sprint.id })
 
-class Historial_por_hu(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
+class Historial_por_hu(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoHistoria, LoginNOTSuperUser, ListView):
     """Vista basada en clase, se utiliza para listar las historia de usuario asignados al developer"""
     model = Historial_HU
     template_name = 'sprint/historial_hu.html'
@@ -673,7 +673,7 @@ class VisualizarCapacidad(LoginYSuperStaffMixin, LoginNOTSuperUser, TemplateView
         proyecto = Proyec.objects.get(id=id_proyecto)
         return render(request, 'sprint/capacidad.html', {'sprint': sprint, 'proyecto': proyecto})
 
-class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
+class BurnDownChart(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, TemplateView):
     """Vista basada en clase, se utiliza graficar la linea ideal y real del BurnDownChart"""
     template_name = 'sprint/burn_down_chart3.html'
     model = Actividad
@@ -699,6 +699,7 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
         fechas.insert(0, " ")
         dt = pd.bdate_range(start=fecha_inicio, end=fecha_fin, tz=None)
         horas_disponibles = sprint.suma_planing_poker
+        horas_capacidad_sprint = sprint.capacidad_de_equipo_sprint
         dia = 1
         fecha_actividad = []
         fecha_duracion = []
@@ -720,18 +721,24 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
         df["Fechas"] = fecha_duracion
         df["Horas"] = datos
         ultima_fecha = None
+        suma_horas_actividades = 0
         # En esta parte se va guardando y descontando las horas horas_disponibles del sprint
         for i in range(sprint.duracion_dias):
             for a,b in zip(fecha_actividad, horas):
                 if fecha_duracion[i] == a:
-                    sprint.capacidad_de_equipo_sprint = sprint.capacidad_de_equipo_sprint-b
-                    df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
+                    sprint.suma_planing_poker = sprint.suma_planing_poker-b
+                    suma_horas_actividades += b
+                    df.iloc[i,1] = sprint.suma_planing_poker
                     ultima_fecha = df.iloc[i,0]
                 else:
-                    df.iloc[i,1] = sprint.capacidad_de_equipo_sprint
+                    df.iloc[i,1] = sprint.suma_planing_poker
         datos = df["Horas"].tolist()
+        print(horas_disponibles)
+        print(datos)
         ## Si la lista (datos) tiene todos los elementos ceros entonces significa que no se cargaron aun las horas
         datos.insert(0, horas_disponibles)
+        print(df)
+        print(datos)
         contador = 0
         datos2 = []
         # se grafica hasta el último registro de carga de horas
@@ -741,7 +748,7 @@ class BurnDownChart(ValidarQuePertenceAlProyectoSprint, TemplateView):
                 datos2.append(datos[i])
         else:
             datos2.append(horas_disponibles)
-        sprint_hora = datos2[-1]
+        sprint_hora = horas_capacidad_sprint - suma_horas_actividades
         return render(request, 'sprint/burn_down_chart3.html',{'sprint': sprint, 'proyecto': proyecto, 'datos': datos2, 'fechas': fechas2, 'hora': sprint_hora})
 
 
@@ -826,7 +833,7 @@ class ReporteSprintActual(LoginYSuperStaffMixin, LoginNOTSuperUser, ListView):
         return render(request, 'sprint/reporte_SA.html', {'object_list': object_list,'sprint':sprint,'proyecto':proyecto})
 
 
-class IniciarSprint(TemplateView):
+class IniciarSprint(LoginYSuperStaffMixin, ValidarPermisosMixinSprint, TemplateView):
     template_name = 'sprint/iniciar_sprint.html'
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
@@ -843,7 +850,7 @@ class IniciarSprint(TemplateView):
         asignacion_incompleta=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,asignacion=None).exclude(estado='Cancelado').exists()
         pp_incompleto=HistoriaUsuario.objects.filter(sprint=sprint,sprint_backlog=True,estimacion=0).exists()
         historias_en_QA=HistoriaUsuario.objects.filter(sprint=sprint,estado="QA").exists()
-     
+
         print("¿Sprint vacio?")
         print (sprint_vacio)
 
@@ -876,13 +883,13 @@ class IniciarSprint(TemplateView):
                 email.send()
         else:
 
-            mensaje="Este sprint no puede ser iniciado."    
-        
+            mensaje="Este sprint no puede ser iniciado."
+
         return render(request, 'sprint/iniciar_sprint.html',{'sprint': sprint,'proyecto': proyecto, 'existe_sprint_iniciado':existe_sprint_iniciado,'asignacion_incompleta':asignacion_incompleta,'pp_incompleto':pp_incompleto, 'historias_en_QA':historias_en_QA, 'mensaje':mensaje, 'sprint_vacio':sprint_vacio})
 
 
 
-class SolicitarFinalizarSprint(TemplateView):
+class SolicitarFinalizarSprint(LoginYSuperStaffMixin, TemplateView):
     template_name = 'sprint/solicitar_finalizar_sprint.html'
     model = Sprint
     permission_required = ('view_rol', 'add_rol',
@@ -893,7 +900,7 @@ class SolicitarFinalizarSprint(TemplateView):
         proyecto=sprint.proyecto
         return render(request, 'sprint/solicitar_finalizar_sprint.html',{'sprint': sprint,'proyecto': proyecto})
 
-class FinalizarSprint(TemplateView):
+class FinalizarSprint(LoginYSuperStaffMixin, TemplateView):
     template_name = 'sprint/finalizar_sprint.html'
     model = Sprint
     permission_required = ('view_rol', 'add_rol',

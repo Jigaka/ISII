@@ -23,6 +23,8 @@ Gestion de Proyectos | Tabla Kanban
             border: 1px solid #666;
             padding: 5px;
             width: 300px;
+            color:black;
+            background-color: skyblue;
         }
 
         .section.droppable {
@@ -35,6 +37,7 @@ Gestion de Proyectos | Tabla Kanban
             padding: 0;
             font-size: 12pt;
             text-align: center;
+            background-color: white;
         }
 
         .card {
@@ -56,10 +59,14 @@ Gestion de Proyectos | Tabla Kanban
             background-color: skyblue;
             margin: 2px;
         }
+
+        .center {
+          text-align: center;
+        }
     </style>
 {% endblock extra_css %}
 {% block body %}
-<h1>Tabla kanban</h1>
+<h3><strong>TABLA KANBAN</strong></h3>
     <div id="board">
         <div id="ToDo" class="section">
             <h1>To Do</h1>
@@ -160,7 +167,7 @@ Gestion de Proyectos | Tabla Kanban
 
         for (var i = 0, n = cards.length; i < n; i++) {
             var card = cards[i];
-            card.draggable = true;
+            card.draggable = false;
         };
 
 

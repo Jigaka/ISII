@@ -39,6 +39,7 @@ Gestion de Proyectos | Listado de Roles
             <div class="col-md-8">
                 <strong class="card-title">Listado de Roles</strong>
             </div>
+            {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
             <div class="col-md-4">
                 <button type="button" style="float:right" class="btn boton-crear-us">
                     <a href="{%  url 'usuarios:crear_rol' id%}">
@@ -47,6 +48,7 @@ Gestion de Proyectos | Listado de Roles
                     </a>
                 </button>
             </div>
+            {% endif %}
         </div>
 
     </div>
@@ -56,7 +58,9 @@ Gestion de Proyectos | Listado de Roles
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
                     <th>Opciones</th>
+                    {% endif %}
                     <th></th>
                 </tr>
             </thead>
@@ -66,10 +70,12 @@ Gestion de Proyectos | Listado de Roles
                <tr>
                  <td>{{ roles.id }}</td>
                  <td>{{ rol }}</td>
+                   {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
                  <td class="opciones">
                    <a class="opcion" href="{%  url 'usuarios:agregar_permisos_roles' roles.id %}">  Agregar permisos</a>
                    <a class="eliminar" href="{%  url 'usuarios:eliminar_rol' roles.id %}">  Eliminar </a>
                  </td>
+               {% endif %}
                </tr>
              {% endfor %}
             </tbody>

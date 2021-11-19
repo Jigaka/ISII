@@ -50,14 +50,14 @@ Gestion de Proyectos | Listado de Proyectos
                                 <a href="{%  url 'proyectos:ver_proyecto' proyec.id%}"> Ver proyecto</a>
                             {%endifnotequal%}
                             {% endif %}
-                            {% if  request.user.id == proyec.encargado.id %}
-                                <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar datos del proyecto</a>
-                                <a href="{%  url 'proyectos:asignar_equipo_proyecto' proyec.id %}"> Asignar equipo</a>
-                                <a href="{%  url 'proyectos:cambiar_estado_proyecto' proyec.id %}">Cambiar estado</a>
+                            {% if proyec.estado == 'Iniciado' or proyec.estado == 'Pendiente' %}
+                                {% if  request.user.id == proyec.encargado.id %}
+                                    <a href="{%  url 'proyectos:editar_proyecto' proyec.id %}"> Editar datos del proyecto</a>
+                                    <a href="{%  url 'proyectos:asignar_equipo_proyecto' proyec.id %}"> Asignar equipo</a>
+                                    <a href="{%  url 'proyectos:cambiar_estado_proyecto' proyec.id %}">Cambiar estado</a>
+                                {% endif %}
                             {% endif %}
-                            {% if  request.user.is_superuser or request.user.id == proyec.encargado.id %}
                                 <a href="{%  url 'proyectos:historial_proyecto' proyec.id %}">Historial</a>
-                            {% endif %}
                             {% if  request.user.is_superuser %}
                                 <a class="eliminar" href="{%  url 'proyectos:eliminar_proyecto' proyec.id %}"> Eliminar</a>
                             {% endif %}

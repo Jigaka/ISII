@@ -42,7 +42,9 @@ Gestion de Proyectos | Listado de integrantes
                     <tr>
                         <th>username</th>
                         <th>rol</th>
+                        {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
                         <th style="text-align: left;">Opciones</th>
+                            {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -55,11 +57,13 @@ Gestion de Proyectos | Listado de integrantes
                         {% else %}
                             <td>Sin rol</td>
                         {% endif %}
+                        {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
                         <td style="text-align: left;">
                             <button class="btn btn-primary" onclick="abrirModalRol('{% url 'usuarios:asignar_rol' user.user.id id%}')"> Asignar Rol</button>
                             {% if  user.user.id != proyecto.encargado.id %}
                             <a class="eliminar" href="{% url 'proyectos:expulsar_integrante' user.user.id id%}">  Expulsar </a>
                             {% endif %}
+                        {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

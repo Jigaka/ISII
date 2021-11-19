@@ -16,6 +16,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                 <strong class="card-title">Listado de Historias de Usuario</strong>
             </div>
             <div class="col-md-4">
+            {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
                 {% ifnotequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
                 <button type="button" style="float:right" class="btn boton-crear-us">
                     <a href="{%  url 'proyectos:crear_us'  id%}">
@@ -24,6 +25,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                     </a>
                 </button>
                 {%endifnotequal%}
+            {% endif %}
             </div>
         </div>
     </div>
@@ -64,6 +66,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                             {%endifequal%}</td>
                         <td>{{us.product_owner}}</td>
                         <td class="opciones">
+                        {% if proyecto.estado == 'Iniciado' or proyecto.estado == 'Pendiente' %}
                             {% if  request.user.id == us.proyecto.encargado_id %}
                                 <a href="{%  url 'proyectos:aprobar_us' us.id%}" class="aprobar">Aprobar</a>
                                 {%if not us.rechazado_PB%}
@@ -73,6 +76,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                         {% if  request.user.id == us.product_owner_id %}
                                 <a href="{%  url 'proyectos:editar_us' us.id %}"> Editar</a>
                                 <a href="{%  url 'proyectos:eliminar_us' us.id %}" class="eliminar"> Eliminar</a>
+                        {% endif %}
                         {% endif %}
                                   <a href="{%  url 'sprint:historial_hu' us.id %}">Ver Historial</a>
                         </td>

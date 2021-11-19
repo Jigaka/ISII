@@ -14,7 +14,7 @@ Gestion de Proyectos | Listado de historia de usuarios
             <div class="col-md-8">
                 <strong class="card-title">Miembros del Equipo</strong>
             </div>
-            {% ifequal sprint.estado|stringformat:"s" "Pendiente" %}
+            {% if us.proyecto.estado == 'Iniciado' %}
             <div class="col-md-4">
                 <button type="button" style="float:right" class="btn boton-crear-us">
                     <a href="{%  url 'sprint:configurar_equipo' id%}">
@@ -23,7 +23,7 @@ Gestion de Proyectos | Listado de historia de usuarios
                     </a>
                 </button>
             </div>
-            {%endifequal%}
+            {% endif %}
 
         </div>
     </div>

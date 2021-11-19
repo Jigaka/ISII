@@ -914,8 +914,10 @@ CREATE TABLE public.sprint_sprint (
     fecha_creacion date,
     capacidad_de_equipo_sprint integer NOT NULL,
     capacidad_equipo integer NOT NULL,
+    suma_planing_poker integer NOT NULL,
     CONSTRAINT sprint_sprint_capacidad_de_equipo_sprint_check CHECK ((capacidad_de_equipo_sprint >= 0)),
-    CONSTRAINT sprint_sprint_capacidad_equipo_check CHECK ((capacidad_equipo >= 0))
+    CONSTRAINT sprint_sprint_capacidad_equipo_check CHECK ((capacidad_equipo >= 0)),
+    CONSTRAINT sprint_sprint_suma_planing_poker_check CHECK ((suma_planing_poker >= 0))
 );
 
 
@@ -1394,6 +1396,10 @@ COPY public.auth_group (id, name) FROM stdin;
 3	Scrum Master-Proyecto 3
 4	Developer-Proyecto 1
 5	Product Owner-Proyecto 1
+7	Developer-Proyecto 3
+6	Product Owner-Proyecto 3
+8	Developer-Proyecto 2
+9	Product Owner-Proyecto 2
 \.
 
 
@@ -1446,6 +1452,34 @@ COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
 42	5	69
 43	5	70
 44	5	71
+45	6	109
+46	6	110
+47	6	111
+48	6	112
+53	7	113
+54	7	114
+55	7	115
+56	7	116
+57	7	58
+58	7	60
+59	6	72
+60	6	69
+61	6	70
+62	6	71
+63	8	117
+64	8	118
+65	8	119
+66	8	120
+67	9	121
+68	9	122
+69	9	123
+70	9	124
+71	8	58
+72	8	60
+73	9	72
+74	9	69
+75	9	70
+76	9	71
 \.
 
 
@@ -1562,6 +1596,22 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 106	Can change Product Owner-Proyecto 1	14	change_Product Owner-Proyecto 1
 107	Can delete Product Owner-Proyecto 1	14	delete_Product Owner-Proyecto 1
 108	Can view Product Owner-Proyecto 1	14	view_Product Owner-Proyecto 1
+109	Can add Product Owner-Proyecto 3	14	add_Product Owner-Proyecto 3
+110	Can change Product Owner-Proyecto 3	14	change_Product Owner-Proyecto 3
+111	Can delete Product Owner-Proyecto 3	14	delete_Product Owner-Proyecto 3
+112	Can view Product Owner-Proyecto 3	14	view_Product Owner-Proyecto 3
+113	Can add Developer-Proyecto 3	14	add_Developer-Proyecto 3
+114	Can change Developer-Proyecto 3	14	change_Developer-Proyecto 3
+115	Can delete Developer-Proyecto 3	14	delete_Developer-Proyecto 3
+116	Can view Developer-Proyecto 3	14	view_Developer-Proyecto 3
+117	Can add Developer-Proyecto 2	14	add_Developer-Proyecto 2
+118	Can change Developer-Proyecto 2	14	change_Developer-Proyecto 2
+119	Can delete Developer-Proyecto 2	14	delete_Developer-Proyecto 2
+120	Can view Developer-Proyecto 2	14	view_Developer-Proyecto 2
+121	Can add Product Owner-Proyecto 2	14	add_Product Owner-Proyecto 2
+122	Can change Product Owner-Proyecto 2	14	change_Product Owner-Proyecto 2
+123	Can delete Product Owner-Proyecto 2	14	delete_Product Owner-Proyecto 2
+124	Can view Product Owner-Proyecto 2	14	view_Product Owner-Proyecto 2
 \.
 
 
@@ -1571,6 +1621,12 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 
 COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
 1	2021-11-17 21:24:52.972118-03	1	Sprint 1 - Proyecto 1	2	[{"changed": {"fields": ["Fecha inicio", "Fecha fin"]}}]	17	1
+2	2021-11-19 10:12:13.285248-03	4	Sprint 1 - Proyecto 3	2	[{"changed": {"fields": ["Fecha inicio", "Fecha fin"]}}]	17	1
+3	2021-11-19 10:13:41.856511-03	6	A1-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+4	2021-11-19 10:14:48.99547-03	7	A2-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+5	2021-11-19 10:15:07.052042-03	8	A3-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+6	2021-11-19 10:15:31.781383-03	9	A4-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+7	2021-11-19 11:30:42.198343-03	5	Sprint 2 - Proyecto 3	2	[{"changed": {"fields": ["Fecha inicio", "Fecha fin"]}}]	17	1
 \.
 
 
@@ -1710,6 +1766,9 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 99	sprint	0024_merge_20211116_1501	2021-11-17 17:30:12.276443-03
 100	sprint	0025_auto_20211117_0929	2021-11-17 17:30:12.492083-03
 101	user	0004_auto_20210907_2351	2021-11-17 17:30:12.8208-03
+102	sprint	0025_auto_20211117_1845	2021-11-18 22:35:32.319616-03
+103	sprint	0026_sprint_suma_planing_poker	2021-11-18 22:35:32.463627-03
+104	sprint	0027_merge_20211118_1932	2021-11-18 22:35:32.469636-03
 \.
 
 
@@ -1723,6 +1782,8 @@ tdvch71q5ptpa727fsx6kh8j6iimydr5	.eJxVTEsOwiAUvAtrQwiUV3CnFyGPBwRiQxOBlfHuUtOFzq
 ybfhr1ptjgvr3mgogozyqc52jm1uim7r	.eJxVjMEOwiAQRP-FsyFAgVKP3vsNZJfdStVAUtqT8d9tkx70Npn3Zt4iwrbmuDVe4kziKrS4_HYI6cnlAPSAcq8y1bIuM8pDkSdtcqzEr9vp_h1kaHlfKwwIxnQO2Xibpsl1qbPBapuchZ57dODMoKzyA4SkgfaI7B0SAZISny_b6TgP:1mnUtl:kM0yjoe_a9MEy1kia-fpSmi_z5dIbH0xHkuh20uj9mI	2021-12-01 21:03:29.194965-03
 p7mk5ma7099nws9qinmicbdauwxgkrk4	.eJxVTEsOwiAUvAtrQwiUV3CnFyGPBwRiQxOBlfHuUtOFzqzm-2IOR89utPh0JbArU-zy63mkR6xHgNt22ByJ9lE7_3bOuPHbVLH2QtjLXu_n6u8qY8vzRytpyAAEM7moNeiYvCBcwiq0AQsTRvhEQYIEEaW1kNAaLTBqSsTeH62PPD0:1mnVso:kMPzFOg5SKpU7VsDqkmTlkIlfEfLE2cYSVJ0wFFcmls	2021-12-01 22:06:34.795666-03
 qisjkcm2pozyqm16kgjwz8kogabw679u	.eJxVjEEOwiAURO_C2jQIfCju7EXIBz6B2NBEYGW8u63pQpfzZua9mMPRsxuNnq5EdmOCXX6Zx_CgehS4rgeeMIRt1D59N2fdpvueqPYSsJetLufrT5Wx5d1jwaZoCEjo5NFEC9pwUoZHUolftTSCZALhufckZuCJuFAWQEklaZbs_QG7tTvH:1mnVu2:PVNpv8KiHU-mWoJztWa18bSANq9kSDg4MncnmpxINtc	2021-12-01 22:07:50.430499-03
+txg92rsdq7uqooip5u8zydtydmrjisx1	.eJxVTEsOwiAUvAtrQwiUV3CnFyGPBwRiQxOBlfHuUtOFzqzm-2IOR89utPh0JbArU-zy63mkR6xHgNt22ByJ9lE7_3bOuPHbVLH2QtjLXu_n6u8qY8vzRytpyAAEM7moNeiYvCBcwiq0AQsTRvhEQYIEEaW1kNAaLTBqSsTeH62PPD0:1mo5NH:H_QRmUWKz3V1YS4tDWHa9CQyJII9zjAF3PLSGrhVEWI	2021-12-03 12:00:23.036916-03
+94ow715wu3blecr0sv7z1837iij6mavc	.eJxVjMEOwiAQRP-FsyFAgVKP3vsNZJfdStVAUtqT8d9tkx70Npn3Zt4iwrbmuDVe4kziKrS4_HYI6cnlAPSAcq8y1bIuM8pDkSdtcqzEr9vp_h1kaHlfKwwIxnQO2Xibpsl1qbPBapuchZ57dODMoKzyA4SkgfaI7B0SAZISny_b6TgP:1mo3g4:o0FdAjuTDm31pYDF3KMAE5xKGOBciCUwsmLNRGyRhgU	2021-12-03 10:11:40.200004-03
 \.
 
 
@@ -1752,9 +1813,9 @@ COPY public.login_listapermitidos (id, correo) FROM stdin;
 --
 
 COPY public.proyectos_proyec (id, nombre, descripcion, estado, fecha, dias_estimados, encargado_id, estado_anterior, fecha_cancelado, fecha_concluido, fecha_creacion, fecha_inicio) FROM stdin;
-2	Proyecto 2	Este es el proyecto numero 2	Pendiente	2021-11-17	0	3	Pendiente	\N	\N	2021-11-17	\N
-3	Proyecto 3	Este es el proyecto numero 2	Pendiente	2021-11-17	0	4	Pendiente	\N	\N	2021-11-17	\N
-1	Proyecto 1	Este es el proyecto numero 1	Pendiente	2021-11-17	0	2	Pendiente	\N	\N	2021-11-17	\N
+1	Proyecto 1	Este es el proyecto numero 1	Iniciado	2021-11-18	0	2	Iniciado	\N	\N	2021-11-17	2021-11-18
+3	Proyecto 3	Este es el proyecto numero 2	Concluido	2021-11-19	0	4	Concluido	2021-11-19	2021-11-19	2021-11-17	2021-11-19
+2	Proyecto 2	Este es el proyecto numero 2	Iniciado	2021-11-19	0	3	Iniciado	\N	\N	2021-11-17	2021-11-19
 \.
 
 
@@ -1769,6 +1830,12 @@ COPY public.proyectos_proyec_equipo (id, proyec_id, user_id) FROM stdin;
 4	1	3
 5	1	4
 6	1	5
+7	3	2
+8	3	3
+9	3	5
+11	2	2
+12	2	5
+13	2	4
 \.
 
 
@@ -1782,6 +1849,10 @@ COPY public.proyectos_rolproyecto (id, proyecto_id, rol_id, nombre) FROM stdin;
 3	3	3	Scrum Master-Proyecto 3
 4	1	4	Developer-Proyecto 1
 5	1	5	Product Owner-Proyecto 1
+6	3	6	Product Owner-Proyecto 3
+7	3	7	Developer-Proyecto 3
+8	2	8	Developer-Proyecto 2
+9	2	9	Product Owner-Proyecto 2
 \.
 
 
@@ -1790,10 +1861,10 @@ COPY public.proyectos_rolproyecto (id, proyecto_id, rol_id, nombre) FROM stdin;
 --
 
 COPY public.socialaccount_socialaccount (id, provider, uid, last_login, date_joined, extra_data, user_id) FROM stdin;
-4	google	116860843875389860314	2021-11-17 22:04:18.078019-03	2021-11-17 17:53:24.664178-03	{"id": "116860843875389860314", "email": "delia23072307@gmail.com", "verified_email": true, "name": "delia ramirez", "given_name": "delia", "family_name": "ramirez", "picture": "https://lh3.googleusercontent.com/a/AATXAJxpGeXW7HjaZ3P-ZAelc3KV4xYF9DAImf9hqvxL=s96-c", "locale": "es-419"}	5
-2	google	103748530319783491304	2021-11-17 22:06:34.767086-03	2021-11-17 17:31:55.479306-03	{"id": "103748530319783491304", "email": "garcetejoseka@gmail.com", "verified_email": true, "name": "Jos\\u00e9 Garcete", "given_name": "Jos\\u00e9", "family_name": "Garcete", "picture": "https://lh3.googleusercontent.com/a-/AOh14GgTZu38-DbamAd4HMQ5iV-rN3Nl-xIC6qwDcckItw=s96-c", "locale": "es"}	3
-3	google	100050764976762921735	2021-11-17 22:06:39.564086-03	2021-11-17 17:32:05.589006-03	{"id": "100050764976762921735", "email": "garcetejoseka@fpuna.edu.py", "verified_email": true, "name": "Jose Ildefonso Garcete Aguilar", "given_name": "Jose Ildefonso", "family_name": "Garcete Aguilar", "picture": "https://lh3.googleusercontent.com/a-/AOh14GhQBaP3niW8fmv8BVptRpNedwuds-SJsUbOg30=s96-c", "locale": "es", "hd": "fpuna.edu.py"}	4
-1	google	100187510958441531749	2021-11-17 22:07:50.407943-03	2021-11-17 17:31:44.249581-03	{"id": "100187510958441531749", "email": "apepunando@gmail.com", "verified_email": true, "name": "Apepu Coding", "given_name": "Apepu", "family_name": "Coding", "picture": "https://lh3.googleusercontent.com/a/AATXAJyMiH3sRTo2AqC7oq7o6wlMfY7Di9dRVH6Jlx_R=s96-c", "locale": "es-419"}	2
+1	google	100187510958441531749	2021-11-19 11:48:12.501507-03	2021-11-17 17:31:44.249581-03	{"id": "100187510958441531749", "email": "apepunando@gmail.com", "verified_email": true, "name": "Apepu Coding", "given_name": "Apepu", "family_name": "Coding", "picture": "https://lh3.googleusercontent.com/a/AATXAJyMiH3sRTo2AqC7oq7o6wlMfY7Di9dRVH6Jlx_R=s96-c", "locale": "es-419"}	2
+4	google	116860843875389860314	2021-11-19 11:48:48.506289-03	2021-11-17 17:53:24.664178-03	{"id": "116860843875389860314", "email": "delia23072307@gmail.com", "verified_email": true, "name": "delia ramirez", "given_name": "delia", "family_name": "ramirez", "picture": "https://lh3.googleusercontent.com/a/AATXAJxpGeXW7HjaZ3P-ZAelc3KV4xYF9DAImf9hqvxL=s96-c", "locale": "es-419"}	5
+3	google	100050764976762921735	2021-11-19 11:58:43.684774-03	2021-11-17 17:32:05.589006-03	{"id": "100050764976762921735", "email": "garcetejoseka@fpuna.edu.py", "verified_email": true, "name": "Jose Ildefonso Garcete Aguilar", "given_name": "Jose Ildefonso", "family_name": "Garcete Aguilar", "picture": "https://lh3.googleusercontent.com/a-/AOh14GhQBaP3niW8fmv8BVptRpNedwuds-SJsUbOg30=s96-c", "locale": "es", "hd": "fpuna.edu.py"}	4
+2	google	103748530319783491304	2021-11-19 12:00:23.013626-03	2021-11-17 17:31:55.479306-03	{"id": "103748530319783491304", "email": "garcetejoseka@gmail.com", "verified_email": true, "name": "Jos\\u00e9 Garcete", "given_name": "Jos\\u00e9", "family_name": "Garcete", "picture": "https://lh3.googleusercontent.com/a-/AOh14GgTZu38-DbamAd4HMQ5iV-rN3Nl-xIC6qwDcckItw=s96-c", "locale": "es"}	3
 \.
 
 
@@ -1829,6 +1900,18 @@ COPY public.sprint_actividad (id, nombre, hora_trabajo, comentario, id_sprint, f
 1	A1-S1	10	Actividad	1	2021-11-08
 2	A2-S1	14	Actividad 2	1	2021-11-10
 3	A3-S1	24	Actividad 3	1	2021-11-12
+4	A4-S2	10	actividad 4	2	2021-11-18
+5	A5-S2	15	Actividad 5	2	2021-11-18
+6	A1-S1-P3	20	Actividad 1	4	2021-10-01
+7	A2-S1-P3	10	Actividad 2	4	2021-10-05
+8	A3-S1-P3	10	Actividad 3	4	2021-10-06
+9	A4-S1-P3	20	Actividad 4	4	2021-10-08
+10	A1-S2-P3	8	Actividad 1	5	2021-10-11
+11	A2-S2-P3	8	Actividad 2	5	2021-10-12
+12	A3-S1-P3	8	Actividad 3	5	2021-10-13
+13	A4-S1-P3	8	Actividad 4	5	2021-10-14
+14	A5-S1-P3	8	Actividad 5	5	2021-10-15
+15	A6-S1-P3	8	Actividad 6	5	2021-10-18
 \.
 
 
@@ -1841,6 +1924,10 @@ COPY public.sprint_capacidaddiariaensprint (id, capacidad_diaria_horas, sprint_i
 2	8	1	5
 3	8	2	4
 4	6	2	5
+5	5	4	3
+6	5	4	2
+7	4	5	2
+8	4	5	3
 \.
 
 
@@ -1852,6 +1939,12 @@ COPY public.sprint_estado_hu (id, estado, hu_id, sprint_id, "PP", desarrollador,
 1	Rechazado_QA	2	1	24	delia	Alta	f	Imposible que trabajes 24 horas seguidas	t
 2	ToDo	10	1	48	jose_ildefonso	Alta	f	\N	f
 3	Aprobado_QA	6	1	24	delia	Media	t	Buen trabajo	f
+4	Aprobado_QA	16	4	20	jose1	Alta	t	Buen Trabajo	f
+5	Aprobado_QA	15	4	20	apepu	Media	t	Buen Trabajo	f
+6	Aprobado_QA	19	4	20	apepu	Alta	t	Buen Trabajo	f
+7	Aprobado_QA	18	5	16	apepu	Media	t	Buen Trabajo	f
+9	Aprobado_QA	17	5	16	apepu	Baja	t	Buen Trabajo	f
+8	Rechazado_QA	14	5	16	jose1	Baja	f	Mal trabajo	t
 \.
 
 
@@ -1913,6 +2006,81 @@ COPY public.sprint_historial_hu (id, fecha_creacion, descripcion, hu_id, hora) F
 51	2021-11-17	 Estmacion del usuario delia :25	5	22:06:09.450811
 52	2021-11-17	 Resultado del Planning Poker: 25.0	10	22:07:31.657326
 53	2021-11-17	 Estmacion del usuario jose_ildefonso :25	10	22:07:31.666519
+85	2021-11-18	Cambio de estado Pendiente a estado Doing	10	23:21:20.234184
+86	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 1 - proyecto 3 id #14 con prioridad: Baja	14	09:38:57.26624
+87	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 2 - proyecto 3 id #15 con prioridad: Media	15	09:39:12.191607
+88	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 3 - proyecto 3 id #16 con prioridad: Alta	16	09:39:28.531069
+89	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 4 - proyecto 3 id #17 con prioridad: Baja	17	09:39:43.505907
+90	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 5 - proyecto 3 id #18 con prioridad: Media	18	09:39:56.919948
+91	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 6 - proyecto 3 id #19 con prioridad: Alta	19	09:40:11.604995
+92	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 3 - proyecto 3 al Sprint: Sprint 1 - Proyecto 3	16	09:50:28.388457
+93	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 6 - proyecto 3 al Sprint: Sprint 1 - Proyecto 3	19	09:50:35.998549
+94	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 2 - proyecto 3 al Sprint: Sprint 1 - Proyecto 3	15	09:50:42.707278
+95	2021-11-19	Asignacion de la Historia de Usuario a: jose1	16	09:53:55.420003
+96	2021-11-19	 Estmacion del Scum Master: 30	16	09:53:55.426679
+97	2021-11-19	Asignacion de la Historia de Usuario a: apepu	19	09:54:17.922695
+98	2021-11-19	 Estmacion del Scum Master: 30	19	09:54:17.93028
+99	2021-11-19	Asignacion de la Historia de Usuario a: jose1	16	09:54:48.867802
+100	2021-11-19	 Estmacion del Scum Master: 20	16	09:54:48.873931
+101	2021-11-19	Asignacion de la Historia de Usuario a: apepu	19	09:55:08.802151
+102	2021-11-19	 Estmacion del Scum Master: 20	19	09:55:08.819676
+103	2021-11-19	Asignacion de la Historia de Usuario a: apepu	15	09:55:32.407153
+104	2021-11-19	 Estmacion del Scum Master: 20	15	09:55:32.414255
+105	2021-11-19	 Resultado del Planning Poker: 20.0	19	09:56:56.994183
+106	2021-11-19	 Estmacion del usuario apepu :20	19	09:56:57.002955
+107	2021-11-19	 Resultado del Planning Poker: 20.0	15	09:57:03.147251
+108	2021-11-19	 Estmacion del usuario apepu :20	15	09:57:03.159516
+109	2021-11-19	 Resultado del Planning Poker: 20.0	16	09:57:33.226358
+110	2021-11-19	 Estmacion del usuario jose1 :20	16	09:57:33.243624
+111	2021-11-19	Cambio de estado Pendiente a estado Doing	15	10:02:41.097456
+112	2021-11-19	El usuario asignado: apepu registra la actividad: A1-S1-P3 horas invertidas 20	15	10:04:12.348955
+113	2021-11-19	Cambio de estado Pendiente a estado Doing	19	10:04:59.152317
+114	2021-11-19	El usuario asignado: apepu registra la actividad: A2-S1-P3 horas invertidas 10	19	10:06:04.926181
+115	2021-11-19	El usuario asignado: apepu registra la actividad: A3-S1-P3 horas invertidas 10	19	10:06:42.30386
+116	2021-11-19	Cambio de estado Doing a estado Done	15	10:07:21.709868
+117	2021-11-19	Cambio de estado Doing a estado Done	19	10:07:25.424314
+118	2021-11-19	Cambio de estado Pendiente a estado Doing	16	10:07:53.489194
+119	2021-11-19	El usuario asignado: jose1 registra la actividad: A4-S1-P3 horas invertidas 20	16	10:09:23.313573
+120	2021-11-19	Cambio de estado Doing a estado Done	16	10:09:25.965896
+121	2021-11-19	La Historia de Usuario: Historia de usuario 3 - proyecto 3 es aprobada. Comentario: Buen Trabajo	16	10:44:19.001194
+122	2021-11-19	La Historia de Usuario: Historia de usuario 2 - proyecto 3 es aprobada. Comentario: Buen Trabajo	15	10:44:32.827116
+123	2021-11-19	La Historia de Usuario: Historia de usuario 6 - proyecto 3 es aprobada. Comentario: Buen Trabajo	19	10:44:43.603025
+124	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 5 - proyecto 3 al Sprint: Sprint 2 - Proyecto 3	18	11:08:27.458497
+125	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 1 - proyecto 3 al Sprint: Sprint 2 - Proyecto 3	14	11:08:35.592825
+126	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 4 - proyecto 3 al Sprint: Sprint 2 - Proyecto 3	17	11:08:43.191653
+127	2021-11-19	Asignacion de la Historia de Usuario a: apepu	18	11:10:42.651808
+128	2021-11-19	 Estmacion del Scum Master: 16	18	11:10:42.659526
+129	2021-11-19	Asignacion de la Historia de Usuario a: jose1	14	11:10:59.530994
+130	2021-11-19	 Estmacion del Scum Master: 16	14	11:10:59.537577
+131	2021-11-19	Asignacion de la Historia de Usuario a: apepu	17	11:11:14.24925
+132	2021-11-19	 Estmacion del Scum Master: 16	17	11:11:14.258559
+133	2021-11-19	 Resultado del Planning Poker: 16.0	18	11:11:54.521501
+134	2021-11-19	 Estmacion del usuario apepu :16	18	11:11:54.533499
+135	2021-11-19	 Resultado del Planning Poker: 16.0	17	11:12:00.41314
+136	2021-11-19	 Estmacion del usuario apepu :16	17	11:12:00.421047
+137	2021-11-19	 Resultado del Planning Poker: 16.0	14	11:12:56.01052
+138	2021-11-19	 Estmacion del usuario jose1 :16	14	11:12:56.028276
+139	2021-11-19	Cambio de estado Pendiente a estado Doing	18	11:18:04.682728
+140	2021-11-19	El usuario asignado: apepu registra la actividad: A1-S2-P3 horas invertidas 8	18	11:19:55.910485
+141	2021-11-19	El usuario asignado: apepu registra la actividad: A1-S2-P3 horas invertidas 8	18	11:20:34.560996
+142	2021-11-19	Cambio de estado Pendiente a estado Doing	17	11:26:02.061206
+143	2021-11-19	Cambio de estado Doing a estado Done	18	11:26:10.972604
+144	2021-11-19	El usuario asignado: apepu registra la actividad: A3-S1-P3 horas invertidas 8	17	11:27:05.34897
+145	2021-11-19	El usuario asignado: apepu registra la actividad: A4-S1-P3 horas invertidas 8	17	11:27:29.655811
+146	2021-11-19	Cambio de estado Doing a estado Done	17	11:27:35.857354
+147	2021-11-19	Cambio de estado Pendiente a estado Doing	14	11:28:22.921714
+148	2021-11-19	El usuario asignado: jose1 registra la actividad: A5-S1-P3 horas invertidas 8	14	11:28:45.974049
+149	2021-11-19	El usuario asignado: jose1 registra la actividad: A6-S1-P3 horas invertidas 8	14	11:29:15.228648
+150	2021-11-19	Cambio de estado Doing a estado Done	14	11:29:19.172133
+151	2021-11-19	La Historia de Usuario: Historia de usuario 5 - proyecto 3 es aprobada. Comentario: Buen Trabajo	18	11:32:00.234023
+152	2021-11-19	La Historia de Usuario: Historia de usuario 4 - proyecto 3 es aprobada. Comentario: Buen Trabajo	17	11:32:11.70248
+153	2021-11-19	La Historia de Usuario: Historia de usuario 1 - proyecto 3 es rechazada y se agrega de nuevo al Product Backlog con prioridad Alta y estado: Pendiente	14	11:32:37.132763
+154	2021-11-19	La Historia de Usuario>Historia de usuario 1 - proyecto 3 ha sido cancelada, estado actual: Cancelado	14	11:36:08.647502
+155	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 1 - proyecto 2 id #20 con prioridad: Baja	20	11:59:45.3293
+156	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 2 - proyecto 2 id #21 con prioridad: Media	21	11:59:58.003685
+157	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 3 - proyecto 2 id #22 con prioridad: Alta	22	12:00:10.708216
+158	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 3 - proyecto 2 al Sprint: Sprint 1 - Proyecto 2	22	12:05:28.881425
+159	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 2 - proyecto 2 al Sprint: Sprint 1 - Proyecto 2	21	12:05:43.63425
 \.
 
 
@@ -1922,7 +2090,6 @@ COPY public.sprint_historial_hu (id, fecha_creacion, descripcion, hu_id, hora) F
 
 COPY public.sprint_historiausuario (id, nombre, descripcion, estado, fecha, estimacion, fecha_creacion, "fecha_ToDo", "fecha_Doing", "fecha_Done", "fecha_QA", estado_anterior, prioridad, prioridad_numerica, "aprobado_PB", sprint_backlog, estimacion_user, estimacion_scrum, asignacion_id, proyecto_id, sprint_id, product_owner_id, "rechazado_PB", "aprobado_QA", "rechazado_QA", comentario, horas_restantes, horas_trabajadas, horas_trabajadas_en_total, cancelado) FROM stdin;
 13	Historia de usuario 13 - proyecto 1	Historia de usuario 13 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Media	2	f	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
-2	Historia de usuario 2 - proyecto 1	Historia de usuario 2 - proyecto 1	ToDo	2021-11-17	20	2021-11-17	\N	2021-11-17	\N	2021-11-17	QA	Alta	3	t	t	20	20	5	1	2	3	f	f	f	\N	0	24	24	f
 1	Historia de usuario 1 - proyecto 1	Este es la historia de usuario nro 1 del proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 3	Historia de usuario 3 - proyecto 1	Historia de usuario 3 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 4	Historia de usuario 4 - proyecto 1	Historia de usuario 4- proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
@@ -1931,9 +2098,19 @@ COPY public.sprint_historiausuario (id, nombre, descripcion, estado, fecha, esti
 9	Historia de usuario 9 - proyecto 1	Historia de usuario 9 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 11	Historia de usuario 11 - proyecto 1	Historia de usuario 11 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 12	Historia de usuario 12 - proyecto 1	Historia de usuario 12 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
-5	Historia de usuario 5 - proyecto 1	Historia de usuario 5 - proyecto 1	ToDo	2021-11-17	25	2021-11-17	\N	\N	\N	\N	Pendiente	Media	2	t	t	25	25	5	1	2	3	f	f	f	\N	0	0	0	f
-10	Historia de usuario 10 - proyecto 1	Historia de usuario 10 - proyecto 1	ToDo	2021-11-17	25	2021-11-17	\N	\N	\N	\N	Pendiente	Alta	3	t	t	25	25	4	1	2	3	f	f	f	\N	48	0	0	f
 6	Historia de usuario 6 - proyecto 1	Historia de usuario 6 - proyecto 1	QA	2021-11-17	24	2021-11-17	\N	2021-11-17	\N	2021-11-17	QA	Media	2	t	t	24	24	5	1	1	3	f	t	f	Buen trabajo	0	24	24	f
+20	Historia de usuario 1 - proyecto 2	Historia de usuario 1 - proyecto 2	Pendiente	2021-11-19	0	2021-11-19	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	2	\N	4	f	f	f	\N	0	0	0	f
+22	Historia de usuario 3 - proyecto 2	Historia de usuario 3 - proyecto 2	ToDo	2021-11-19	0	2021-11-19	\N	\N	\N	\N	Pendiente	Alta	3	t	t	0	0	\N	2	6	4	f	f	f	\N	0	0	0	f
+21	Historia de usuario 2 - proyecto 2	Historia de usuario 2 - proyecto 2	ToDo	2021-11-19	0	2021-11-19	\N	\N	\N	\N	Pendiente	Media	2	t	t	0	0	\N	2	6	4	f	f	f	\N	0	0	0	f
+15	Historia de usuario 2 - proyecto 3	Historia de usuario 2 - proyecto 3	QA	2021-11-19	20	2021-11-19	\N	2021-11-19	\N	\N	Done	Media	2	t	t	20	20	2	3	4	5	f	t	f	Buen Trabajo	0	20	20	f
+10	Historia de usuario 10 - proyecto 1	Historia de usuario 10 - proyecto 1	Doing	2021-11-17	25	2021-11-17	\N	2021-11-18	\N	\N	Doing	Alta	3	t	t	25	25	4	1	2	3	f	f	f	\N	15	10	10	f
+5	Historia de usuario 5 - proyecto 1	Historia de usuario 5 - proyecto 1	ToDo	2021-11-17	25	2021-11-17	\N	\N	\N	\N	Pendiente	Media	2	t	t	25	25	5	1	2	3	f	f	f	\N	25	0	0	f
+2	Historia de usuario 2 - proyecto 1	Historia de usuario 2 - proyecto 1	ToDo	2021-11-17	20	2021-11-17	\N	2021-11-17	\N	2021-11-17	QA	Alta	3	t	t	20	20	5	1	2	3	f	f	f	\N	20	0	24	f
+18	Historia de usuario 5 - proyecto 3	Historia de usuario 5 - proyecto 3	QA	2021-11-19	16	2021-11-19	\N	2021-11-19	\N	\N	Done	Media	2	t	t	16	16	2	3	5	5	f	t	f	Buen Trabajo	0	16	16	f
+17	Historia de usuario 4 - proyecto 3	Historia de usuario 4 - proyecto 3	QA	2021-11-19	16	2021-11-19	\N	2021-11-19	\N	\N	Done	Baja	1	t	t	16	16	2	3	5	5	f	t	f	Buen Trabajo	0	16	16	f
+16	Historia de usuario 3 - proyecto 3	Historia de usuario 3 - proyecto 3	QA	2021-11-19	20	2021-11-19	\N	2021-11-19	\N	\N	Done	Alta	3	t	t	20	20	3	3	4	5	f	t	f	Buen Trabajo	0	20	20	f
+19	Historia de usuario 6 - proyecto 3	Historia de usuario 6 - proyecto 3	QA	2021-11-19	20	2021-11-19	\N	2021-11-19	\N	\N	Done	Alta	3	t	t	20	20	2	3	4	5	f	t	f	Buen Trabajo	0	20	20	f
+14	Historia de usuario 1 - proyecto 3	Historia de usuario 1 - proyecto 3	Cancelado	2021-11-19	0	2021-11-19	\N	2021-11-19	\N	\N	Done	Alta	3	t	f	0	0	\N	3	\N	5	f	f	f	\N	0	16	16	t
 \.
 
 
@@ -1945,6 +2122,18 @@ COPY public.sprint_historiausuario_actividades (id, historiausuario_id, activida
 1	6	1
 2	6	2
 3	2	3
+4	10	4
+5	10	5
+6	15	6
+7	19	7
+8	19	8
+9	16	9
+10	18	10
+11	18	11
+12	17	12
+13	17	13
+14	14	14
+15	14	15
 \.
 
 
@@ -1952,10 +2141,13 @@ COPY public.sprint_historiausuario_actividades (id, historiausuario_id, activida
 -- Data for Name: sprint_sprint; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.sprint_sprint (id, nombre, fecha_inicio, fecha_fin, estado, proyecto_id, fecha_creacion, capacidad_de_equipo_sprint, capacidad_equipo) FROM stdin;
-1	Sprint 1 - Proyecto 1	2021-11-05	2021-11-15	Finalizado	1	2021-11-17	112	16
-2	Sprint 2 - Proyecto 1	2021-11-17	2021-11-23	Iniciado	1	2021-11-17	70	14
-3	Sprint 3 - Proyecto 1	2021-11-30	2021-12-07	Pendiente	1	2021-11-17	0	0
+COPY public.sprint_sprint (id, nombre, fecha_inicio, fecha_fin, estado, proyecto_id, fecha_creacion, capacidad_de_equipo_sprint, capacidad_equipo, suma_planing_poker) FROM stdin;
+3	Sprint 3 - Proyecto 1	2021-11-30	2021-12-07	Pendiente	1	2021-11-17	0	0	0
+1	Sprint 1 - Proyecto 1	2021-11-05	2021-11-15	Finalizado	1	2021-11-17	112	16	96
+2	Sprint 2 - Proyecto 1	2021-11-17	2021-11-23	Iniciado	1	2021-11-17	70	14	70
+4	Sprint 1 - Proyecto 3	2021-10-01	2021-10-08	Finalizado	3	2021-11-19	60	10	60
+5	Sprint 2 - Proyecto 3	2021-10-11	2021-10-18	Finalizado	3	2021-11-19	48	8	48
+6	Sprint 1 - Proyecto 2	2021-11-22	2021-11-29	Pendiente	2	2021-11-19	0	0	0
 \.
 
 
@@ -1968,6 +2160,10 @@ COPY public.sprint_sprint_equipo (id, sprint_id, user_id) FROM stdin;
 2	1	5
 3	2	4
 4	2	5
+5	4	2
+6	4	3
+7	5	2
+8	5	3
 \.
 
 
@@ -1981,6 +2177,10 @@ COPY public.user_rol (id, rol) FROM stdin;
 3	Scrum Master-Proyecto 3
 4	Developer-Proyecto 1
 5	Product Owner-Proyecto 1
+6	Product Owner-Proyecto 3
+7	Developer-Proyecto 3
+8	Developer-Proyecto 2
+9	Product Owner-Proyecto 2
 \.
 
 
@@ -1989,11 +2189,11 @@ COPY public.user_rol (id, rol) FROM stdin;
 --
 
 COPY public.user_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$260000$bW9ujoNt4glm86xWnzqqbQ$yTnRQx9/RAd2qOg9lQtwEeJs47T4PQGtf6F9gHD6XW0=	2021-11-17 21:03:29.190343-03	t	jose			jose@jose.com	t	t	2021-11-17 17:30:36.096521-03
-5	!XSkNOYInoJaCKUjc5G4fHlZQzxRp687KUpQbOVBO	2021-11-17 22:04:18.110706-03	f	delia	delia	ramirez	delia23072307@gmail.com	f	t	2021-11-17 17:53:24.622842-03
-3	!j5tCUKQ8bq2vlX3Ayb6g2XtvmtwNZEzVSPeBbTDY	2021-11-17 22:06:34.79041-03	f	jose1	José	Garcete	garcetejoseka@gmail.com	f	t	2021-11-17 17:31:55.444589-03
-4	!JLHVq3vW9oqPRJRmal0eM6XSAzJy439TnUqCqOn3	2021-11-17 22:06:39.594427-03	f	jose_ildefonso	Jose Ildefonso	Garcete Aguilar	garcetejoseka@fpuna.edu.py	f	t	2021-11-17 17:32:05.550902-03
-2	!HIfTJefgCWCgK3IpNIfop6SnvBl7jQj1LVitOO8z	2021-11-17 22:07:50.426558-03	f	apepu	Apepu	Coding	apepunando@gmail.com	f	t	2021-11-17 17:31:44.192879-03
+2	!HIfTJefgCWCgK3IpNIfop6SnvBl7jQj1LVitOO8z	2021-11-19 11:48:12.523246-03	f	apepu	Apepu	Coding	apepunando@gmail.com	f	t	2021-11-17 17:31:44.192879-03
+5	!XSkNOYInoJaCKUjc5G4fHlZQzxRp687KUpQbOVBO	2021-11-19 11:48:48.528621-03	f	delia	delia	ramirez	delia23072307@gmail.com	f	t	2021-11-17 17:53:24.622842-03
+1	pbkdf2_sha256$260000$bW9ujoNt4glm86xWnzqqbQ$yTnRQx9/RAd2qOg9lQtwEeJs47T4PQGtf6F9gHD6XW0=	2021-11-19 11:49:04.246008-03	t	jose			jose@jose.com	t	t	2021-11-17 17:30:36.096521-03
+4	!JLHVq3vW9oqPRJRmal0eM6XSAzJy439TnUqCqOn3	2021-11-19 11:58:43.713318-03	f	jose_ildefonso	Jose Ildefonso	Garcete Aguilar	garcetejoseka@fpuna.edu.py	f	t	2021-11-17 17:32:05.550902-03
+3	!j5tCUKQ8bq2vlX3Ayb6g2XtvmtwNZEzVSPeBbTDY	2021-11-19 12:00:23.032296-03	f	jose1	José	Garcete	garcetejoseka@gmail.com	f	t	2021-11-17 17:31:55.444589-03
 \.
 
 
@@ -2008,6 +2208,12 @@ COPY public.user_user_groups (id, user_id, group_id) FROM stdin;
 4	4	4
 5	3	5
 6	5	4
+7	5	6
+8	3	7
+9	2	7
+10	4	9
+11	2	8
+12	5	8
 \.
 
 
@@ -2022,6 +2228,12 @@ COPY public.user_user_rol (id, user_id, rolproyecto_id) FROM stdin;
 4	4	4
 5	3	5
 6	5	4
+7	5	6
+8	3	7
+9	2	7
+10	4	9
+11	2	8
+12	5	8
 \.
 
 
@@ -2051,28 +2263,28 @@ SELECT pg_catalog.setval('public.account_emailconfirmation_id_seq', 1, false);
 -- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_group_id_seq', 5, true);
+SELECT pg_catalog.setval('public.auth_group_id_seq', 9, true);
 
 
 --
 -- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 44, true);
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 76, true);
 
 
 --
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 108, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 124, true);
 
 
 --
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 7, true);
 
 
 --
@@ -2086,7 +2298,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 22, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 101, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 104, true);
 
 
 --
@@ -2107,7 +2319,7 @@ SELECT pg_catalog.setval('public.login_listapermitidos_id_seq', 4, true);
 -- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.proyectos_proyec_equipo_id_seq', 6, true);
+SELECT pg_catalog.setval('public.proyectos_proyec_equipo_id_seq', 13, true);
 
 
 --
@@ -2121,7 +2333,7 @@ SELECT pg_catalog.setval('public.proyectos_proyec_id_seq', 3, true);
 -- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.proyectos_rolproyecto_id_seq', 5, true);
+SELECT pg_catalog.setval('public.proyectos_rolproyecto_id_seq', 9, true);
 
 
 --
@@ -2156,70 +2368,70 @@ SELECT pg_catalog.setval('public.socialaccount_socialtoken_id_seq', 1, false);
 -- Name: sprint_actividad_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_actividad_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sprint_actividad_id_seq', 15, true);
 
 
 --
 -- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_capacidaddiariaensprint_id_seq', 4, true);
+SELECT pg_catalog.setval('public.sprint_capacidaddiariaensprint_id_seq', 8, true);
 
 
 --
 -- Name: sprint_estado_hu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_estado_hu_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sprint_estado_hu_id_seq', 9, true);
 
 
 --
 -- Name: sprint_historial_hu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_historial_hu_id_seq', 84, true);
+SELECT pg_catalog.setval('public.sprint_historial_hu_id_seq', 159, true);
 
 
 --
 -- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_historiausuario_actividades_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sprint_historiausuario_actividades_id_seq', 15, true);
 
 
 --
 -- Name: sprint_historiausuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_historiausuario_id_seq', 13, true);
+SELECT pg_catalog.setval('public.sprint_historiausuario_id_seq', 22, true);
 
 
 --
 -- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_sprint_equipo_id_seq', 4, true);
+SELECT pg_catalog.setval('public.sprint_sprint_equipo_id_seq', 8, true);
 
 
 --
 -- Name: sprint_sprint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sprint_sprint_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sprint_sprint_id_seq', 6, true);
 
 
 --
 -- Name: user_rol_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_rol_id_seq', 5, true);
+SELECT pg_catalog.setval('public.user_rol_id_seq', 9, true);
 
 
 --
 -- Name: user_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_user_groups_id_seq', 6, true);
+SELECT pg_catalog.setval('public.user_user_groups_id_seq', 12, true);
 
 
 --
@@ -2233,7 +2445,7 @@ SELECT pg_catalog.setval('public.user_user_id_seq', 5, true);
 -- Name: user_user_rol_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_user_rol_id_seq', 6, true);
+SELECT pg_catalog.setval('public.user_user_rol_id_seq', 12, true);
 
 
 --

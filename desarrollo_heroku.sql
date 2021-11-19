@@ -1,5 +1,5 @@
 --
--- cbtmfnawuurplyQL database dump
+-- weicqbeqlduvdsQL database dump
 --
 
 -- Dumped from database version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: account_emailaddress; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.account_emailaddress (
@@ -33,10 +33,10 @@ CREATE TABLE public.account_emailaddress (
 );
 
 
-ALTER TABLE public.account_emailaddress OWNER TO cbtmfnawuurply;
+ALTER TABLE public.account_emailaddress OWNER TO weicqbeqlduvds;
 
 --
--- Name: account_emailaddress_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.account_emailaddress_id_seq
@@ -47,17 +47,17 @@ CREATE SEQUENCE public.account_emailaddress_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.account_emailaddress_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.account_emailaddress_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: account_emailaddress_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.account_emailaddress_id_seq OWNED BY public.account_emailaddress.id;
 
 
 --
--- Name: account_emailconfirmation; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.account_emailconfirmation (
@@ -69,10 +69,10 @@ CREATE TABLE public.account_emailconfirmation (
 );
 
 
-ALTER TABLE public.account_emailconfirmation OWNER TO cbtmfnawuurply;
+ALTER TABLE public.account_emailconfirmation OWNER TO weicqbeqlduvds;
 
 --
--- Name: account_emailconfirmation_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.account_emailconfirmation_id_seq
@@ -83,17 +83,17 @@ CREATE SEQUENCE public.account_emailconfirmation_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.account_emailconfirmation_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.account_emailconfirmation_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: account_emailconfirmation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.account_emailconfirmation_id_seq OWNED BY public.account_emailconfirmation.id;
 
 
 --
--- Name: auth_group; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.auth_group (
@@ -102,10 +102,10 @@ CREATE TABLE public.auth_group (
 );
 
 
-ALTER TABLE public.auth_group OWNER TO cbtmfnawuurply;
+ALTER TABLE public.auth_group OWNER TO weicqbeqlduvds;
 
 --
--- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.auth_group_id_seq
@@ -117,17 +117,17 @@ CREATE SEQUENCE public.auth_group_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.auth_group_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.auth_group_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
 
 
 --
--- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.auth_group_permissions (
@@ -137,10 +137,10 @@ CREATE TABLE public.auth_group_permissions (
 );
 
 
-ALTER TABLE public.auth_group_permissions OWNER TO cbtmfnawuurply;
+ALTER TABLE public.auth_group_permissions OWNER TO weicqbeqlduvds;
 
 --
--- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.auth_group_permissions_id_seq
@@ -151,17 +151,17 @@ CREATE SEQUENCE public.auth_group_permissions_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.auth_group_permissions_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
 
 
 --
--- Name: auth_permission; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.auth_permission (
@@ -172,10 +172,10 @@ CREATE TABLE public.auth_permission (
 );
 
 
-ALTER TABLE public.auth_permission OWNER TO cbtmfnawuurply;
+ALTER TABLE public.auth_permission OWNER TO weicqbeqlduvds;
 
 --
--- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.auth_permission_id_seq
@@ -187,17 +187,17 @@ CREATE SEQUENCE public.auth_permission_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.auth_permission_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.auth_permission_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
 
 
 --
--- Name: django_admin_log; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.django_admin_log (
@@ -213,10 +213,10 @@ CREATE TABLE public.django_admin_log (
 );
 
 
-ALTER TABLE public.django_admin_log OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_admin_log OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.django_admin_log_id_seq
@@ -228,17 +228,17 @@ CREATE SEQUENCE public.django_admin_log_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.django_admin_log_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_admin_log_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
 
 
 --
--- Name: django_content_type; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.django_content_type (
@@ -248,10 +248,10 @@ CREATE TABLE public.django_content_type (
 );
 
 
-ALTER TABLE public.django_content_type OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_content_type OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.django_content_type_id_seq
@@ -263,17 +263,17 @@ CREATE SEQUENCE public.django_content_type_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.django_content_type_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_content_type_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
 
 
 --
--- Name: django_migrations; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.django_migrations (
@@ -284,10 +284,10 @@ CREATE TABLE public.django_migrations (
 );
 
 
-ALTER TABLE public.django_migrations OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_migrations OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.django_migrations_id_seq
@@ -298,17 +298,17 @@ CREATE SEQUENCE public.django_migrations_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.django_migrations_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_migrations_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
 
 
 --
--- Name: django_session; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_session; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.django_session (
@@ -318,10 +318,10 @@ CREATE TABLE public.django_session (
 );
 
 
-ALTER TABLE public.django_session OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_session OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_site; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.django_site (
@@ -331,10 +331,10 @@ CREATE TABLE public.django_site (
 );
 
 
-ALTER TABLE public.django_site OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_site OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_site_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.django_site_id_seq
@@ -346,17 +346,17 @@ CREATE SEQUENCE public.django_site_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.django_site_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.django_site_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: django_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.django_site_id_seq OWNED BY public.django_site.id;
 
 
 --
--- Name: login_listapermitidos; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.login_listapermitidos (
@@ -365,10 +365,10 @@ CREATE TABLE public.login_listapermitidos (
 );
 
 
-ALTER TABLE public.login_listapermitidos OWNER TO cbtmfnawuurply;
+ALTER TABLE public.login_listapermitidos OWNER TO weicqbeqlduvds;
 
 --
--- Name: login_listapermitidos_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.login_listapermitidos_id_seq
@@ -379,17 +379,17 @@ CREATE SEQUENCE public.login_listapermitidos_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.login_listapermitidos_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.login_listapermitidos_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: login_listapermitidos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.login_listapermitidos_id_seq OWNED BY public.login_listapermitidos.id;
 
 
 --
--- Name: proyectos_proyec; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.proyectos_proyec (
@@ -409,10 +409,10 @@ CREATE TABLE public.proyectos_proyec (
 );
 
 
-ALTER TABLE public.proyectos_proyec OWNER TO cbtmfnawuurply;
+ALTER TABLE public.proyectos_proyec OWNER TO weicqbeqlduvds;
 
 --
--- Name: proyectos_proyec_equipo; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.proyectos_proyec_equipo (
@@ -422,10 +422,10 @@ CREATE TABLE public.proyectos_proyec_equipo (
 );
 
 
-ALTER TABLE public.proyectos_proyec_equipo OWNER TO cbtmfnawuurply;
+ALTER TABLE public.proyectos_proyec_equipo OWNER TO weicqbeqlduvds;
 
 --
--- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.proyectos_proyec_equipo_id_seq
@@ -436,17 +436,17 @@ CREATE SEQUENCE public.proyectos_proyec_equipo_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.proyectos_proyec_equipo_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.proyectos_proyec_equipo_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.proyectos_proyec_equipo_id_seq OWNED BY public.proyectos_proyec_equipo.id;
 
 
 --
--- Name: proyectos_proyec_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.proyectos_proyec_id_seq
@@ -458,17 +458,17 @@ CREATE SEQUENCE public.proyectos_proyec_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.proyectos_proyec_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.proyectos_proyec_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: proyectos_proyec_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.proyectos_proyec_id_seq OWNED BY public.proyectos_proyec.id;
 
 
 --
--- Name: proyectos_rolproyecto; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.proyectos_rolproyecto (
@@ -479,10 +479,10 @@ CREATE TABLE public.proyectos_rolproyecto (
 );
 
 
-ALTER TABLE public.proyectos_rolproyecto OWNER TO cbtmfnawuurply;
+ALTER TABLE public.proyectos_rolproyecto OWNER TO weicqbeqlduvds;
 
 --
--- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.proyectos_rolproyecto_id_seq
@@ -493,17 +493,17 @@ CREATE SEQUENCE public.proyectos_rolproyecto_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.proyectos_rolproyecto_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.proyectos_rolproyecto_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.proyectos_rolproyecto_id_seq OWNED BY public.proyectos_rolproyecto.id;
 
 
 --
--- Name: socialaccount_socialaccount; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.socialaccount_socialaccount (
@@ -517,10 +517,10 @@ CREATE TABLE public.socialaccount_socialaccount (
 );
 
 
-ALTER TABLE public.socialaccount_socialaccount OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialaccount OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.socialaccount_socialaccount_id_seq
@@ -531,17 +531,17 @@ CREATE SEQUENCE public.socialaccount_socialaccount_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.socialaccount_socialaccount_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialaccount_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.socialaccount_socialaccount_id_seq OWNED BY public.socialaccount_socialaccount.id;
 
 
 --
--- Name: socialaccount_socialapp; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.socialaccount_socialapp (
@@ -554,10 +554,10 @@ CREATE TABLE public.socialaccount_socialapp (
 );
 
 
-ALTER TABLE public.socialaccount_socialapp OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialapp OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.socialaccount_socialapp_id_seq
@@ -568,17 +568,17 @@ CREATE SEQUENCE public.socialaccount_socialapp_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.socialaccount_socialapp_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialapp_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.socialaccount_socialapp_id_seq OWNED BY public.socialaccount_socialapp.id;
 
 
 --
--- Name: socialaccount_socialapp_sites; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.socialaccount_socialapp_sites (
@@ -588,10 +588,10 @@ CREATE TABLE public.socialaccount_socialapp_sites (
 );
 
 
-ALTER TABLE public.socialaccount_socialapp_sites OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialapp_sites OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.socialaccount_socialapp_sites_id_seq
@@ -602,17 +602,17 @@ CREATE SEQUENCE public.socialaccount_socialapp_sites_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.socialaccount_socialapp_sites_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialapp_sites_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.socialaccount_socialapp_sites_id_seq OWNED BY public.socialaccount_socialapp_sites.id;
 
 
 --
--- Name: socialaccount_socialtoken; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.socialaccount_socialtoken (
@@ -625,10 +625,10 @@ CREATE TABLE public.socialaccount_socialtoken (
 );
 
 
-ALTER TABLE public.socialaccount_socialtoken OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialtoken OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.socialaccount_socialtoken_id_seq
@@ -639,17 +639,17 @@ CREATE SEQUENCE public.socialaccount_socialtoken_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.socialaccount_socialtoken_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.socialaccount_socialtoken_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.socialaccount_socialtoken_id_seq OWNED BY public.socialaccount_socialtoken.id;
 
 
 --
--- Name: sprint_actividad; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_actividad; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_actividad (
@@ -663,10 +663,10 @@ CREATE TABLE public.sprint_actividad (
 );
 
 
-ALTER TABLE public.sprint_actividad OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_actividad OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_actividad_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_actividad_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_actividad_id_seq
@@ -678,17 +678,17 @@ CREATE SEQUENCE public.sprint_actividad_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_actividad_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_actividad_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_actividad_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_actividad_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_actividad_id_seq OWNED BY public.sprint_actividad.id;
 
 
 --
--- Name: sprint_capacidaddiariaensprint; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_capacidaddiariaensprint (
@@ -700,10 +700,10 @@ CREATE TABLE public.sprint_capacidaddiariaensprint (
 );
 
 
-ALTER TABLE public.sprint_capacidaddiariaensprint OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_capacidaddiariaensprint OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_capacidaddiariaensprint_id_seq
@@ -714,17 +714,17 @@ CREATE SEQUENCE public.sprint_capacidaddiariaensprint_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_capacidaddiariaensprint_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_capacidaddiariaensprint_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_capacidaddiariaensprint_id_seq OWNED BY public.sprint_capacidaddiariaensprint.id;
 
 
 --
--- Name: sprint_estado_hu; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_estado_hu (
@@ -741,10 +741,10 @@ CREATE TABLE public.sprint_estado_hu (
 );
 
 
-ALTER TABLE public.sprint_estado_hu OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_estado_hu OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_estado_hu_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_estado_hu_id_seq
@@ -756,17 +756,17 @@ CREATE SEQUENCE public.sprint_estado_hu_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_estado_hu_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_estado_hu_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_estado_hu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_estado_hu_id_seq OWNED BY public.sprint_estado_hu.id;
 
 
 --
--- Name: sprint_historial_hu; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_historial_hu (
@@ -778,10 +778,10 @@ CREATE TABLE public.sprint_historial_hu (
 );
 
 
-ALTER TABLE public.sprint_historial_hu OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_historial_hu OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_historial_hu_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_historial_hu_id_seq
@@ -792,17 +792,17 @@ CREATE SEQUENCE public.sprint_historial_hu_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_historial_hu_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_historial_hu_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_historial_hu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_historial_hu_id_seq OWNED BY public.sprint_historial_hu.id;
 
 
 --
--- Name: sprint_historiausuario; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_historiausuario (
@@ -842,10 +842,10 @@ CREATE TABLE public.sprint_historiausuario (
 );
 
 
-ALTER TABLE public.sprint_historiausuario OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_historiausuario OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_historiausuario_actividades; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_historiausuario_actividades (
@@ -855,10 +855,10 @@ CREATE TABLE public.sprint_historiausuario_actividades (
 );
 
 
-ALTER TABLE public.sprint_historiausuario_actividades OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_historiausuario_actividades OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_historiausuario_actividades_id_seq
@@ -869,17 +869,17 @@ CREATE SEQUENCE public.sprint_historiausuario_actividades_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_historiausuario_actividades_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_historiausuario_actividades_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_historiausuario_actividades_id_seq OWNED BY public.sprint_historiausuario_actividades.id;
 
 
 --
--- Name: sprint_historiausuario_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_historiausuario_id_seq
@@ -891,17 +891,17 @@ CREATE SEQUENCE public.sprint_historiausuario_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_historiausuario_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_historiausuario_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_historiausuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_historiausuario_id_seq OWNED BY public.sprint_historiausuario.id;
 
 
 --
--- Name: sprint_sprint; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_sprint (
@@ -914,15 +914,17 @@ CREATE TABLE public.sprint_sprint (
     fecha_creacion date,
     capacidad_de_equipo_sprint integer NOT NULL,
     capacidad_equipo integer NOT NULL,
+    suma_planing_poker integer NOT NULL,
     CONSTRAINT sprint_sprint_capacidad_de_equipo_sprint_check CHECK ((capacidad_de_equipo_sprint >= 0)),
-    CONSTRAINT sprint_sprint_capacidad_equipo_check CHECK ((capacidad_equipo >= 0))
+    CONSTRAINT sprint_sprint_capacidad_equipo_check CHECK ((capacidad_equipo >= 0)),
+    CONSTRAINT sprint_sprint_suma_planing_poker_check CHECK ((suma_planing_poker >= 0))
 );
 
 
-ALTER TABLE public.sprint_sprint OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_sprint OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_sprint_equipo; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.sprint_sprint_equipo (
@@ -932,10 +934,10 @@ CREATE TABLE public.sprint_sprint_equipo (
 );
 
 
-ALTER TABLE public.sprint_sprint_equipo OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_sprint_equipo OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_sprint_equipo_id_seq
@@ -946,17 +948,17 @@ CREATE SEQUENCE public.sprint_sprint_equipo_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_sprint_equipo_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_sprint_equipo_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_sprint_equipo_id_seq OWNED BY public.sprint_sprint_equipo.id;
 
 
 --
--- Name: sprint_sprint_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.sprint_sprint_id_seq
@@ -967,17 +969,17 @@ CREATE SEQUENCE public.sprint_sprint_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sprint_sprint_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.sprint_sprint_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: sprint_sprint_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.sprint_sprint_id_seq OWNED BY public.sprint_sprint.id;
 
 
 --
--- Name: user_rol; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.user_rol (
@@ -986,10 +988,10 @@ CREATE TABLE public.user_rol (
 );
 
 
-ALTER TABLE public.user_rol OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_rol OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_rol_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.user_rol_id_seq
@@ -1001,17 +1003,17 @@ CREATE SEQUENCE public.user_rol_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_rol_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_rol_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_rol_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.user_rol_id_seq OWNED BY public.user_rol.id;
 
 
 --
--- Name: user_user; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.user_user (
@@ -1029,10 +1031,10 @@ CREATE TABLE public.user_user (
 );
 
 
-ALTER TABLE public.user_user OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_groups; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.user_user_groups (
@@ -1042,10 +1044,10 @@ CREATE TABLE public.user_user_groups (
 );
 
 
-ALTER TABLE public.user_user_groups OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_groups OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.user_user_groups_id_seq
@@ -1056,17 +1058,17 @@ CREATE SEQUENCE public.user_user_groups_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_user_groups_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_groups_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.user_user_groups_id_seq OWNED BY public.user_user_groups.id;
 
 
 --
--- Name: user_user_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.user_user_id_seq
@@ -1077,17 +1079,17 @@ CREATE SEQUENCE public.user_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_user_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.user_user_id_seq OWNED BY public.user_user.id;
 
 
 --
--- Name: user_user_rol; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.user_user_rol (
@@ -1097,10 +1099,10 @@ CREATE TABLE public.user_user_rol (
 );
 
 
-ALTER TABLE public.user_user_rol OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_rol OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_rol_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.user_user_rol_id_seq
@@ -1111,17 +1113,17 @@ CREATE SEQUENCE public.user_user_rol_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_user_rol_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_rol_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_rol_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.user_user_rol_id_seq OWNED BY public.user_user_rol.id;
 
 
 --
--- Name: user_user_user_permissions; Type: TABLE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions; Type: TABLE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE TABLE public.user_user_user_permissions (
@@ -1131,10 +1133,10 @@ CREATE TABLE public.user_user_user_permissions (
 );
 
 
-ALTER TABLE public.user_user_user_permissions OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_user_permissions OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE SEQUENCE public.user_user_user_permissions_id_seq
@@ -1145,227 +1147,227 @@ CREATE SEQUENCE public.user_user_user_permissions_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_user_user_permissions_id_seq OWNER TO cbtmfnawuurply;
+ALTER TABLE public.user_user_user_permissions_id_seq OWNER TO weicqbeqlduvds;
 
 --
--- Name: user_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER SEQUENCE public.user_user_user_permissions_id_seq OWNED BY public.user_user_user_permissions.id;
 
 
 --
--- Name: account_emailaddress id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailaddress ALTER COLUMN id SET DEFAULT nextval('public.account_emailaddress_id_seq'::regclass);
 
 
 --
--- Name: account_emailconfirmation id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailconfirmation ALTER COLUMN id SET DEFAULT nextval('public.account_emailconfirmation_id_seq'::regclass);
 
 
 --
--- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
 
 
 --
--- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
 
 
 --
--- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
 
 
 --
--- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
 
 
 --
--- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
 
 
 --
--- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
 
 
 --
--- Name: django_site id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_site ALTER COLUMN id SET DEFAULT nextval('public.django_site_id_seq'::regclass);
 
 
 --
--- Name: login_listapermitidos id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.login_listapermitidos ALTER COLUMN id SET DEFAULT nextval('public.login_listapermitidos_id_seq'::regclass);
 
 
 --
--- Name: proyectos_proyec id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec ALTER COLUMN id SET DEFAULT nextval('public.proyectos_proyec_id_seq'::regclass);
 
 
 --
--- Name: proyectos_proyec_equipo id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec_equipo ALTER COLUMN id SET DEFAULT nextval('public.proyectos_proyec_equipo_id_seq'::regclass);
 
 
 --
--- Name: proyectos_rolproyecto id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_rolproyecto ALTER COLUMN id SET DEFAULT nextval('public.proyectos_rolproyecto_id_seq'::regclass);
 
 
 --
--- Name: socialaccount_socialaccount id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialaccount ALTER COLUMN id SET DEFAULT nextval('public.socialaccount_socialaccount_id_seq'::regclass);
 
 
 --
--- Name: socialaccount_socialapp id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialapp ALTER COLUMN id SET DEFAULT nextval('public.socialaccount_socialapp_id_seq'::regclass);
 
 
 --
--- Name: socialaccount_socialapp_sites id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialapp_sites ALTER COLUMN id SET DEFAULT nextval('public.socialaccount_socialapp_sites_id_seq'::regclass);
 
 
 --
--- Name: socialaccount_socialtoken id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialtoken ALTER COLUMN id SET DEFAULT nextval('public.socialaccount_socialtoken_id_seq'::regclass);
 
 
 --
--- Name: sprint_actividad id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_actividad id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_actividad ALTER COLUMN id SET DEFAULT nextval('public.sprint_actividad_id_seq'::regclass);
 
 
 --
--- Name: sprint_capacidaddiariaensprint id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_capacidaddiariaensprint ALTER COLUMN id SET DEFAULT nextval('public.sprint_capacidaddiariaensprint_id_seq'::regclass);
 
 
 --
--- Name: sprint_estado_hu id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_estado_hu ALTER COLUMN id SET DEFAULT nextval('public.sprint_estado_hu_id_seq'::regclass);
 
 
 --
--- Name: sprint_historial_hu id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historial_hu ALTER COLUMN id SET DEFAULT nextval('public.sprint_historial_hu_id_seq'::regclass);
 
 
 --
--- Name: sprint_historiausuario id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario ALTER COLUMN id SET DEFAULT nextval('public.sprint_historiausuario_id_seq'::regclass);
 
 
 --
--- Name: sprint_historiausuario_actividades id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario_actividades ALTER COLUMN id SET DEFAULT nextval('public.sprint_historiausuario_actividades_id_seq'::regclass);
 
 
 --
--- Name: sprint_sprint id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint ALTER COLUMN id SET DEFAULT nextval('public.sprint_sprint_id_seq'::regclass);
 
 
 --
--- Name: sprint_sprint_equipo id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint_equipo ALTER COLUMN id SET DEFAULT nextval('public.sprint_sprint_equipo_id_seq'::regclass);
 
 
 --
--- Name: user_rol id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_rol ALTER COLUMN id SET DEFAULT nextval('public.user_rol_id_seq'::regclass);
 
 
 --
--- Name: user_user id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user ALTER COLUMN id SET DEFAULT nextval('public.user_user_id_seq'::regclass);
 
 
 --
--- Name: user_user_groups id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_groups ALTER COLUMN id SET DEFAULT nextval('public.user_user_groups_id_seq'::regclass);
 
 
 --
--- Name: user_user_rol id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_rol ALTER COLUMN id SET DEFAULT nextval('public.user_user_rol_id_seq'::regclass);
 
 
 --
--- Name: user_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.user_user_user_permissions_id_seq'::regclass);
 
 
 --
--- Data for Name: account_emailaddress; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: account_emailaddress; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.account_emailaddress (id, email, verified, "primary", user_id) FROM stdin;
@@ -1377,7 +1379,7 @@ COPY public.account_emailaddress (id, email, verified, "primary", user_id) FROM 
 
 
 --
--- Data for Name: account_emailconfirmation; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: account_emailconfirmation; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.account_emailconfirmation (id, created, sent, key, email_address_id) FROM stdin;
@@ -1385,7 +1387,7 @@ COPY public.account_emailconfirmation (id, created, sent, key, email_address_id)
 
 
 --
--- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.auth_group (id, name) FROM stdin;
@@ -1394,11 +1396,15 @@ COPY public.auth_group (id, name) FROM stdin;
 3	Scrum Master-Proyecto 3
 4	Developer-Proyecto 1
 5	Product Owner-Proyecto 1
+7	Developer-Proyecto 3
+6	Product Owner-Proyecto 3
+8	Developer-Proyecto 2
+9	Product Owner-Proyecto 2
 \.
 
 
 --
--- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
@@ -1446,11 +1452,39 @@ COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
 42	5	69
 43	5	70
 44	5	71
+45	6	109
+46	6	110
+47	6	111
+48	6	112
+53	7	113
+54	7	114
+55	7	115
+56	7	116
+57	7	58
+58	7	60
+59	6	72
+60	6	69
+61	6	70
+62	6	71
+63	8	117
+64	8	118
+65	8	119
+66	8	120
+67	9	121
+68	9	122
+69	9	123
+70	9	124
+71	8	58
+72	8	60
+73	9	72
+74	9	69
+75	9	70
+76	9	71
 \.
 
 
 --
--- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
@@ -1562,20 +1596,42 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 106	Can change Product Owner-Proyecto 1	14	change_Product Owner-Proyecto 1
 107	Can delete Product Owner-Proyecto 1	14	delete_Product Owner-Proyecto 1
 108	Can view Product Owner-Proyecto 1	14	view_Product Owner-Proyecto 1
+109	Can add Product Owner-Proyecto 3	14	add_Product Owner-Proyecto 3
+110	Can change Product Owner-Proyecto 3	14	change_Product Owner-Proyecto 3
+111	Can delete Product Owner-Proyecto 3	14	delete_Product Owner-Proyecto 3
+112	Can view Product Owner-Proyecto 3	14	view_Product Owner-Proyecto 3
+113	Can add Developer-Proyecto 3	14	add_Developer-Proyecto 3
+114	Can change Developer-Proyecto 3	14	change_Developer-Proyecto 3
+115	Can delete Developer-Proyecto 3	14	delete_Developer-Proyecto 3
+116	Can view Developer-Proyecto 3	14	view_Developer-Proyecto 3
+117	Can add Developer-Proyecto 2	14	add_Developer-Proyecto 2
+118	Can change Developer-Proyecto 2	14	change_Developer-Proyecto 2
+119	Can delete Developer-Proyecto 2	14	delete_Developer-Proyecto 2
+120	Can view Developer-Proyecto 2	14	view_Developer-Proyecto 2
+121	Can add Product Owner-Proyecto 2	14	add_Product Owner-Proyecto 2
+122	Can change Product Owner-Proyecto 2	14	change_Product Owner-Proyecto 2
+123	Can delete Product Owner-Proyecto 2	14	delete_Product Owner-Proyecto 2
+124	Can view Product Owner-Proyecto 2	14	view_Product Owner-Proyecto 2
 \.
 
 
 --
--- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
 1	2021-11-17 21:24:52.972118-03	1	Sprint 1 - Proyecto 1	2	[{"changed": {"fields": ["Fecha inicio", "Fecha fin"]}}]	17	1
+2	2021-11-19 10:12:13.285248-03	4	Sprint 1 - Proyecto 3	2	[{"changed": {"fields": ["Fecha inicio", "Fecha fin"]}}]	17	1
+3	2021-11-19 10:13:41.856511-03	6	A1-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+4	2021-11-19 10:14:48.99547-03	7	A2-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+5	2021-11-19 10:15:07.052042-03	8	A3-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+6	2021-11-19 10:15:31.781383-03	9	A4-S1-P3	2	[{"changed": {"fields": ["Fecha"]}}]	22	1
+7	2021-11-19 11:30:42.198343-03	5	Sprint 2 - Proyecto 3	2	[{"changed": {"fields": ["Fecha inicio", "Fecha fin"]}}]	17	1
 \.
 
 
 --
--- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.django_content_type (id, app_label, model) FROM stdin;
@@ -1605,7 +1661,7 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 
 
 --
--- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
@@ -1710,11 +1766,14 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 99	sprint	0024_merge_20211116_1501	2021-11-17 17:30:12.276443-03
 100	sprint	0025_auto_20211117_0929	2021-11-17 17:30:12.492083-03
 101	user	0004_auto_20210907_2351	2021-11-17 17:30:12.8208-03
+102	sprint	0025_auto_20211117_1845	2021-11-18 22:35:32.319616-03
+103	sprint	0026_sprint_suma_planing_poker	2021-11-18 22:35:32.463627-03
+104	sprint	0027_merge_20211118_1932	2021-11-18 22:35:32.469636-03
 \.
 
 
 --
--- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
@@ -1723,11 +1782,13 @@ tdvch71q5ptpa727fsx6kh8j6iimydr5	.eJxVTEsOwiAUvAtrQwiUV3CnFyGPBwRiQxOBlfHuUtOFzq
 ybfhr1ptjgvr3mgogozyqc52jm1uim7r	.eJxVjMEOwiAQRP-FsyFAgVKP3vsNZJfdStVAUtqT8d9tkx70Npn3Zt4iwrbmuDVe4kziKrS4_HYI6cnlAPSAcq8y1bIuM8pDkSdtcqzEr9vp_h1kaHlfKwwIxnQO2Xibpsl1qbPBapuchZ57dODMoKzyA4SkgfaI7B0SAZISny_b6TgP:1mnUtl:kM0yjoe_a9MEy1kia-fpSmi_z5dIbH0xHkuh20uj9mI	2021-12-01 21:03:29.194965-03
 p7mk5ma7099nws9qinmicbdauwxgkrk4	.eJxVTEsOwiAUvAtrQwiUV3CnFyGPBwRiQxOBlfHuUtOFzqzm-2IOR89utPh0JbArU-zy63mkR6xHgNt22ByJ9lE7_3bOuPHbVLH2QtjLXu_n6u8qY8vzRytpyAAEM7moNeiYvCBcwiq0AQsTRvhEQYIEEaW1kNAaLTBqSsTeH62PPD0:1mnVso:kMPzFOg5SKpU7VsDqkmTlkIlfEfLE2cYSVJ0wFFcmls	2021-12-01 22:06:34.795666-03
 qisjkcm2pozyqm16kgjwz8kogabw679u	.eJxVjEEOwiAURO_C2jQIfCju7EXIBz6B2NBEYGW8u63pQpfzZua9mMPRsxuNnq5EdmOCXX6Zx_CgehS4rgeeMIRt1D59N2fdpvueqPYSsJetLufrT5Wx5d1jwaZoCEjo5NFEC9pwUoZHUolftTSCZALhufckZuCJuFAWQEklaZbs_QG7tTvH:1mnVu2:PVNpv8KiHU-mWoJztWa18bSANq9kSDg4MncnmpxINtc	2021-12-01 22:07:50.430499-03
+txg92rsdq7uqooip5u8zydtydmrjisx1	.eJxVTEsOwiAUvAtrQwiUV3CnFyGPBwRiQxOBlfHuUtOFzqzm-2IOR89utPh0JbArU-zy63mkR6xHgNt22ByJ9lE7_3bOuPHbVLH2QtjLXu_n6u8qY8vzRytpyAAEM7moNeiYvCBcwiq0AQsTRvhEQYIEEaW1kNAaLTBqSsTeH62PPD0:1mo5NH:H_QRmUWKz3V1YS4tDWHa9CQyJII9zjAF3PLSGrhVEWI	2021-12-03 12:00:23.036916-03
+94ow715wu3blecr0sv7z1837iij6mavc	.eJxVjMEOwiAQRP-FsyFAgVKP3vsNZJfdStVAUtqT8d9tkx70Npn3Zt4iwrbmuDVe4kziKrS4_HYI6cnlAPSAcq8y1bIuM8pDkSdtcqzEr9vp_h1kaHlfKwwIxnQO2Xibpsl1qbPBapuchZ57dODMoKzyA4SkgfaI7B0SAZISny_b6TgP:1mo3g4:o0FdAjuTDm31pYDF3KMAE5xKGOBciCUwsmLNRGyRhgU	2021-12-03 10:11:40.200004-03
 \.
 
 
 --
--- Data for Name: django_site; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: django_site; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.django_site (id, domain, name) FROM stdin;
@@ -1736,7 +1797,7 @@ COPY public.django_site (id, domain, name) FROM stdin;
 
 
 --
--- Data for Name: login_listapermitidos; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: login_listapermitidos; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.login_listapermitidos (id, correo) FROM stdin;
@@ -1748,18 +1809,18 @@ COPY public.login_listapermitidos (id, correo) FROM stdin;
 
 
 --
--- Data for Name: proyectos_proyec; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: proyectos_proyec; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.proyectos_proyec (id, nombre, descripcion, estado, fecha, dias_estimados, encargado_id, estado_anterior, fecha_cancelado, fecha_concluido, fecha_creacion, fecha_inicio) FROM stdin;
-2	Proyecto 2	Este es el proyecto numero 2	Pendiente	2021-11-17	0	3	Pendiente	\N	\N	2021-11-17	\N
-3	Proyecto 3	Este es el proyecto numero 2	Pendiente	2021-11-17	0	4	Pendiente	\N	\N	2021-11-17	\N
-1	Proyecto 1	Este es el proyecto numero 1	Pendiente	2021-11-17	0	2	Pendiente	\N	\N	2021-11-17	\N
+1	Proyecto 1	Este es el proyecto numero 1	Iniciado	2021-11-18	0	2	Iniciado	\N	\N	2021-11-17	2021-11-18
+3	Proyecto 3	Este es el proyecto numero 2	Concluido	2021-11-19	0	4	Concluido	2021-11-19	2021-11-19	2021-11-17	2021-11-19
+2	Proyecto 2	Este es el proyecto numero 2	Iniciado	2021-11-19	0	3	Iniciado	\N	\N	2021-11-17	2021-11-19
 \.
 
 
 --
--- Data for Name: proyectos_proyec_equipo; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: proyectos_proyec_equipo; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.proyectos_proyec_equipo (id, proyec_id, user_id) FROM stdin;
@@ -1769,11 +1830,17 @@ COPY public.proyectos_proyec_equipo (id, proyec_id, user_id) FROM stdin;
 4	1	3
 5	1	4
 6	1	5
+7	3	2
+8	3	3
+9	3	5
+11	2	2
+12	2	5
+13	2	4
 \.
 
 
 --
--- Data for Name: proyectos_rolproyecto; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: proyectos_rolproyecto; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.proyectos_rolproyecto (id, proyecto_id, rol_id, nombre) FROM stdin;
@@ -1782,23 +1849,27 @@ COPY public.proyectos_rolproyecto (id, proyecto_id, rol_id, nombre) FROM stdin;
 3	3	3	Scrum Master-Proyecto 3
 4	1	4	Developer-Proyecto 1
 5	1	5	Product Owner-Proyecto 1
+6	3	6	Product Owner-Proyecto 3
+7	3	7	Developer-Proyecto 3
+8	2	8	Developer-Proyecto 2
+9	2	9	Product Owner-Proyecto 2
 \.
 
 
 --
--- Data for Name: socialaccount_socialaccount; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: socialaccount_socialaccount; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.socialaccount_socialaccount (id, provider, uid, last_login, date_joined, extra_data, user_id) FROM stdin;
-4	google	116860843875389860314	2021-11-17 22:04:18.078019-03	2021-11-17 17:53:24.664178-03	{"id": "116860843875389860314", "email": "delia23072307@gmail.com", "verified_email": true, "name": "delia ramirez", "given_name": "delia", "family_name": "ramirez", "picture": "https://lh3.googleusercontent.com/a/AATXAJxpGeXW7HjaZ3P-ZAelc3KV4xYF9DAImf9hqvxL=s96-c", "locale": "es-419"}	5
-2	google	103748530319783491304	2021-11-17 22:06:34.767086-03	2021-11-17 17:31:55.479306-03	{"id": "103748530319783491304", "email": "garcetejoseka@gmail.com", "verified_email": true, "name": "Jos\\u00e9 Garcete", "given_name": "Jos\\u00e9", "family_name": "Garcete", "picture": "https://lh3.googleusercontent.com/a-/AOh14GgTZu38-DbamAd4HMQ5iV-rN3Nl-xIC6qwDcckItw=s96-c", "locale": "es"}	3
-3	google	100050764976762921735	2021-11-17 22:06:39.564086-03	2021-11-17 17:32:05.589006-03	{"id": "100050764976762921735", "email": "garcetejoseka@fpuna.edu.py", "verified_email": true, "name": "Jose Ildefonso Garcete Aguilar", "given_name": "Jose Ildefonso", "family_name": "Garcete Aguilar", "picture": "https://lh3.googleusercontent.com/a-/AOh14GhQBaP3niW8fmv8BVptRpNedwuds-SJsUbOg30=s96-c", "locale": "es", "hd": "fpuna.edu.py"}	4
-1	google	100187510958441531749	2021-11-17 22:07:50.407943-03	2021-11-17 17:31:44.249581-03	{"id": "100187510958441531749", "email": "apepunando@gmail.com", "verified_email": true, "name": "Apepu Coding", "given_name": "Apepu", "family_name": "Coding", "picture": "https://lh3.googleusercontent.com/a/AATXAJyMiH3sRTo2AqC7oq7o6wlMfY7Di9dRVH6Jlx_R=s96-c", "locale": "es-419"}	2
+1	google	100187510958441531749	2021-11-19 11:48:12.501507-03	2021-11-17 17:31:44.249581-03	{"id": "100187510958441531749", "email": "apepunando@gmail.com", "verified_email": true, "name": "Apepu Coding", "given_name": "Apepu", "family_name": "Coding", "picture": "https://lh3.googleusercontent.com/a/AATXAJyMiH3sRTo2AqC7oq7o6wlMfY7Di9dRVH6Jlx_R=s96-c", "locale": "es-419"}	2
+4	google	116860843875389860314	2021-11-19 11:48:48.506289-03	2021-11-17 17:53:24.664178-03	{"id": "116860843875389860314", "email": "delia23072307@gmail.com", "verified_email": true, "name": "delia ramirez", "given_name": "delia", "family_name": "ramirez", "picture": "https://lh3.googleusercontent.com/a/AATXAJxpGeXW7HjaZ3P-ZAelc3KV4xYF9DAImf9hqvxL=s96-c", "locale": "es-419"}	5
+3	google	100050764976762921735	2021-11-19 11:58:43.684774-03	2021-11-17 17:32:05.589006-03	{"id": "100050764976762921735", "email": "garcetejoseka@fpuna.edu.py", "verified_email": true, "name": "Jose Ildefonso Garcete Aguilar", "given_name": "Jose Ildefonso", "family_name": "Garcete Aguilar", "picture": "https://lh3.googleusercontent.com/a-/AOh14GhQBaP3niW8fmv8BVptRpNedwuds-SJsUbOg30=s96-c", "locale": "es", "hd": "fpuna.edu.py"}	4
+2	google	103748530319783491304	2021-11-19 12:00:23.013626-03	2021-11-17 17:31:55.479306-03	{"id": "103748530319783491304", "email": "garcetejoseka@gmail.com", "verified_email": true, "name": "Jos\\u00e9 Garcete", "given_name": "Jos\\u00e9", "family_name": "Garcete", "picture": "https://lh3.googleusercontent.com/a-/AOh14GgTZu38-DbamAd4HMQ5iV-rN3Nl-xIC6qwDcckItw=s96-c", "locale": "es"}	3
 \.
 
 
 --
--- Data for Name: socialaccount_socialapp; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: socialaccount_socialapp; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.socialaccount_socialapp (id, provider, name, client_id, secret, key) FROM stdin;
@@ -1806,7 +1877,7 @@ COPY public.socialaccount_socialapp (id, provider, name, client_id, secret, key)
 
 
 --
--- Data for Name: socialaccount_socialapp_sites; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: socialaccount_socialapp_sites; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.socialaccount_socialapp_sites (id, socialapp_id, site_id) FROM stdin;
@@ -1814,7 +1885,7 @@ COPY public.socialaccount_socialapp_sites (id, socialapp_id, site_id) FROM stdin
 
 
 --
--- Data for Name: socialaccount_socialtoken; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: socialaccount_socialtoken; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.socialaccount_socialtoken (id, token, token_secret, expires_at, account_id, app_id) FROM stdin;
@@ -1822,18 +1893,30 @@ COPY public.socialaccount_socialtoken (id, token, token_secret, expires_at, acco
 
 
 --
--- Data for Name: sprint_actividad; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_actividad; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_actividad (id, nombre, hora_trabajo, comentario, id_sprint, fecha) FROM stdin;
 1	A1-S1	10	Actividad	1	2021-11-08
 2	A2-S1	14	Actividad 2	1	2021-11-10
 3	A3-S1	24	Actividad 3	1	2021-11-12
+4	A4-S2	10	actividad 4	2	2021-11-18
+5	A5-S2	15	Actividad 5	2	2021-11-18
+6	A1-S1-P3	20	Actividad 1	4	2021-10-01
+7	A2-S1-P3	10	Actividad 2	4	2021-10-05
+8	A3-S1-P3	10	Actividad 3	4	2021-10-06
+9	A4-S1-P3	20	Actividad 4	4	2021-10-08
+10	A1-S2-P3	8	Actividad 1	5	2021-10-11
+11	A2-S2-P3	8	Actividad 2	5	2021-10-12
+12	A3-S1-P3	8	Actividad 3	5	2021-10-13
+13	A4-S1-P3	8	Actividad 4	5	2021-10-14
+14	A5-S1-P3	8	Actividad 5	5	2021-10-15
+15	A6-S1-P3	8	Actividad 6	5	2021-10-18
 \.
 
 
 --
--- Data for Name: sprint_capacidaddiariaensprint; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_capacidaddiariaensprint; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_capacidaddiariaensprint (id, capacidad_diaria_horas, sprint_id, usuario_id) FROM stdin;
@@ -1841,22 +1924,32 @@ COPY public.sprint_capacidaddiariaensprint (id, capacidad_diaria_horas, sprint_i
 2	8	1	5
 3	8	2	4
 4	6	2	5
+5	5	4	3
+6	5	4	2
+7	4	5	2
+8	4	5	3
 \.
 
 
 --
--- Data for Name: sprint_estado_hu; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_estado_hu; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_estado_hu (id, estado, hu_id, sprint_id, "PP", desarrollador, prioridad, "aprobado_QA", comentario, "rechazado_QA") FROM stdin;
 1	Rechazado_QA	2	1	24	delia	Alta	f	Imposible que trabajes 24 horas seguidas	t
 2	ToDo	10	1	48	jose_ildefonso	Alta	f	\N	f
 3	Aprobado_QA	6	1	24	delia	Media	t	Buen trabajo	f
+4	Aprobado_QA	16	4	20	jose1	Alta	t	Buen Trabajo	f
+5	Aprobado_QA	15	4	20	apepu	Media	t	Buen Trabajo	f
+6	Aprobado_QA	19	4	20	apepu	Alta	t	Buen Trabajo	f
+7	Aprobado_QA	18	5	16	apepu	Media	t	Buen Trabajo	f
+9	Aprobado_QA	17	5	16	apepu	Baja	t	Buen Trabajo	f
+8	Rechazado_QA	14	5	16	jose1	Baja	f	Mal trabajo	t
 \.
 
 
 --
--- Data for Name: sprint_historial_hu; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_historial_hu; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_historial_hu (id, fecha_creacion, descripcion, hu_id, hora) FROM stdin;
@@ -1913,16 +2006,90 @@ COPY public.sprint_historial_hu (id, fecha_creacion, descripcion, hu_id, hora) F
 51	2021-11-17	 Estmacion del usuario delia :25	5	22:06:09.450811
 52	2021-11-17	 Resultado del Planning Poker: 25.0	10	22:07:31.657326
 53	2021-11-17	 Estmacion del usuario jose_ildefonso :25	10	22:07:31.666519
+85	2021-11-18	Cambio de estado Pendiente a estado Doing	10	23:21:20.234184
+86	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 1 - proyecto 3 id #14 con prioridad: Baja	14	09:38:57.26624
+87	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 2 - proyecto 3 id #15 con prioridad: Media	15	09:39:12.191607
+88	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 3 - proyecto 3 id #16 con prioridad: Alta	16	09:39:28.531069
+89	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 4 - proyecto 3 id #17 con prioridad: Baja	17	09:39:43.505907
+90	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 5 - proyecto 3 id #18 con prioridad: Media	18	09:39:56.919948
+91	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 6 - proyecto 3 id #19 con prioridad: Alta	19	09:40:11.604995
+92	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 3 - proyecto 3 al Sprint: Sprint 1 - Proyecto 3	16	09:50:28.388457
+93	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 6 - proyecto 3 al Sprint: Sprint 1 - Proyecto 3	19	09:50:35.998549
+94	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 2 - proyecto 3 al Sprint: Sprint 1 - Proyecto 3	15	09:50:42.707278
+95	2021-11-19	Asignacion de la Historia de Usuario a: jose1	16	09:53:55.420003
+96	2021-11-19	 Estmacion del Scum Master: 30	16	09:53:55.426679
+97	2021-11-19	Asignacion de la Historia de Usuario a: apepu	19	09:54:17.922695
+98	2021-11-19	 Estmacion del Scum Master: 30	19	09:54:17.93028
+99	2021-11-19	Asignacion de la Historia de Usuario a: jose1	16	09:54:48.867802
+100	2021-11-19	 Estmacion del Scum Master: 20	16	09:54:48.873931
+101	2021-11-19	Asignacion de la Historia de Usuario a: apepu	19	09:55:08.802151
+102	2021-11-19	 Estmacion del Scum Master: 20	19	09:55:08.819676
+103	2021-11-19	Asignacion de la Historia de Usuario a: apepu	15	09:55:32.407153
+104	2021-11-19	 Estmacion del Scum Master: 20	15	09:55:32.414255
+105	2021-11-19	 Resultado del Planning Poker: 20.0	19	09:56:56.994183
+106	2021-11-19	 Estmacion del usuario apepu :20	19	09:56:57.002955
+107	2021-11-19	 Resultado del Planning Poker: 20.0	15	09:57:03.147251
+108	2021-11-19	 Estmacion del usuario apepu :20	15	09:57:03.159516
+109	2021-11-19	 Resultado del Planning Poker: 20.0	16	09:57:33.226358
+110	2021-11-19	 Estmacion del usuario jose1 :20	16	09:57:33.243624
+111	2021-11-19	Cambio de estado Pendiente a estado Doing	15	10:02:41.097456
+112	2021-11-19	El usuario asignado: apepu registra la actividad: A1-S1-P3 horas invertidas 20	15	10:04:12.348955
+113	2021-11-19	Cambio de estado Pendiente a estado Doing	19	10:04:59.152317
+114	2021-11-19	El usuario asignado: apepu registra la actividad: A2-S1-P3 horas invertidas 10	19	10:06:04.926181
+115	2021-11-19	El usuario asignado: apepu registra la actividad: A3-S1-P3 horas invertidas 10	19	10:06:42.30386
+116	2021-11-19	Cambio de estado Doing a estado Done	15	10:07:21.709868
+117	2021-11-19	Cambio de estado Doing a estado Done	19	10:07:25.424314
+118	2021-11-19	Cambio de estado Pendiente a estado Doing	16	10:07:53.489194
+119	2021-11-19	El usuario asignado: jose1 registra la actividad: A4-S1-P3 horas invertidas 20	16	10:09:23.313573
+120	2021-11-19	Cambio de estado Doing a estado Done	16	10:09:25.965896
+121	2021-11-19	La Historia de Usuario: Historia de usuario 3 - proyecto 3 es aprobada. Comentario: Buen Trabajo	16	10:44:19.001194
+122	2021-11-19	La Historia de Usuario: Historia de usuario 2 - proyecto 3 es aprobada. Comentario: Buen Trabajo	15	10:44:32.827116
+123	2021-11-19	La Historia de Usuario: Historia de usuario 6 - proyecto 3 es aprobada. Comentario: Buen Trabajo	19	10:44:43.603025
+124	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 5 - proyecto 3 al Sprint: Sprint 2 - Proyecto 3	18	11:08:27.458497
+125	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 1 - proyecto 3 al Sprint: Sprint 2 - Proyecto 3	14	11:08:35.592825
+126	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 4 - proyecto 3 al Sprint: Sprint 2 - Proyecto 3	17	11:08:43.191653
+127	2021-11-19	Asignacion de la Historia de Usuario a: apepu	18	11:10:42.651808
+128	2021-11-19	 Estmacion del Scum Master: 16	18	11:10:42.659526
+129	2021-11-19	Asignacion de la Historia de Usuario a: jose1	14	11:10:59.530994
+130	2021-11-19	 Estmacion del Scum Master: 16	14	11:10:59.537577
+131	2021-11-19	Asignacion de la Historia de Usuario a: apepu	17	11:11:14.24925
+132	2021-11-19	 Estmacion del Scum Master: 16	17	11:11:14.258559
+133	2021-11-19	 Resultado del Planning Poker: 16.0	18	11:11:54.521501
+134	2021-11-19	 Estmacion del usuario apepu :16	18	11:11:54.533499
+135	2021-11-19	 Resultado del Planning Poker: 16.0	17	11:12:00.41314
+136	2021-11-19	 Estmacion del usuario apepu :16	17	11:12:00.421047
+137	2021-11-19	 Resultado del Planning Poker: 16.0	14	11:12:56.01052
+138	2021-11-19	 Estmacion del usuario jose1 :16	14	11:12:56.028276
+139	2021-11-19	Cambio de estado Pendiente a estado Doing	18	11:18:04.682728
+140	2021-11-19	El usuario asignado: apepu registra la actividad: A1-S2-P3 horas invertidas 8	18	11:19:55.910485
+141	2021-11-19	El usuario asignado: apepu registra la actividad: A1-S2-P3 horas invertidas 8	18	11:20:34.560996
+142	2021-11-19	Cambio de estado Pendiente a estado Doing	17	11:26:02.061206
+143	2021-11-19	Cambio de estado Doing a estado Done	18	11:26:10.972604
+144	2021-11-19	El usuario asignado: apepu registra la actividad: A3-S1-P3 horas invertidas 8	17	11:27:05.34897
+145	2021-11-19	El usuario asignado: apepu registra la actividad: A4-S1-P3 horas invertidas 8	17	11:27:29.655811
+146	2021-11-19	Cambio de estado Doing a estado Done	17	11:27:35.857354
+147	2021-11-19	Cambio de estado Pendiente a estado Doing	14	11:28:22.921714
+148	2021-11-19	El usuario asignado: jose1 registra la actividad: A5-S1-P3 horas invertidas 8	14	11:28:45.974049
+149	2021-11-19	El usuario asignado: jose1 registra la actividad: A6-S1-P3 horas invertidas 8	14	11:29:15.228648
+150	2021-11-19	Cambio de estado Doing a estado Done	14	11:29:19.172133
+151	2021-11-19	La Historia de Usuario: Historia de usuario 5 - proyecto 3 es aprobada. Comentario: Buen Trabajo	18	11:32:00.234023
+152	2021-11-19	La Historia de Usuario: Historia de usuario 4 - proyecto 3 es aprobada. Comentario: Buen Trabajo	17	11:32:11.70248
+153	2021-11-19	La Historia de Usuario: Historia de usuario 1 - proyecto 3 es rechazada y se agrega de nuevo al Product Backlog con prioridad Alta y estado: Pendiente	14	11:32:37.132763
+154	2021-11-19	La Historia de Usuario>Historia de usuario 1 - proyecto 3 ha sido cancelada, estado actual: Cancelado	14	11:36:08.647502
+155	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 1 - proyecto 2 id #20 con prioridad: Baja	20	11:59:45.3293
+156	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 2 - proyecto 2 id #21 con prioridad: Media	21	11:59:58.003685
+157	2021-11-19	Creacion de la Historia de Usuario: Historia de usuario 3 - proyecto 2 id #22 con prioridad: Alta	22	12:00:10.708216
+158	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 3 - proyecto 2 al Sprint: Sprint 1 - Proyecto 2	22	12:05:28.881425
+159	2021-11-19	Se agrega la Historia de Usuario: Historia de usuario 2 - proyecto 2 al Sprint: Sprint 1 - Proyecto 2	21	12:05:43.63425
 \.
 
 
 --
--- Data for Name: sprint_historiausuario; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_historiausuario; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_historiausuario (id, nombre, descripcion, estado, fecha, estimacion, fecha_creacion, "fecha_ToDo", "fecha_Doing", "fecha_Done", "fecha_QA", estado_anterior, prioridad, prioridad_numerica, "aprobado_PB", sprint_backlog, estimacion_user, estimacion_scrum, asignacion_id, proyecto_id, sprint_id, product_owner_id, "rechazado_PB", "aprobado_QA", "rechazado_QA", comentario, horas_restantes, horas_trabajadas, horas_trabajadas_en_total, cancelado) FROM stdin;
 13	Historia de usuario 13 - proyecto 1	Historia de usuario 13 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Media	2	f	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
-2	Historia de usuario 2 - proyecto 1	Historia de usuario 2 - proyecto 1	ToDo	2021-11-17	20	2021-11-17	\N	2021-11-17	\N	2021-11-17	QA	Alta	3	t	t	20	20	5	1	2	3	f	f	f	\N	0	24	24	f
 1	Historia de usuario 1 - proyecto 1	Este es la historia de usuario nro 1 del proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 3	Historia de usuario 3 - proyecto 1	Historia de usuario 3 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 4	Historia de usuario 4 - proyecto 1	Historia de usuario 4- proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
@@ -1931,36 +2098,61 @@ COPY public.sprint_historiausuario (id, nombre, descripcion, estado, fecha, esti
 9	Historia de usuario 9 - proyecto 1	Historia de usuario 9 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 11	Historia de usuario 11 - proyecto 1	Historia de usuario 11 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
 12	Historia de usuario 12 - proyecto 1	Historia de usuario 12 - proyecto 1	Pendiente	2021-11-17	0	2021-11-17	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	1	\N	3	f	f	f	\N	0	0	0	f
-5	Historia de usuario 5 - proyecto 1	Historia de usuario 5 - proyecto 1	ToDo	2021-11-17	25	2021-11-17	\N	\N	\N	\N	Pendiente	Media	2	t	t	25	25	5	1	2	3	f	f	f	\N	0	0	0	f
-10	Historia de usuario 10 - proyecto 1	Historia de usuario 10 - proyecto 1	ToDo	2021-11-17	25	2021-11-17	\N	\N	\N	\N	Pendiente	Alta	3	t	t	25	25	4	1	2	3	f	f	f	\N	48	0	0	f
 6	Historia de usuario 6 - proyecto 1	Historia de usuario 6 - proyecto 1	QA	2021-11-17	24	2021-11-17	\N	2021-11-17	\N	2021-11-17	QA	Media	2	t	t	24	24	5	1	1	3	f	t	f	Buen trabajo	0	24	24	f
+20	Historia de usuario 1 - proyecto 2	Historia de usuario 1 - proyecto 2	Pendiente	2021-11-19	0	2021-11-19	\N	\N	\N	\N	Pendiente	Baja	1	t	f	0	0	\N	2	\N	4	f	f	f	\N	0	0	0	f
+22	Historia de usuario 3 - proyecto 2	Historia de usuario 3 - proyecto 2	ToDo	2021-11-19	0	2021-11-19	\N	\N	\N	\N	Pendiente	Alta	3	t	t	0	0	\N	2	6	4	f	f	f	\N	0	0	0	f
+21	Historia de usuario 2 - proyecto 2	Historia de usuario 2 - proyecto 2	ToDo	2021-11-19	0	2021-11-19	\N	\N	\N	\N	Pendiente	Media	2	t	t	0	0	\N	2	6	4	f	f	f	\N	0	0	0	f
+15	Historia de usuario 2 - proyecto 3	Historia de usuario 2 - proyecto 3	QA	2021-11-19	20	2021-11-19	\N	2021-11-19	\N	\N	Done	Media	2	t	t	20	20	2	3	4	5	f	t	f	Buen Trabajo	0	20	20	f
+10	Historia de usuario 10 - proyecto 1	Historia de usuario 10 - proyecto 1	Doing	2021-11-17	25	2021-11-17	\N	2021-11-18	\N	\N	Doing	Alta	3	t	t	25	25	4	1	2	3	f	f	f	\N	15	10	10	f
+5	Historia de usuario 5 - proyecto 1	Historia de usuario 5 - proyecto 1	ToDo	2021-11-17	25	2021-11-17	\N	\N	\N	\N	Pendiente	Media	2	t	t	25	25	5	1	2	3	f	f	f	\N	25	0	0	f
+2	Historia de usuario 2 - proyecto 1	Historia de usuario 2 - proyecto 1	ToDo	2021-11-17	20	2021-11-17	\N	2021-11-17	\N	2021-11-17	QA	Alta	3	t	t	20	20	5	1	2	3	f	f	f	\N	20	0	24	f
+18	Historia de usuario 5 - proyecto 3	Historia de usuario 5 - proyecto 3	QA	2021-11-19	16	2021-11-19	\N	2021-11-19	\N	\N	Done	Media	2	t	t	16	16	2	3	5	5	f	t	f	Buen Trabajo	0	16	16	f
+17	Historia de usuario 4 - proyecto 3	Historia de usuario 4 - proyecto 3	QA	2021-11-19	16	2021-11-19	\N	2021-11-19	\N	\N	Done	Baja	1	t	t	16	16	2	3	5	5	f	t	f	Buen Trabajo	0	16	16	f
+16	Historia de usuario 3 - proyecto 3	Historia de usuario 3 - proyecto 3	QA	2021-11-19	20	2021-11-19	\N	2021-11-19	\N	\N	Done	Alta	3	t	t	20	20	3	3	4	5	f	t	f	Buen Trabajo	0	20	20	f
+19	Historia de usuario 6 - proyecto 3	Historia de usuario 6 - proyecto 3	QA	2021-11-19	20	2021-11-19	\N	2021-11-19	\N	\N	Done	Alta	3	t	t	20	20	2	3	4	5	f	t	f	Buen Trabajo	0	20	20	f
+14	Historia de usuario 1 - proyecto 3	Historia de usuario 1 - proyecto 3	Cancelado	2021-11-19	0	2021-11-19	\N	2021-11-19	\N	\N	Done	Alta	3	t	f	0	0	\N	3	\N	5	f	f	f	\N	0	16	16	t
 \.
 
 
 --
--- Data for Name: sprint_historiausuario_actividades; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_historiausuario_actividades; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_historiausuario_actividades (id, historiausuario_id, actividad_id) FROM stdin;
 1	6	1
 2	6	2
 3	2	3
+4	10	4
+5	10	5
+6	15	6
+7	19	7
+8	19	8
+9	16	9
+10	18	10
+11	18	11
+12	17	12
+13	17	13
+14	14	14
+15	14	15
 \.
 
 
 --
--- Data for Name: sprint_sprint; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_sprint; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
-COPY public.sprint_sprint (id, nombre, fecha_inicio, fecha_fin, estado, proyecto_id, fecha_creacion, capacidad_de_equipo_sprint, capacidad_equipo) FROM stdin;
-1	Sprint 1 - Proyecto 1	2021-11-05	2021-11-15	Finalizado	1	2021-11-17	112	16
-2	Sprint 2 - Proyecto 1	2021-11-17	2021-11-23	Iniciado	1	2021-11-17	70	14
-3	Sprint 3 - Proyecto 1	2021-11-30	2021-12-07	Pendiente	1	2021-11-17	0	0
+COPY public.sprint_sprint (id, nombre, fecha_inicio, fecha_fin, estado, proyecto_id, fecha_creacion, capacidad_de_equipo_sprint, capacidad_equipo, suma_planing_poker) FROM stdin;
+3	Sprint 3 - Proyecto 1	2021-11-30	2021-12-07	Pendiente	1	2021-11-17	0	0	0
+1	Sprint 1 - Proyecto 1	2021-11-05	2021-11-15	Finalizado	1	2021-11-17	112	16	96
+2	Sprint 2 - Proyecto 1	2021-11-17	2021-11-23	Iniciado	1	2021-11-17	70	14	70
+4	Sprint 1 - Proyecto 3	2021-10-01	2021-10-08	Finalizado	3	2021-11-19	60	10	60
+5	Sprint 2 - Proyecto 3	2021-10-11	2021-10-18	Finalizado	3	2021-11-19	48	8	48
+6	Sprint 1 - Proyecto 2	2021-11-22	2021-11-29	Pendiente	2	2021-11-19	0	0	0
 \.
 
 
 --
--- Data for Name: sprint_sprint_equipo; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: sprint_sprint_equipo; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.sprint_sprint_equipo (id, sprint_id, user_id) FROM stdin;
@@ -1968,11 +2160,15 @@ COPY public.sprint_sprint_equipo (id, sprint_id, user_id) FROM stdin;
 2	1	5
 3	2	4
 4	2	5
+5	4	2
+6	4	3
+7	5	2
+8	5	3
 \.
 
 
 --
--- Data for Name: user_rol; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: user_rol; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.user_rol (id, rol) FROM stdin;
@@ -1981,24 +2177,28 @@ COPY public.user_rol (id, rol) FROM stdin;
 3	Scrum Master-Proyecto 3
 4	Developer-Proyecto 1
 5	Product Owner-Proyecto 1
+6	Product Owner-Proyecto 3
+7	Developer-Proyecto 3
+8	Developer-Proyecto 2
+9	Product Owner-Proyecto 2
 \.
 
 
 --
--- Data for Name: user_user; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: user_user; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.user_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$260000$bW9ujoNt4glm86xWnzqqbQ$yTnRQx9/RAd2qOg9lQtwEeJs47T4PQGtf6F9gHD6XW0=	2021-11-17 21:03:29.190343-03	t	jose			jose@jose.com	t	t	2021-11-17 17:30:36.096521-03
-5	!XSkNOYInoJaCKUjc5G4fHlZQzxRp687KUpQbOVBO	2021-11-17 22:04:18.110706-03	f	delia	delia	ramirez	delia23072307@gmail.com	f	t	2021-11-17 17:53:24.622842-03
-3	!j5tCUKQ8bq2vlX3Ayb6g2XtvmtwNZEzVSPeBbTDY	2021-11-17 22:06:34.79041-03	f	jose1	José	Garcete	garcetejoseka@gmail.com	f	t	2021-11-17 17:31:55.444589-03
-4	!JLHVq3vW9oqPRJRmal0eM6XSAzJy439TnUqCqOn3	2021-11-17 22:06:39.594427-03	f	jose_ildefonso	Jose Ildefonso	Garcete Aguilar	garcetejoseka@fpuna.edu.py	f	t	2021-11-17 17:32:05.550902-03
-2	!HIfTJefgCWCgK3IpNIfop6SnvBl7jQj1LVitOO8z	2021-11-17 22:07:50.426558-03	f	apepu	Apepu	Coding	apepunando@gmail.com	f	t	2021-11-17 17:31:44.192879-03
+2	!HIfTJefgCWCgK3IpNIfop6SnvBl7jQj1LVitOO8z	2021-11-19 11:48:12.523246-03	f	apepu	Apepu	Coding	apepunando@gmail.com	f	t	2021-11-17 17:31:44.192879-03
+5	!XSkNOYInoJaCKUjc5G4fHlZQzxRp687KUpQbOVBO	2021-11-19 11:48:48.528621-03	f	delia	delia	ramirez	delia23072307@gmail.com	f	t	2021-11-17 17:53:24.622842-03
+1	pbkdf2_sha256$260000$bW9ujoNt4glm86xWnzqqbQ$yTnRQx9/RAd2qOg9lQtwEeJs47T4PQGtf6F9gHD6XW0=	2021-11-19 11:49:04.246008-03	t	jose			jose@jose.com	t	t	2021-11-17 17:30:36.096521-03
+4	!JLHVq3vW9oqPRJRmal0eM6XSAzJy439TnUqCqOn3	2021-11-19 11:58:43.713318-03	f	jose_ildefonso	Jose Ildefonso	Garcete Aguilar	garcetejoseka@fpuna.edu.py	f	t	2021-11-17 17:32:05.550902-03
+3	!j5tCUKQ8bq2vlX3Ayb6g2XtvmtwNZEzVSPeBbTDY	2021-11-19 12:00:23.032296-03	f	jose1	José	Garcete	garcetejoseka@gmail.com	f	t	2021-11-17 17:31:55.444589-03
 \.
 
 
 --
--- Data for Name: user_user_groups; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: user_user_groups; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.user_user_groups (id, user_id, group_id) FROM stdin;
@@ -2008,11 +2208,17 @@ COPY public.user_user_groups (id, user_id, group_id) FROM stdin;
 4	4	4
 5	3	5
 6	5	4
+7	5	6
+8	3	7
+9	2	7
+10	4	9
+11	2	8
+12	5	8
 \.
 
 
 --
--- Data for Name: user_user_rol; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: user_user_rol; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.user_user_rol (id, user_id, rolproyecto_id) FROM stdin;
@@ -2022,11 +2228,17 @@ COPY public.user_user_rol (id, user_id, rolproyecto_id) FROM stdin;
 4	4	4
 5	3	5
 6	5	4
+7	5	6
+8	3	7
+9	2	7
+10	4	9
+11	2	8
+12	5	8
 \.
 
 
 --
--- Data for Name: user_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: cbtmfnawuurply
+-- Data for Name: user_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: weicqbeqlduvds
 --
 
 COPY public.user_user_user_permissions (id, user_id, permission_id) FROM stdin;
@@ -2034,217 +2246,217 @@ COPY public.user_user_user_permissions (id, user_id, permission_id) FROM stdin;
 
 
 --
--- Name: account_emailaddress_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.account_emailaddress_id_seq', 4, true);
 
 
 --
--- Name: account_emailconfirmation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.account_emailconfirmation_id_seq', 1, false);
 
 
 --
--- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.auth_group_id_seq', 5, true);
-
-
---
--- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 44, true);
+SELECT pg_catalog.setval('public.auth_group_id_seq', 9, true);
 
 
 --
--- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 108, true);
-
-
---
--- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, true);
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 76, true);
 
 
 --
--- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 124, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 7, true);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 22, true);
 
 
 --
--- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 101, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 104, true);
 
 
 --
--- Name: django_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.django_site_id_seq', 1, true);
 
 
 --
--- Name: login_listapermitidos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.login_listapermitidos_id_seq', 4, true);
 
 
 --
--- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.proyectos_proyec_equipo_id_seq', 6, true);
+SELECT pg_catalog.setval('public.proyectos_proyec_equipo_id_seq', 13, true);
 
 
 --
--- Name: proyectos_proyec_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.proyectos_proyec_id_seq', 3, true);
 
 
 --
--- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.proyectos_rolproyecto_id_seq', 5, true);
+SELECT pg_catalog.setval('public.proyectos_rolproyecto_id_seq', 9, true);
 
 
 --
--- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.socialaccount_socialaccount_id_seq', 4, true);
 
 
 --
--- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.socialaccount_socialapp_id_seq', 1, false);
 
 
 --
--- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.socialaccount_socialapp_sites_id_seq', 1, false);
 
 
 --
--- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.socialaccount_socialtoken_id_seq', 1, false);
 
 
 --
--- Name: sprint_actividad_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_actividad_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.sprint_actividad_id_seq', 3, true);
-
-
---
--- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.sprint_capacidaddiariaensprint_id_seq', 4, true);
+SELECT pg_catalog.setval('public.sprint_actividad_id_seq', 15, true);
 
 
 --
--- Name: sprint_estado_hu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.sprint_estado_hu_id_seq', 3, true);
-
-
---
--- Name: sprint_historial_hu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.sprint_historial_hu_id_seq', 84, true);
+SELECT pg_catalog.setval('public.sprint_capacidaddiariaensprint_id_seq', 8, true);
 
 
 --
--- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.sprint_historiausuario_actividades_id_seq', 3, true);
-
-
---
--- Name: sprint_historiausuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.sprint_historiausuario_id_seq', 13, true);
+SELECT pg_catalog.setval('public.sprint_estado_hu_id_seq', 9, true);
 
 
 --
--- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.sprint_sprint_equipo_id_seq', 4, true);
-
-
---
--- Name: sprint_sprint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.sprint_sprint_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sprint_historial_hu_id_seq', 159, true);
 
 
 --
--- Name: user_rol_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.user_rol_id_seq', 5, true);
-
-
---
--- Name: user_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
---
-
-SELECT pg_catalog.setval('public.user_user_groups_id_seq', 6, true);
+SELECT pg_catalog.setval('public.sprint_historiausuario_actividades_id_seq', 15, true);
 
 
 --
--- Name: user_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.sprint_historiausuario_id_seq', 22, true);
+
+
+--
+-- Name: sprint_sprint_equipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.sprint_sprint_equipo_id_seq', 8, true);
+
+
+--
+-- Name: sprint_sprint_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.sprint_sprint_id_seq', 6, true);
+
+
+--
+-- Name: user_rol_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.user_rol_id_seq', 9, true);
+
+
+--
+-- Name: user_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
+--
+
+SELECT pg_catalog.setval('public.user_user_groups_id_seq', 12, true);
+
+
+--
+-- Name: user_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.user_user_id_seq', 5, true);
 
 
 --
--- Name: user_user_rol_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
-SELECT pg_catalog.setval('public.user_user_rol_id_seq', 6, true);
+SELECT pg_catalog.setval('public.user_user_rol_id_seq', 12, true);
 
 
 --
--- Name: user_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: weicqbeqlduvds
 --
 
 SELECT pg_catalog.setval('public.user_user_user_permissions_id_seq', 1, false);
 
 
 --
--- Name: account_emailaddress account_emailaddress_email_key; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress account_emailaddress_email_key; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailaddress
@@ -2252,7 +2464,7 @@ ALTER TABLE ONLY public.account_emailaddress
 
 
 --
--- Name: account_emailaddress account_emailaddress_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress account_emailaddress_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailaddress
@@ -2260,7 +2472,7 @@ ALTER TABLE ONLY public.account_emailaddress
 
 
 --
--- Name: account_emailconfirmation account_emailconfirmation_key_key; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation account_emailconfirmation_key_key; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailconfirmation
@@ -2268,7 +2480,7 @@ ALTER TABLE ONLY public.account_emailconfirmation
 
 
 --
--- Name: account_emailconfirmation account_emailconfirmation_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation account_emailconfirmation_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailconfirmation
@@ -2276,7 +2488,7 @@ ALTER TABLE ONLY public.account_emailconfirmation
 
 
 --
--- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group
@@ -2284,7 +2496,7 @@ ALTER TABLE ONLY public.auth_group
 
 
 --
--- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -2292,7 +2504,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -2300,7 +2512,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group
@@ -2308,7 +2520,7 @@ ALTER TABLE ONLY public.auth_group
 
 
 --
--- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_permission
@@ -2316,7 +2528,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_permission
@@ -2324,7 +2536,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_admin_log
@@ -2332,7 +2544,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_content_type
@@ -2340,7 +2552,7 @@ ALTER TABLE ONLY public.django_content_type
 
 
 --
--- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_content_type
@@ -2348,7 +2560,7 @@ ALTER TABLE ONLY public.django_content_type
 
 
 --
--- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_migrations
@@ -2356,7 +2568,7 @@ ALTER TABLE ONLY public.django_migrations
 
 
 --
--- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_session
@@ -2364,7 +2576,7 @@ ALTER TABLE ONLY public.django_session
 
 
 --
--- Name: django_site django_site_domain_a2e37b91_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site django_site_domain_a2e37b91_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_site
@@ -2372,7 +2584,7 @@ ALTER TABLE ONLY public.django_site
 
 
 --
--- Name: django_site django_site_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site django_site_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_site
@@ -2380,7 +2592,7 @@ ALTER TABLE ONLY public.django_site
 
 
 --
--- Name: login_listapermitidos login_listapermitidos_correo_55763410_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos login_listapermitidos_correo_55763410_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.login_listapermitidos
@@ -2388,7 +2600,7 @@ ALTER TABLE ONLY public.login_listapermitidos
 
 
 --
--- Name: login_listapermitidos login_listapermitidos_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos login_listapermitidos_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.login_listapermitidos
@@ -2396,7 +2608,7 @@ ALTER TABLE ONLY public.login_listapermitidos
 
 
 --
--- Name: proyectos_proyec_equipo proyectos_proyec_equipo_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo proyectos_proyec_equipo_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec_equipo
@@ -2404,7 +2616,7 @@ ALTER TABLE ONLY public.proyectos_proyec_equipo
 
 
 --
--- Name: proyectos_proyec_equipo proyectos_proyec_equipo_proyec_id_user_id_16a5c62c_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo proyectos_proyec_equipo_proyec_id_user_id_16a5c62c_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec_equipo
@@ -2412,7 +2624,7 @@ ALTER TABLE ONLY public.proyectos_proyec_equipo
 
 
 --
--- Name: proyectos_proyec proyectos_proyec_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec proyectos_proyec_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec
@@ -2420,7 +2632,7 @@ ALTER TABLE ONLY public.proyectos_proyec
 
 
 --
--- Name: proyectos_rolproyecto proyectos_rolproyecto_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto proyectos_rolproyecto_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_rolproyecto
@@ -2428,7 +2640,7 @@ ALTER TABLE ONLY public.proyectos_rolproyecto
 
 
 --
--- Name: socialaccount_socialaccount socialaccount_socialaccount_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount socialaccount_socialaccount_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialaccount
@@ -2436,7 +2648,7 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
 
 
 --
--- Name: socialaccount_socialaccount socialaccount_socialaccount_provider_uid_fc810c6e_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount socialaccount_socialaccount_provider_uid_fc810c6e_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialaccount
@@ -2444,7 +2656,7 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
 
 
 --
--- Name: socialaccount_socialapp_sites socialaccount_socialapp__socialapp_id_site_id_71a9a768_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites socialaccount_socialapp__socialapp_id_site_id_71a9a768_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialapp_sites
@@ -2452,7 +2664,7 @@ ALTER TABLE ONLY public.socialaccount_socialapp_sites
 
 
 --
--- Name: socialaccount_socialapp socialaccount_socialapp_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp socialaccount_socialapp_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialapp
@@ -2460,7 +2672,7 @@ ALTER TABLE ONLY public.socialaccount_socialapp
 
 
 --
--- Name: socialaccount_socialapp_sites socialaccount_socialapp_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites socialaccount_socialapp_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialapp_sites
@@ -2468,7 +2680,7 @@ ALTER TABLE ONLY public.socialaccount_socialapp_sites
 
 
 --
--- Name: socialaccount_socialtoken socialaccount_socialtoken_app_id_account_id_fca4e0ac_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken socialaccount_socialtoken_app_id_account_id_fca4e0ac_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialtoken
@@ -2476,7 +2688,7 @@ ALTER TABLE ONLY public.socialaccount_socialtoken
 
 
 --
--- Name: socialaccount_socialtoken socialaccount_socialtoken_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken socialaccount_socialtoken_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialtoken
@@ -2484,7 +2696,7 @@ ALTER TABLE ONLY public.socialaccount_socialtoken
 
 
 --
--- Name: sprint_actividad sprint_actividad_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_actividad sprint_actividad_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_actividad
@@ -2492,7 +2704,7 @@ ALTER TABLE ONLY public.sprint_actividad
 
 
 --
--- Name: sprint_capacidaddiariaensprint sprint_capacidaddiariaensprint_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint sprint_capacidaddiariaensprint_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_capacidaddiariaensprint
@@ -2500,7 +2712,7 @@ ALTER TABLE ONLY public.sprint_capacidaddiariaensprint
 
 
 --
--- Name: sprint_estado_hu sprint_estado_hu_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu sprint_estado_hu_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_estado_hu
@@ -2508,7 +2720,7 @@ ALTER TABLE ONLY public.sprint_estado_hu
 
 
 --
--- Name: sprint_historial_hu sprint_historial_hu_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu sprint_historial_hu_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historial_hu
@@ -2516,7 +2728,7 @@ ALTER TABLE ONLY public.sprint_historial_hu
 
 
 --
--- Name: sprint_historiausuario_actividades sprint_historiausuario_a_historiausuario_id_activ_a301a67c_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades sprint_historiausuario_a_historiausuario_id_activ_a301a67c_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario_actividades
@@ -2524,7 +2736,7 @@ ALTER TABLE ONLY public.sprint_historiausuario_actividades
 
 
 --
--- Name: sprint_historiausuario_actividades sprint_historiausuario_actividades_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades sprint_historiausuario_actividades_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario_actividades
@@ -2532,7 +2744,7 @@ ALTER TABLE ONLY public.sprint_historiausuario_actividades
 
 
 --
--- Name: sprint_historiausuario sprint_historiausuario_nombre_key; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario sprint_historiausuario_nombre_key; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario
@@ -2540,7 +2752,7 @@ ALTER TABLE ONLY public.sprint_historiausuario
 
 
 --
--- Name: sprint_historiausuario sprint_historiausuario_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario sprint_historiausuario_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario
@@ -2548,7 +2760,7 @@ ALTER TABLE ONLY public.sprint_historiausuario
 
 
 --
--- Name: sprint_sprint_equipo sprint_sprint_equipo_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo sprint_sprint_equipo_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint_equipo
@@ -2556,7 +2768,7 @@ ALTER TABLE ONLY public.sprint_sprint_equipo
 
 
 --
--- Name: sprint_sprint_equipo sprint_sprint_equipo_sprint_id_user_id_d9e8145d_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo sprint_sprint_equipo_sprint_id_user_id_d9e8145d_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint_equipo
@@ -2564,7 +2776,7 @@ ALTER TABLE ONLY public.sprint_sprint_equipo
 
 
 --
--- Name: sprint_sprint sprint_sprint_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint sprint_sprint_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint
@@ -2572,7 +2784,7 @@ ALTER TABLE ONLY public.sprint_sprint
 
 
 --
--- Name: user_rol user_rol_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol user_rol_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_rol
@@ -2580,7 +2792,7 @@ ALTER TABLE ONLY public.user_rol
 
 
 --
--- Name: user_rol user_rol_rol_key; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol user_rol_rol_key; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_rol
@@ -2588,7 +2800,7 @@ ALTER TABLE ONLY public.user_rol
 
 
 --
--- Name: user_user_groups user_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups user_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_groups
@@ -2596,7 +2808,7 @@ ALTER TABLE ONLY public.user_user_groups
 
 
 --
--- Name: user_user_groups user_user_groups_user_id_group_id_bb60391f_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups user_user_groups_user_id_group_id_bb60391f_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_groups
@@ -2604,7 +2816,7 @@ ALTER TABLE ONLY public.user_user_groups
 
 
 --
--- Name: user_user user_user_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user user_user_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user
@@ -2612,7 +2824,7 @@ ALTER TABLE ONLY public.user_user
 
 
 --
--- Name: user_user_rol user_user_rol_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol user_user_rol_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_rol
@@ -2620,7 +2832,7 @@ ALTER TABLE ONLY public.user_user_rol
 
 
 --
--- Name: user_user_rol user_user_rol_user_id_rolproyecto_id_9bfd8ea5_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol user_user_rol_user_id_rolproyecto_id_9bfd8ea5_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_rol
@@ -2628,7 +2840,7 @@ ALTER TABLE ONLY public.user_user_rol
 
 
 --
--- Name: user_user_user_permissions user_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions user_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_user_permissions
@@ -2636,7 +2848,7 @@ ALTER TABLE ONLY public.user_user_user_permissions
 
 
 --
--- Name: user_user_user_permissions user_user_user_permissions_user_id_permission_id_64f4d5b8_uniq; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions user_user_user_permissions_user_id_permission_id_64f4d5b8_uniq; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_user_permissions
@@ -2644,7 +2856,7 @@ ALTER TABLE ONLY public.user_user_user_permissions
 
 
 --
--- Name: user_user user_user_username_key; Type: CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user user_user_username_key; Type: CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user
@@ -2652,336 +2864,336 @@ ALTER TABLE ONLY public.user_user
 
 
 --
--- Name: account_emailaddress_email_03be32b2_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress_email_03be32b2_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX account_emailaddress_email_03be32b2_like ON public.account_emailaddress USING btree (email varchar_pattern_ops);
 
 
 --
--- Name: account_emailaddress_user_id_2c513194; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress_user_id_2c513194; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX account_emailaddress_user_id_2c513194 ON public.account_emailaddress USING btree (user_id);
 
 
 --
--- Name: account_emailconfirmation_email_address_id_5b7f8c58; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation_email_address_id_5b7f8c58; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX account_emailconfirmation_email_address_id_5b7f8c58 ON public.account_emailconfirmation USING btree (email_address_id);
 
 
 --
--- Name: account_emailconfirmation_key_f43612bd_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation_key_f43612bd_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX account_emailconfirmation_key_f43612bd_like ON public.account_emailconfirmation USING btree (key varchar_pattern_ops);
 
 
 --
--- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
 
 
 --
--- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
 
 
 --
--- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
 
 
 --
--- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
 
 
 --
--- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
 
 
 --
--- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
 
 
 --
--- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
 
 
 --
--- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
 
 
 --
--- Name: django_site_domain_a2e37b91_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_site_domain_a2e37b91_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX django_site_domain_a2e37b91_like ON public.django_site USING btree (domain varchar_pattern_ops);
 
 
 --
--- Name: login_listapermitidos_correo_55763410_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: login_listapermitidos_correo_55763410_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX login_listapermitidos_correo_55763410_like ON public.login_listapermitidos USING btree (correo text_pattern_ops);
 
 
 --
--- Name: proyectos_proyec_encargado_id_bb1e827d; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_encargado_id_bb1e827d; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX proyectos_proyec_encargado_id_bb1e827d ON public.proyectos_proyec USING btree (encargado_id);
 
 
 --
--- Name: proyectos_proyec_equipo_proyec_id_e6c12285; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo_proyec_id_e6c12285; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX proyectos_proyec_equipo_proyec_id_e6c12285 ON public.proyectos_proyec_equipo USING btree (proyec_id);
 
 
 --
--- Name: proyectos_proyec_equipo_user_id_6092a225; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo_user_id_6092a225; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX proyectos_proyec_equipo_user_id_6092a225 ON public.proyectos_proyec_equipo USING btree (user_id);
 
 
 --
--- Name: proyectos_rolproyecto_proyecto_id_7b619e50; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto_proyecto_id_7b619e50; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX proyectos_rolproyecto_proyecto_id_7b619e50 ON public.proyectos_rolproyecto USING btree (proyecto_id);
 
 
 --
--- Name: proyectos_rolproyecto_rol_id_abb7250f; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto_rol_id_abb7250f; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX proyectos_rolproyecto_rol_id_abb7250f ON public.proyectos_rolproyecto USING btree (rol_id);
 
 
 --
--- Name: socialaccount_socialaccount_user_id_8146e70c; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount_user_id_8146e70c; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX socialaccount_socialaccount_user_id_8146e70c ON public.socialaccount_socialaccount USING btree (user_id);
 
 
 --
--- Name: socialaccount_socialapp_sites_site_id_2579dee5; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites_site_id_2579dee5; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX socialaccount_socialapp_sites_site_id_2579dee5 ON public.socialaccount_socialapp_sites USING btree (site_id);
 
 
 --
--- Name: socialaccount_socialapp_sites_socialapp_id_97fb6e7d; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites_socialapp_id_97fb6e7d; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX socialaccount_socialapp_sites_socialapp_id_97fb6e7d ON public.socialaccount_socialapp_sites USING btree (socialapp_id);
 
 
 --
--- Name: socialaccount_socialtoken_account_id_951f210e; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken_account_id_951f210e; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX socialaccount_socialtoken_account_id_951f210e ON public.socialaccount_socialtoken USING btree (account_id);
 
 
 --
--- Name: socialaccount_socialtoken_app_id_636a42d7; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken_app_id_636a42d7; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX socialaccount_socialtoken_app_id_636a42d7 ON public.socialaccount_socialtoken USING btree (app_id);
 
 
 --
--- Name: sprint_capacidaddiariaensprint_sprint_id_e7cde0f7; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint_sprint_id_e7cde0f7; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_capacidaddiariaensprint_sprint_id_e7cde0f7 ON public.sprint_capacidaddiariaensprint USING btree (sprint_id);
 
 
 --
--- Name: sprint_capacidaddiariaensprint_usuario_id_1b98ce15; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint_usuario_id_1b98ce15; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_capacidaddiariaensprint_usuario_id_1b98ce15 ON public.sprint_capacidaddiariaensprint USING btree (usuario_id);
 
 
 --
--- Name: sprint_estado_hu_hu_id_4cb00bdd; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu_hu_id_4cb00bdd; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_estado_hu_hu_id_4cb00bdd ON public.sprint_estado_hu USING btree (hu_id);
 
 
 --
--- Name: sprint_estado_hu_sprint_id_76226139; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu_sprint_id_76226139; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_estado_hu_sprint_id_76226139 ON public.sprint_estado_hu USING btree (sprint_id);
 
 
 --
--- Name: sprint_historial_hu_hu_id_f2f45c00; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu_hu_id_f2f45c00; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historial_hu_hu_id_f2f45c00 ON public.sprint_historial_hu USING btree (hu_id);
 
 
 --
--- Name: sprint_historiausuario_Product_Owner_id_920b6b1a; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_Product_Owner_id_920b6b1a; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX "sprint_historiausuario_Product_Owner_id_920b6b1a" ON public.sprint_historiausuario USING btree (product_owner_id);
 
 
 --
--- Name: sprint_historiausuario_actividades_actividad_id_a80aedea; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades_actividad_id_a80aedea; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historiausuario_actividades_actividad_id_a80aedea ON public.sprint_historiausuario_actividades USING btree (actividad_id);
 
 
 --
--- Name: sprint_historiausuario_actividades_historiausuario_id_72c8f6aa; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades_historiausuario_id_72c8f6aa; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historiausuario_actividades_historiausuario_id_72c8f6aa ON public.sprint_historiausuario_actividades USING btree (historiausuario_id);
 
 
 --
--- Name: sprint_historiausuario_asignacion_id_b3a646f4; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_asignacion_id_b3a646f4; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historiausuario_asignacion_id_b3a646f4 ON public.sprint_historiausuario USING btree (asignacion_id);
 
 
 --
--- Name: sprint_historiausuario_nombre_ce565aeb_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_nombre_ce565aeb_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historiausuario_nombre_ce565aeb_like ON public.sprint_historiausuario USING btree (nombre varchar_pattern_ops);
 
 
 --
--- Name: sprint_historiausuario_proyecto_id_e7ed4dee; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_proyecto_id_e7ed4dee; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historiausuario_proyecto_id_e7ed4dee ON public.sprint_historiausuario USING btree (proyecto_id);
 
 
 --
--- Name: sprint_historiausuario_sprint_id_dfb3c413; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_sprint_id_dfb3c413; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_historiausuario_sprint_id_dfb3c413 ON public.sprint_historiausuario USING btree (sprint_id);
 
 
 --
--- Name: sprint_sprint_equipo_sprint_id_07d49117; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo_sprint_id_07d49117; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_sprint_equipo_sprint_id_07d49117 ON public.sprint_sprint_equipo USING btree (sprint_id);
 
 
 --
--- Name: sprint_sprint_equipo_user_id_40b22169; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo_user_id_40b22169; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_sprint_equipo_user_id_40b22169 ON public.sprint_sprint_equipo USING btree (user_id);
 
 
 --
--- Name: sprint_sprint_proyecto_id_119395d9; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_proyecto_id_119395d9; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX sprint_sprint_proyecto_id_119395d9 ON public.sprint_sprint USING btree (proyecto_id);
 
 
 --
--- Name: user_rol_rol_ccc37137_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_rol_rol_ccc37137_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_rol_rol_ccc37137_like ON public.user_rol USING btree (rol varchar_pattern_ops);
 
 
 --
--- Name: user_user_groups_group_id_c57f13c0; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups_group_id_c57f13c0; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_groups_group_id_c57f13c0 ON public.user_user_groups USING btree (group_id);
 
 
 --
--- Name: user_user_groups_user_id_13f9a20d; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups_user_id_13f9a20d; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_groups_user_id_13f9a20d ON public.user_user_groups USING btree (user_id);
 
 
 --
--- Name: user_user_rol_rolproyecto_id_c4e6bdca; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol_rolproyecto_id_c4e6bdca; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_rol_rolproyecto_id_c4e6bdca ON public.user_user_rol USING btree (rolproyecto_id);
 
 
 --
--- Name: user_user_rol_user_id_cc65092b; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol_user_id_cc65092b; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_rol_user_id_cc65092b ON public.user_user_rol USING btree (user_id);
 
 
 --
--- Name: user_user_user_permissions_permission_id_ce49d4de; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions_permission_id_ce49d4de; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_user_permissions_permission_id_ce49d4de ON public.user_user_user_permissions USING btree (permission_id);
 
 
 --
--- Name: user_user_user_permissions_user_id_31782f58; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions_user_id_31782f58; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_user_permissions_user_id_31782f58 ON public.user_user_user_permissions USING btree (user_id);
 
 
 --
--- Name: user_user_username_e2bdfe0c_like; Type: INDEX; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_username_e2bdfe0c_like; Type: INDEX; Schema: public; Owner: weicqbeqlduvds
 --
 
 CREATE INDEX user_user_username_e2bdfe0c_like ON public.user_user USING btree (username varchar_pattern_ops);
 
 
 --
--- Name: account_emailaddress account_emailaddress_user_id_2c513194_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailaddress account_emailaddress_user_id_2c513194_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailaddress
@@ -2989,7 +3201,7 @@ ALTER TABLE ONLY public.account_emailaddress
 
 
 --
--- Name: account_emailconfirmation account_emailconfirmation_email_address_id_5b7f8c58_fk; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: account_emailconfirmation account_emailconfirmation_email_address_id_5b7f8c58_fk; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.account_emailconfirmation
@@ -2997,7 +3209,7 @@ ALTER TABLE ONLY public.account_emailconfirmation
 
 
 --
--- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -3005,7 +3217,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -3013,7 +3225,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.auth_permission
@@ -3021,7 +3233,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_admin_log
@@ -3029,7 +3241,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.django_admin_log
@@ -3037,7 +3249,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: proyectos_proyec proyectos_proyec_encargado_id_bb1e827d_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec proyectos_proyec_encargado_id_bb1e827d_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec
@@ -3045,7 +3257,7 @@ ALTER TABLE ONLY public.proyectos_proyec
 
 
 --
--- Name: proyectos_proyec_equipo proyectos_proyec_equ_proyec_id_e6c12285_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo proyectos_proyec_equ_proyec_id_e6c12285_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec_equipo
@@ -3053,7 +3265,7 @@ ALTER TABLE ONLY public.proyectos_proyec_equipo
 
 
 --
--- Name: proyectos_proyec_equipo proyectos_proyec_equipo_user_id_6092a225_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_proyec_equipo proyectos_proyec_equipo_user_id_6092a225_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_proyec_equipo
@@ -3061,7 +3273,7 @@ ALTER TABLE ONLY public.proyectos_proyec_equipo
 
 
 --
--- Name: proyectos_rolproyecto proyectos_rolproyect_proyecto_id_7b619e50_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto proyectos_rolproyect_proyecto_id_7b619e50_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_rolproyecto
@@ -3069,7 +3281,7 @@ ALTER TABLE ONLY public.proyectos_rolproyecto
 
 
 --
--- Name: proyectos_rolproyecto proyectos_rolproyecto_rol_id_abb7250f_fk_user_rol_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: proyectos_rolproyecto proyectos_rolproyecto_rol_id_abb7250f_fk_user_rol_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.proyectos_rolproyecto
@@ -3077,7 +3289,7 @@ ALTER TABLE ONLY public.proyectos_rolproyecto
 
 
 --
--- Name: socialaccount_socialapp_sites socialaccount_social_site_id_2579dee5_fk_django_si; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialapp_sites socialaccount_social_site_id_2579dee5_fk_django_si; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialapp_sites
@@ -3085,7 +3297,7 @@ ALTER TABLE ONLY public.socialaccount_socialapp_sites
 
 
 --
--- Name: socialaccount_socialaccount socialaccount_socialaccount_user_id_8146e70c_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialaccount socialaccount_socialaccount_user_id_8146e70c_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialaccount
@@ -3093,7 +3305,7 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
 
 
 --
--- Name: socialaccount_socialtoken socialaccount_socialtoken_account_id_951f210e_fk; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken socialaccount_socialtoken_account_id_951f210e_fk; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialtoken
@@ -3101,7 +3313,7 @@ ALTER TABLE ONLY public.socialaccount_socialtoken
 
 
 --
--- Name: socialaccount_socialtoken socialaccount_socialtoken_app_id_636a42d7_fk; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: socialaccount_socialtoken socialaccount_socialtoken_app_id_636a42d7_fk; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.socialaccount_socialtoken
@@ -3109,7 +3321,7 @@ ALTER TABLE ONLY public.socialaccount_socialtoken
 
 
 --
--- Name: sprint_capacidaddiariaensprint sprint_capacidaddiar_sprint_id_e7cde0f7_fk_sprint_sp; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint sprint_capacidaddiar_sprint_id_e7cde0f7_fk_sprint_sp; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_capacidaddiariaensprint
@@ -3117,7 +3329,7 @@ ALTER TABLE ONLY public.sprint_capacidaddiariaensprint
 
 
 --
--- Name: sprint_capacidaddiariaensprint sprint_capacidaddiar_usuario_id_1b98ce15_fk_user_user; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_capacidaddiariaensprint sprint_capacidaddiar_usuario_id_1b98ce15_fk_user_user; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_capacidaddiariaensprint
@@ -3125,7 +3337,7 @@ ALTER TABLE ONLY public.sprint_capacidaddiariaensprint
 
 
 --
--- Name: sprint_estado_hu sprint_estado_hu_hu_id_4cb00bdd_fk_sprint_historiausuario_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu sprint_estado_hu_hu_id_4cb00bdd_fk_sprint_historiausuario_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_estado_hu
@@ -3133,7 +3345,7 @@ ALTER TABLE ONLY public.sprint_estado_hu
 
 
 --
--- Name: sprint_estado_hu sprint_estado_hu_sprint_id_76226139_fk_sprint_sprint_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_estado_hu sprint_estado_hu_sprint_id_76226139_fk_sprint_sprint_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_estado_hu
@@ -3141,7 +3353,7 @@ ALTER TABLE ONLY public.sprint_estado_hu
 
 
 --
--- Name: sprint_historial_hu sprint_historial_hu_hu_id_f2f45c00_fk_sprint_historiausuario_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historial_hu sprint_historial_hu_hu_id_f2f45c00_fk_sprint_historiausuario_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historial_hu
@@ -3149,7 +3361,7 @@ ALTER TABLE ONLY public.sprint_historial_hu
 
 
 --
--- Name: sprint_historiausuario_actividades sprint_historiausuar_actividad_id_a80aedea_fk_sprint_ac; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades sprint_historiausuar_actividad_id_a80aedea_fk_sprint_ac; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario_actividades
@@ -3157,7 +3369,7 @@ ALTER TABLE ONLY public.sprint_historiausuario_actividades
 
 
 --
--- Name: sprint_historiausuario_actividades sprint_historiausuar_historiausuario_id_72c8f6aa_fk_sprint_hi; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario_actividades sprint_historiausuar_historiausuario_id_72c8f6aa_fk_sprint_hi; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario_actividades
@@ -3165,7 +3377,7 @@ ALTER TABLE ONLY public.sprint_historiausuario_actividades
 
 
 --
--- Name: sprint_historiausuario sprint_historiausuar_product_owner_id_c1774d40_fk_user_user; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario sprint_historiausuar_product_owner_id_c1774d40_fk_user_user; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario
@@ -3173,7 +3385,7 @@ ALTER TABLE ONLY public.sprint_historiausuario
 
 
 --
--- Name: sprint_historiausuario sprint_historiausuar_proyecto_id_e7ed4dee_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario sprint_historiausuar_proyecto_id_e7ed4dee_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario
@@ -3181,7 +3393,7 @@ ALTER TABLE ONLY public.sprint_historiausuario
 
 
 --
--- Name: sprint_historiausuario sprint_historiausuario_asignacion_id_b3a646f4_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario sprint_historiausuario_asignacion_id_b3a646f4_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario
@@ -3189,7 +3401,7 @@ ALTER TABLE ONLY public.sprint_historiausuario
 
 
 --
--- Name: sprint_historiausuario sprint_historiausuario_sprint_id_dfb3c413_fk_sprint_sprint_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_historiausuario sprint_historiausuario_sprint_id_dfb3c413_fk_sprint_sprint_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_historiausuario
@@ -3197,7 +3409,7 @@ ALTER TABLE ONLY public.sprint_historiausuario
 
 
 --
--- Name: sprint_sprint_equipo sprint_sprint_equipo_sprint_id_07d49117_fk_sprint_sprint_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo sprint_sprint_equipo_sprint_id_07d49117_fk_sprint_sprint_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint_equipo
@@ -3205,7 +3417,7 @@ ALTER TABLE ONLY public.sprint_sprint_equipo
 
 
 --
--- Name: sprint_sprint_equipo sprint_sprint_equipo_user_id_40b22169_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint_equipo sprint_sprint_equipo_user_id_40b22169_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint_equipo
@@ -3213,7 +3425,7 @@ ALTER TABLE ONLY public.sprint_sprint_equipo
 
 
 --
--- Name: sprint_sprint sprint_sprint_proyecto_id_119395d9_fk_proyectos_proyec_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: sprint_sprint sprint_sprint_proyecto_id_119395d9_fk_proyectos_proyec_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.sprint_sprint
@@ -3221,7 +3433,7 @@ ALTER TABLE ONLY public.sprint_sprint
 
 
 --
--- Name: user_user_groups user_user_groups_group_id_c57f13c0_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups user_user_groups_group_id_c57f13c0_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_groups
@@ -3229,7 +3441,7 @@ ALTER TABLE ONLY public.user_user_groups
 
 
 --
--- Name: user_user_groups user_user_groups_user_id_13f9a20d_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_groups user_user_groups_user_id_13f9a20d_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_groups
@@ -3237,7 +3449,7 @@ ALTER TABLE ONLY public.user_user_groups
 
 
 --
--- Name: user_user_rol user_user_rol_rolproyecto_id_c4e6bdca_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol user_user_rol_rolproyecto_id_c4e6bdca_fk_proyectos; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_rol
@@ -3245,7 +3457,7 @@ ALTER TABLE ONLY public.user_user_rol
 
 
 --
--- Name: user_user_rol user_user_rol_user_id_cc65092b_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_rol user_user_rol_user_id_cc65092b_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_rol
@@ -3253,7 +3465,7 @@ ALTER TABLE ONLY public.user_user_rol
 
 
 --
--- Name: user_user_user_permissions user_user_user_permi_permission_id_ce49d4de_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions user_user_user_permi_permission_id_ce49d4de_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_user_permissions
@@ -3261,7 +3473,7 @@ ALTER TABLE ONLY public.user_user_user_permissions
 
 
 --
--- Name: user_user_user_permissions user_user_user_permissions_user_id_31782f58_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: cbtmfnawuurply
+-- Name: user_user_user_permissions user_user_user_permissions_user_id_31782f58_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: weicqbeqlduvds
 --
 
 ALTER TABLE ONLY public.user_user_user_permissions
@@ -3269,6 +3481,6 @@ ALTER TABLE ONLY public.user_user_user_permissions
 
 
 --
--- cbtmfnawuurplyQL database dump complete
+-- weicqbeqlduvdsQL database dump complete
 --
 

@@ -732,9 +732,9 @@ class BurnDownChart(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, T
 
         # en fecha_duracion se guarda la lista de fechas hábiles del sprint
         for time in dt:
+            dia = str(time.day)
             if time.day < 10 and len(str(time.day)) == 1:
                 dia = f'0{time.day}'
-            dia = str(time.day)
             fecha_duracion.append(str(time.year) + "-" + str(time.month) + "-" + dia)
             fechas2.append(str(datetime.strftime(time,'%b %d, %Y')))
 

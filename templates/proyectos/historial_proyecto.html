@@ -1,0 +1,49 @@
+{% extends 'proyectos/proyecto.html' %}
+{% block titulo %}
+  Gestion de Proyectos | Historial de Cambios
+{% endblock titulo %}
+
+{% block body %}
+    <div class="card-header">
+
+          <strong> Proyecto   {{proyecto.nombre}} # {{ proyecto.id }}</strong><br>
+        <strong> Encargado del proyecto: {{proyecto.encargado}} </strong><br>
+        <strong> Equipo de trabajo</strong><br>
+        {% for user in equipo %}
+            <li> {{ user}}</li>
+        {% endfor %}
+      </div>
+<ul>
+  <li>Fecha de creacion: {{ proyecto.fecha_creacion}}</li>
+{%  if proyecto.fecha_inicio != None %}
+    <li>Fecha de inicio: {{ proyecto.fecha_inicio}}</li>
+{% endif %}
+{%  if proyecto.fecha_concluido != None %}
+    <li>Fecha de finalizacion: {{ proyecto.fecha_concluido}}</li>
+{% endif %}
+{%  if proyecto.fecha_cancelado != None %}
+    <li>Fecha de cancelacion: {{ proyecto.fecha_cancelado}}</li>
+{% endif %}
+</ul>
+    {%  if sprint != None %}
+        <strong> Lista de sprint del Proyecto</strong><br>
+        <ul>
+        {% for s in sprint %}
+            <li> Sprint : {{ s.nombre  }}</li>
+                 <ul>
+                  <li>Fecha de creacion: {{ s.fecha_creacion}}</li>
+                {%  if s.fecha_inicio != None %}
+                    <li>Fecha de inicio: {{ s.fecha_inicio}}</li>
+                {% endif %}
+                {%  if s.fecha_fin != None %}
+                    <li>Fecha de finalizacion: {{ s.fecha_fin}}</li>
+                {% endif %}
+                </ul>
+
+        {% endfor %}
+        </ul>
+    {% endif %}
+{{mensaje|linebreaksbr}}<br><br>
+
+<a class="btn btn-primary" href="{%  url 'proyectos:mis_proyectos'   %}" role="button">Volver</a>
+{% endblock body %}

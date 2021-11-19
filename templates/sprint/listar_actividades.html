@@ -1,0 +1,55 @@
+{% extends 'sprint/sprint.html' %}
+{% load static %}
+{% block titulo %}
+Gestion de Proyectos | Ver Actividades
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+    <style>
+         #danger:hover{
+            color:red;
+        }
+    </style>
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Ver Actividades</strong>
+            </div>
+        </div>
+
+    </div>
+    <div class="table-stats order-table ov-h">
+        <table id="tabla_usuarios" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Hora de Trabajo</th>
+                    <th>Comentario</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                     {% for objeto in actividades %}
+               <tr>
+                 <td>{{ objeto.id }}</td>
+                 <td>{{ objeto.nombre }}</td>
+                 <td>{{ objeto.hora_trabajo }}</td>
+                 <td>{{ objeto.comentario }}</td>
+                 <td>{{ objeto.fecha }}</td>
+               </tr>
+                     {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}
+{% block extrajs %}
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/usuarios/index.js' %}"></script>
+{% endblock extrajs %}

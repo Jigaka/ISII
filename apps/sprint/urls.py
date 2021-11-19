@@ -1,8 +1,11 @@
 from django.urls import path
 from apps.proyectos.views import ConfigurarUs, estimarUS,Listar_us_a_estimar, Reasignar_us
-from .views import AsignarCapacidadDiaria, CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, configurarEquipoSprint, \
-  Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad, Historial_por_hu,\
-     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu, ReporteSprintBacklog, ReporteSprintActual, IniciarSprint, SolicitarFinalizarSprint, FinalizarSprint
+from .views import AsignarCapacidadDiaria, CrearSprint, ListarSprint, AgregarHU_sprint, VerSprint, SprintBacklog, \
+     configurarEquipoSprint, \
+     Cambio_de_estadoHU, TablaKanban, EliminarSprint, EditarSprint, ListarEquipo, AddActividad, VerActividad, \
+     Historial_por_hu, \
+     VisualizarCapacidad, VerUS, AprobarQA, RechazarQA, BurnDownChart, Cancelar_hu, ReporteSprintBacklog, \
+     ReporteSprintActual, IniciarSprint, SolicitarFinalizarSprint, FinalizarSprint, ListarActividades
 
 urlpatterns = [
      path('crear_sprint/<int:pk>', CrearSprint.as_view(), name='crear_sprint'),
@@ -27,6 +30,7 @@ urlpatterns = [
      path('aprobarQA/<int:pk>/<int:us>',AprobarQA.as_view(), name='aprobarQA'),
      path('rechazarQA/<int:pk>/<int:us>',RechazarQA.as_view(), name='rechazarQA'),
      path('ver_actividad/<int:pk>',VerActividad.as_view(), name='ver_actividad'),
+     path('listar_actividades/<int:pk>',ListarActividades.as_view(), name='listar_actividades'),
      path('historial_hu/<int:pk>',Historial_por_hu.as_view(), name='historial_hu'),
      path('reasignar_us/<int:pk>',Reasignar_us.as_view(), name='reasignar_us'),
      path('ver_us/<int:pk>/<int:pl>',VerUS.as_view(), name='ver_us'),
@@ -35,4 +39,5 @@ urlpatterns = [
      path('cancelar_hu/<int:pk>',Cancelar_hu.as_view(), name='cancelar_hu'),
      path('reporte_SB/<int:pk>',ReporteSprintBacklog.as_view(), name='reporte_SB'),
      path('reporte_SA/<int:pk>',ReporteSprintActual.as_view(), name='reporte_SA'),
+
     ]

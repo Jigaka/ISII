@@ -45,7 +45,6 @@ Gestion de Proyectos | Sprint Backlog
                     <th>Planning Poker</th>
                     <th>Estado</th>
                     {% ifequal request.user.username|stringformat:"s" proyecto.encargado|stringformat:"s" %}
-
                     <th style="text-align: left;">Opciones</th>
                     {%endifequal%}
                 </tr>
@@ -62,11 +61,14 @@ Gestion de Proyectos | Sprint Backlog
                         <td>{{ objeto.desarrollador }}</td>
                         <td>{{ objeto.PP }}</td>
                         <td>{{ objeto.estado }}</td>
+                        <td style="text-align: left;">
+                            <a href="{%  url 'sprint:listar_actividades' objeto.id %}">Ver Actividades</a><br>
+                        </td>
                      </tr>
                     {% endfor %}
 {% else %}
                      {% for objeto in object_list %}
-               <tr>
+                    <tr>
                  <td>{{ objeto.id }}</td>
                  <td>{{ objeto.nombre }}</td>
                  <td>{{ objeto.descripcion }}</td>

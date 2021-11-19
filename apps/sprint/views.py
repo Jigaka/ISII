@@ -245,21 +245,21 @@ class VerUS(LoginYSuperStaffMixin, TemplateView):
             desarrollador = {
                 'username' : 'Sin asignar'
             }
-        horas_trabajadas = 0
-        horas_trabajadas_total = 0
-        actividad = us.actividades.filter(id_sprint=pl).all()
-        actividad_total = us.actividades.all()
-
-        for a in actividad:
-            horas_trabajadas += a.hora_trabajo
-
-        for b in actividad_total:
-            horas_trabajadas_total += b.hora_trabajo
-
-        horas_restantes = us.estimacion - horas_trabajadas
-        HistoriaUsuario.objects.filter(id=pk).update(horas_restantes=horas_restantes)
-        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas=horas_trabajadas)
-        HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas_en_total=horas_trabajadas_total)
+        # horas_trabajadas = 0
+        # horas_trabajadas_total = 0
+        # actividad = us.actividades.filter(id_sprint=pl).all()
+        # actividad_total = us.actividades.all()
+        #
+        # for a in actividad:
+        #     horas_trabajadas += a.hora_trabajo
+        #
+        # for b in actividad_total:
+        #     horas_trabajadas_total += b.hora_trabajo
+        #
+        # horas_restantes = us.estimacion - horas_trabajadas
+        # HistoriaUsuario.objects.filter(id=pk).update(horas_restantes=horas_restantes)
+        # HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas=horas_trabajadas)
+        # HistoriaUsuario.objects.filter(id=pk).update(horas_trabajadas_en_total=horas_trabajadas_total)
 
         return render(request, 'sprint/ver_us.html', {"us": us, "desarrollador": desarrollador})
 
@@ -428,6 +428,8 @@ class AddActividad(LoginYSuperStaffMixin, CreateView):
     def post(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
         us = self.kwargs['us']
+
+
         nombre = request.POST['nombre']
         comentario = request.POST['comentario']
         hora_trabajo = request.POST['hora_trabajo']
@@ -437,6 +439,23 @@ class AddActividad(LoginYSuperStaffMixin, CreateView):
         history = HistoriaUsuario.objects.get(id=us)
         history.actividades.add(actividad)
         Historial_HU.objects.create(descripcion='El usuario asignado: ' + history.asignacion.username + ' registra la actividad: '+ nombre + ' horas invertidas '+ hora_trabajo ,hu=history)
+
+        horas_trabajadas = 0
+        horas_trabajadas_total = 0
+        actividad = history.actividades.filter(id_sprint=pk).all()
+        actividad_total = history.actividades.all()
+
+        for a in actividad:
+            horas_trabajadas += a.hora_trabajo
+
+        for b in actividad_total:
+            horas_trabajadas_total += b.hora_trabajo
+
+        horas_restantes = history.estimacion - horas_trabajadas
+        HistoriaUsuario.objects.filter(id=us).update(horas_restantes=horas_restantes)
+        HistoriaUsuario.objects.filter(id=us).update(horas_trabajadas=horas_trabajadas)
+        HistoriaUsuario.objects.filter(id=us).update(horas_trabajadas_en_total=horas_trabajadas_total)
+
         return redirect('sprint:kanban', pk)
 
 class AprobarQA(LoginYSuperStaffMixin, CreateView):
@@ -713,7 +732,10 @@ class BurnDownChart(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, T
 
         # en fecha_duracion se guarda la lista de fechas hábiles del sprint
         for time in dt:
-            fecha_duracion.append(str(time.year) + "-" + str(time.month) + "-" + str(time.day))
+            if time.day < 10 and len(str(time.day)) == 1:
+                dia = f'0{time.day}'
+            dia = str(time.day)
+            fecha_duracion.append(str(time.year) + "-" + str(time.month) + "-" + dia)
             fechas2.append(str(datetime.strftime(time,'%b %d, %Y')))
 
         fechas2.insert(0, " ")
@@ -722,11 +744,14 @@ class BurnDownChart(LoginYSuperStaffMixin, ValidarQuePertenceAlProyectoSprint, T
         df["Horas"] = datos
         ultima_fecha = None
         suma_horas_actividades = 0
+        print(fecha_duracion)
+        print(fecha_actividad)
         # En esta parte se va guardando y descontando las horas horas_disponibles del sprint
         for i in range(sprint.duracion_dias):
             for a,b in zip(fecha_actividad, horas):
                 if fecha_duracion[i] == a:
-                    sprint.suma_planing_poker = sprint.suma_planing_poker-b
+                    sprint.suma_planing_poker = sprint.suma_planing_poker - b
+                    print(f'planing {sprint.suma_planing_poker}')
                     suma_horas_actividades += b
                     df.iloc[i,1] = sprint.suma_planing_poker
                     ultima_fecha = df.iloc[i,0]
